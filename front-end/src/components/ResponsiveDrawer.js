@@ -108,7 +108,7 @@ class ResponsiveDrawer extends React.Component
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="title" color="inherit" noWrap>
-							{this.props.title}
+							{this.getActiveComponent().props.title}
 						</Typography>
 					</Toolbar>
 				</AppBar>
