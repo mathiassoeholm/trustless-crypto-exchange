@@ -1,0 +1,48 @@
+{
+  "name": "trustless-crypto-wallet-api",
+  "version": "0.1.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "nodemon src/server.js --exec babel-node",
+    "custom-dev": "cross-env NODE_ENV=custom npm run start",
+    "clean-dist": "rimraf ./dist && mkdir dist",
+    "prebuild": "npm run clean-dist",
+    "build": "babel src -d dist",
+    "staging": "npm run build && cross-env NODE_ENV=staging node dist/server.js",
+    "custom-staging": "npm run build && cross-env NODE_ENV=custom node dist/server.js",
+    "build-production": "npm run build",
+    "rename-production": "rimraf ./deploy && renamer --find dist --replace deploy dist",
+    "production": "cross-env NODE_ENV=production forever start deploy/server.js",
+    "productionStop": "forever stop deploy/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathiassoeholm/trustless-crypto-exchange/tree/master/api"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.18.2",
+    "colors": "^1.1.2",
+    "cors": "^2.8.4",
+    "cross-env": "^5.1.3",
+    "express": "^4.16.2",
+    "forever": "^0.15.3",
+    "mongoose": "^4.13.9",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "eslint": "^4.16.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-react": "^7.5.1",
+    "eslint-watch": "^3.1.3",
+    "nodemon": "^1.14.11",
+    "renamer": "^0.6.1"
+  }
+}
