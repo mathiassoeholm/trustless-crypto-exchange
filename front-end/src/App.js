@@ -10,19 +10,39 @@ import LoginIcon from 'material-ui-icons/VpnKey';
 
 const classes = {}
 
-class App extends Component
+class App extends Component 
 {
-  render()
-  {
-    return (
-      <div className="App">
-      	<ResponsiveDrawer classes={classes} theme={{}} title="Secure Ethereum Exchange">
-			<Create title="Create User" icon={<CreateUserIcon/>}/>
-			<Login title="Login" icon={<LoginIcon/>}/>
-		</ResponsiveDrawer>
-      </div>
-    );
-  }
+	constructor(props)
+	{
+		super(props);
+
+		this.state =
+		{
+			username: ""
+		}
+
+		this.handlers =
+		{
+			onChangedUsername: this.onChangedUsername.bind(this)
+		}
+	}
+
+	onChangedUsername(username)
+	{
+		this.setState({username});
+	}
+
+	render() 
+	{
+		return (
+			<div className="App">
+				<ResponsiveDrawer classes={classes} theme={{}} title="Secure Ethereum Exchange">
+					<Create title="Create User" icon={<CreateUserIcon />} appState={this.state} appHandlers={this.handlers}/>
+					<Login title="Login" icon={<LoginIcon />} appState={this.state} appHandlers={this.handlers}/>
+				</ResponsiveDrawer>
+			</div>
+		);
+	}
 }
 
-export default App;
+export default App; 

@@ -1,50 +1,31 @@
 import React from 'react';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
+import api from '../api';
+import UserForm from './UserForm';
 
-class Login extends React.Component
+const Login = props =>
 {
-	constructor(props)
+	const onClickedLogin = password =>
 	{
-		super(props)
-
-		this.state =
+		api.getWallet(props.appState.username).then(response =>
 		{
-			username: ""
-		}
+			// TODO - Generate Encryption key using password and salt
+			// TODO - Decrypt keys
+			// TODO - Store keys	
+		
+			console.log("Got user: " + response.cipher + " | " + response.salt);
+		});
+	};
 
-		this.onChangeUsername = this.onChangeUsername.bind(this);
-	}
-
-	onChangeUsername(event)
-	{
-		this.setState({username: event.target.value});
-	}
-
-	render()
-	{
-		return (
-			<div>
-				<TextField
-					id="username"
-					label="User"
-					margin="normal"
-					value={this.state.username}
-					onChange={this.onChangeUsername}/>
-				<br/>
-				<TextField
-					id="password"
-					label="Password"
-					type="password"
-					autoComplete="current-password"
-					margin="normal"/>
-				<br/>
-				<Button variant="raised" color="primary">
-					Login
-				</Button>
-			</div>
-		)
-	}
+	return (
+		<UserForm appState={props.appState} appHandlers={props.appHandlers} onClickedButton={onClickedLogin} buttonText="Login"/>
+	);
 }
+
+Login.propTypes =
+{
+	appHandlers: PropTypes.object.isRequired,
+	appState: PropTypes.object.isRequired
+};
 
 export default Login;

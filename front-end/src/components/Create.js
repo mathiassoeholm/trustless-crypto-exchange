@@ -1,50 +1,27 @@
 import React from 'react';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
+import api from '../api';
+import UserForm from './UserForm';
 
-class Create extends React.Component
+const Create = props =>
 {
-	constructor(props)
+	const onClickedCreate = password =>
 	{
-		super(props)
+		// TODO - Generate salt
+		// TODO - Generate encryption key using scrypt and salt
+		// TODO - Encrypt using generated key and AES
+		api.createUser(props.appState.username, "cipher", "testsalt");
+	};
 
-		this.state =
-		{
-			username: ""
-		}
-
-		this.onChangeUsername = this.onChangeUsername.bind(this);
-	}
-
-	onChangeUsername(event)
-	{
-		this.setState({username: event.target.value});
-	}
-
-	render()
-	{
-		return (
-			<div>
-				<TextField
-					id="username"
-					label="User"
-					margin="normal"
-					value={this.state.username}
-					onChange={this.onChangeUsername}/>
-				<br/>
-				<TextField
-					id="password"
-					label="Password"
-					type="password"
-					autoComplete="current-password"
-					margin="normal"/>
-				<br/>
-				<Button variant="raised" color="primary">
-					Create
-				</Button>
-			</div>
-		)
-	}
+	return (
+		<UserForm appState={props.appState} appHandlers={props.appHandlers} onClickedButton={onClickedCreate} buttonText="Create"/>
+	);
 }
+
+Create.propTypes =
+{
+	appHandlers: PropTypes.object.isRequired,
+	appState: PropTypes.object.isRequired
+};
 
 export default Create;
