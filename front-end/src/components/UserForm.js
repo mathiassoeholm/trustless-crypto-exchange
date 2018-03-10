@@ -2,7 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import api from '../api';
+import api from '../modules/auth/api';
+import authActions from '../modules/auth/actions';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) =>
+({
+	username: state.auth.user ? state.auth.user.username : ''
+});
+
+
+const mapDispatchToProps = (dispatch) =>
+({
+	onChangedUsername: (event) => dispatch(authActions.changeUsername(event.target.value))
+});
 
 class UserForm extends React.Component
 {
@@ -16,13 +29,7 @@ class UserForm extends React.Component
 		}
 
 		this.onChangedPassword = this.onChangedPassword.bind(this);
-		this.onChangedUsername = this.onChangedUsername.bind(this);
 		this.onClickedButton = this.onClickedButton.bind(this);
-	}
-
-	onChangedUsername(event)
-	{
-		this.props.appHandlers.onChangedUsername(event.target.value);
 	}
 
 	onChangedPassword(event)
@@ -43,8 +50,8 @@ class UserForm extends React.Component
 					id="username"
 					label="User"
 					margin="normal"
-					value={this.props.appState.username}
-					onChange={this.onChangedUsername}/>
+					value={this.props.username}
+					onChange={this.props.onChangedUsername}/>
 				<br/>
 				<TextField
 					id="password"
@@ -65,10 +72,10 @@ class UserForm extends React.Component
 
 UserForm.propTypes =
 {
-	appHandlers: PropTypes.object.isRequired,
 	onClickedButton: PropTypes.func.isRequired,
-	buttonText: PropTypes.string.isRequired,
-	appState: PropTypes.object.isRequired
+	buttonText: PropTypes.string.isRequired
 }
+
+UserForm = connect(mapStateToProps, mapDispatchToProps)(UserForm);
 
 export default UserForm;

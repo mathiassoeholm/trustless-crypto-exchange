@@ -1,27 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import api from '../api';
 import UserForm from './UserForm';
+import authActions from '../modules/auth/actions';
+import { connect } from 'react-redux';
 
-const Create = props =>
+const mapDispatchToProps = (dispatch) =>
+({
+	onClickedButton: (password) => dispatch(authActions.createUser(password))
+});
+
+let Create = (props) =>
 {
-	const onClickedCreate = password =>
-	{
-		// TODO - Generate salt
-		// TODO - Generate encryption key using scrypt and salt
-		// TODO - Encrypt using generated key and AES
-		api.createUser(props.appState.username, "cipher", "testsalt");
-	};
-
 	return (
-		<UserForm appState={props.appState} appHandlers={props.appHandlers} onClickedButton={onClickedCreate} buttonText="Create"/>
+		<UserForm {...props} buttonText="Create"/>
 	);
 }
 
-Create.propTypes =
-{
-	appHandlers: PropTypes.object.isRequired,
-	appState: PropTypes.object.isRequired
-};
+Create = connect(null, mapDispatchToProps)(Create);
 
 export default Create;

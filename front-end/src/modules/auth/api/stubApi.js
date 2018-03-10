@@ -3,20 +3,28 @@ const fakeDelay = 500; // milliseconds
 // The stub api supports a single user
 let state = {};
 
-const createUser = (user, cipher, salt) =>
+const createUser = (username, cipher, salt) =>
 {
 	return new Promise((resolve, reject) =>
 	{
-		state.user = user;
+		state.username = username;
 		state.cipher = cipher;
 		state.salt = salt;
 		
-		console.log("Created user: " + user + " | " + cipher + " | " + salt);
-		setTimeout(resolve, fakeDelay);
+		console.log("Created user: " + username + " | " + cipher + " | " + salt);
+		setTimeout(resolve, fakeDelay, 
+		{ 
+			user: 
+			{
+				name: state.username
+			},
+			cipher: state.cipher,
+			salt: state.cipher
+		});
 	});
 };
 
-const getWallet = (user) =>
+const getWallet = (username) =>
 {
 	return new Promise((resolve, reject) =>
 	{

@@ -7,6 +7,8 @@ import Login from './components/Login';
 import Create from './components/Create';
 import CreateUserIcon from 'material-ui-icons/Face';
 import LoginIcon from 'material-ui-icons/VpnKey';
+import { Provider } from 'react-redux';
+import reduxStore from './redux/store';
 
 const classes = {}
 
@@ -36,10 +38,12 @@ class App extends Component
 	{
 		return (
 			<div className="App">
-				<ResponsiveDrawer classes={classes} theme={{}} title="Secure Ethereum Exchange">
-					<Create title="Create User" icon={<CreateUserIcon />} appState={this.state} appHandlers={this.handlers}/>
-					<Login title="Login" icon={<LoginIcon />} appState={this.state} appHandlers={this.handlers}/>
-				</ResponsiveDrawer>
+				<Provider store = {reduxStore}>
+					<ResponsiveDrawer classes={classes} theme={{}} title="Secure Ethereum Exchange">
+						<Create title="Create User" icon={<CreateUserIcon />} appState={this.state} appHandlers={this.handlers}/>
+						<Login title="Login" icon={<LoginIcon />} appState={this.state} appHandlers={this.handlers}/>
+					</ResponsiveDrawer>
+				</Provider>
 			</div>
 		);
 	}
