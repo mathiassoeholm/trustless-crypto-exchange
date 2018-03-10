@@ -3,17 +3,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CreateUserIcon from 'material-ui-icons/Face';
 import LoginIcon from 'material-ui-icons/VpnKey';
+import LogoutIcon from 'material-ui-icons/ExitToApp';
 import List from 'material-ui/List';
+import Subheader from 'material-ui/List/ListSubheader';
+import Divider from 'material-ui/Divider';
 
 import ListButton from './ListButton';
 import flowActions from '../modules/flow/actions';
+import authActions from '../modules/auth/actions';
 import menuTypes from '../modules/flow/menuTypes';
 
-const MenuButtons = ({isLoggedIn, dispatch}) =>
+const MenuButtons = ({isLoggedIn, username, dispatch}) =>
 {
 	const onButtonClick = (menuType) => () =>
 	{
 		dispatch(flowActions.changeMenu(menuType));
+	};
+
+	const onLogoutClick = () =>
+	{
+		dispatch(authActions.logout());
 	};
 
 	if(!isLoggedIn)
@@ -27,18 +36,26 @@ const MenuButtons = ({isLoggedIn, dispatch}) =>
 	}
 	else
 	{
-		return null;
+		return (
+			<List>
+				<Divider />
+				<Subheader>Logged in as: <b>{username}</b></Subheader>
+				<ListButton text="Logout" icon={<LogoutIcon/>} onClick={onLogoutClick} />
+			</List>	
+		);
 	}
 };
 
 const mapStateToProps = (state) =>
 ({
-	isLoggedIn: state.auth.isLoggedIn
+	isLoggedIn: state.auth.isLoggedIn,
+	username: state.auth.isLoggedIn ? state.auth.user.username : null
 });
 
 MenuButtons.propTypes =
 {
 	isLoggedIn: PropTypes.bool.isRequired,
+	username: PropTypes.string,
 	dispatch: PropTypes.func.isRequired
 };
 

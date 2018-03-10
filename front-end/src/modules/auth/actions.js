@@ -70,6 +70,13 @@ function login(password)
 	};
 }
 
+function logout()
+{
+	return {
+		type: t.LOG_OUT
+	};
+}
+
 function changeUsername(username)
 {
 	return (dispatch) =>
@@ -86,5 +93,6 @@ export default
 {
 	createUser,
 	login,
+	logout,
 	changeUsername
 };
