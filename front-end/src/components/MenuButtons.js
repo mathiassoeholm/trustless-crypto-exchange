@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import CreateUserIcon from 'material-ui-icons/Face';
 import LoginIcon from 'material-ui-icons/VpnKey';
 import LogoutIcon from 'material-ui-icons/ExitToApp';
+import WalletIcon from 'material-ui-icons/AccountBalanceWallet';
 import List from 'material-ui/List';
 import Subheader from 'material-ui/List/ListSubheader';
 import Divider from 'material-ui/Divider';
@@ -38,6 +39,7 @@ const MenuButtons = ({isLoggedIn, username, dispatch}) =>
 	{
 		return (
 			<List>
+				<ListButton text="Wallet" icon={<WalletIcon/>} onClick={onButtonClick(menuTypes.WALLET)} />
 				<Divider />
 				<Subheader>Logged in as: <b>{username}</b></Subheader>
 				<ListButton text="Logout" icon={<LogoutIcon/>} onClick={onLogoutClick} />

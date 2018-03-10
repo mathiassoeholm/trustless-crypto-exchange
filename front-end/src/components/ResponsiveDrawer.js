@@ -62,6 +62,8 @@ class ResponsiveDrawer extends React.Component
 		{
 			mobileOpen: false
 		};
+
+		this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
 	}
 	
 	handleDrawerToggle()

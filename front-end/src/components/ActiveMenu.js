@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import menuTypes from '../modules/flow/menuTypes';
 import Login from './Login';
 import Create from './Create';
+import WalletDetails from './WalletDetails';
 
 const ActiveMenu = ({ activeMenu }) =>
 {
@@ -14,6 +15,8 @@ const ActiveMenu = ({ activeMenu }) =>
 			return <Create />;
 		case menuTypes.LOGIN:
 			return <Login />;
+		case menuTypes.WALLET:
+			return <WalletDetails />;
 	}
 };
 

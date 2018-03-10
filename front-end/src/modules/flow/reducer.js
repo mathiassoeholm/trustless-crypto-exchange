@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) =>
     {
 		case authActionTypes.LOG_IN:
 			// TODO - Change to correct menu after logging in
-			return changeMenu(state, menuTypes.LOGIN);
+			return changeMenu(state, menuTypes.WALLET);
 
 		case authActionTypes.LOG_OUT:
 			return changeMenu(state, menuTypes.LOGIN);

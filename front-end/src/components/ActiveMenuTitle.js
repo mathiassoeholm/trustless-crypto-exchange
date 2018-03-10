@@ -11,6 +11,8 @@ const ActiveMenuTitle = ({activeMenu}) =>
 			return 'Create User';
 		case menuTypes.LOGIN:
 			return 'Login';
+		case menuTypes.WALLET:
+			return 'Wallet';
 	}
 };
 
