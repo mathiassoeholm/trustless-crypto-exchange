@@ -14,7 +14,7 @@ let Login = (props) =>
 	return (
 		<UserForm {...props} buttonText="Login"/>
 	);
-}
+};
 
 Login = connect(null, mapDispatchToProps)(Login);
 

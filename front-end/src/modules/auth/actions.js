@@ -18,10 +18,10 @@ function createUser(password)
 			{
 				type: t.LOG_IN,
 				user
-			})
+			});
 		});	
-	}
-};
+	};
+}
 
 function login(password)
 {
@@ -38,9 +38,9 @@ function login(password)
 				{
 					username
 				}	
-			})
+			});
 		});
-	}
+	};
 }
 
 function changeUsername(username)
@@ -52,7 +52,7 @@ function changeUsername(username)
 			type: t.CHANGE_USERNAME,
 			username
 		});
-	}
+	};
 }
 
 export default
@@ -60,4 +60,4 @@ export default
 	createUser,
 	login,
 	changeUsername
-}
+};

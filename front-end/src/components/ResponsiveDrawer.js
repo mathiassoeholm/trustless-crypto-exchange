@@ -9,8 +9,10 @@ import IconButton from 'material-ui/IconButton';
 import Hidden from 'material-ui/Hidden';
 import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
-import List from 'material-ui/List';
-import ListButton from './ListButton';
+
+import MenuButtons from './MenuButtons';
+import ActiveMenu from './ActiveMenu';
+import ActiveMenuTitle from './ActiveMenuTitle';
 
 const drawerWidth = 240;
 
@@ -52,34 +54,19 @@ const styles = theme => ({
 
 class ResponsiveDrawer extends React.Component
 {
-	state =
+	constructor(props)
 	{
-		mobileOpen: false,
-		index: 0
-	};
+		super(props);
 
-	handleDrawerToggle = () => {
-		this.setState({ mobileOpen: !this.state.mobileOpen });
-	};
-
-	onMenuItemClicked = (index) => {
-		this.setState({ index });
-	}
-
-	getActiveComponent = () => {
-		return this.props.children[this.state.index];
-	}
-
-	getMenuItems = () =>
-	{
-		let index = 0;
-		return this.props.children.map(child =>
+		this.state =
 		{
-			const button = <ListButton title={child.props.title} icon={child.props.icon} key={index} index={index} onClick={this.onMenuItemClicked}/>
-			index++;
-
-			return button;
-		});
+			mobileOpen: false
+		};
+	}
+	
+	handleDrawerToggle()
+	{
+		this.setState({ mobileOpen: !this.state.mobileOpen });
 	}
 
 	render() {
@@ -89,9 +76,7 @@ class ResponsiveDrawer extends React.Component
 			<div>
 				<div className={classes.toolbar} />
 				<Divider />
-				<List>
-					{this.getMenuItems()}
-				</List>
+				<MenuButtons />
 			</div>
 		);
 
@@ -108,7 +93,7 @@ class ResponsiveDrawer extends React.Component
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="title" color="inherit" noWrap>
-							{this.getActiveComponent().props.title}
+							<ActiveMenuTitle />
 						</Typography>
 					</Toolbar>
 				</AppBar>
@@ -141,7 +126,7 @@ class ResponsiveDrawer extends React.Component
 				</Hidden>
 				<main className={classes.content}>
 					<div className={classes.toolbar} />
-					{this.getActiveComponent()}
+					<ActiveMenu />
 				</main>
 			</div>
 		);

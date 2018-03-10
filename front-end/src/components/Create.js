@@ -13,7 +13,7 @@ let Create = (props) =>
 	return (
 		<UserForm {...props} buttonText="Create"/>
 	);
-}
+};
 
 Create = connect(null, mapDispatchToProps)(Create);
 

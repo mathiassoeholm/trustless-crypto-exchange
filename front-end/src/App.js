@@ -1,52 +1,22 @@
 import React, { Component } from 'react';
 import ResponsiveDrawer from './components/ResponsiveDrawer';
 import Typography from 'material-ui/Typography';
-import 'typeface-roboto'
+import 'typeface-roboto';
 import './App.css';
-import Login from './components/Login';
-import Create from './components/Create';
-import CreateUserIcon from 'material-ui-icons/Face';
-import LoginIcon from 'material-ui-icons/VpnKey';
 import { Provider } from 'react-redux';
 import reduxStore from './redux/store';
 
-const classes = {}
+const classes = {};
 
-class App extends Component 
+const App = ()  =>
 {
-	constructor(props)
-	{
-		super(props);
-
-		this.state =
-		{
-			username: ""
-		}
-
-		this.handlers =
-		{
-			onChangedUsername: this.onChangedUsername.bind(this)
-		}
-	}
-
-	onChangedUsername(username)
-	{
-		this.setState({username});
-	}
-
-	render() 
-	{
-		return (
-			<div className="App">
-				<Provider store = {reduxStore}>
-					<ResponsiveDrawer classes={classes} theme={{}} title="Secure Ethereum Exchange">
-						<Create title="Create User" icon={<CreateUserIcon />} appState={this.state} appHandlers={this.handlers}/>
-						<Login title="Login" icon={<LoginIcon />} appState={this.state} appHandlers={this.handlers}/>
-					</ResponsiveDrawer>
-				</Provider>
-			</div>
-		);
-	}
-}
+	return (
+		<div className="App">
+			<Provider store = {reduxStore}>
+				<ResponsiveDrawer classes={classes} theme={{}} title="Secure Ethereum Exchange" />
+			</Provider>
+		</div>
+	);
+};
 
 export default App; 

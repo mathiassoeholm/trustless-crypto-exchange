@@ -30,7 +30,7 @@ const getWallet = (username) =>
 	{
 		setTimeout(resolve, fakeDelay, { cipher: state.cipher, salt: state.salt });
 	});
-}
+};
 
 export default
 {

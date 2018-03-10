@@ -21,12 +21,12 @@ class UserForm extends React.Component
 {
 	constructor(props)
 	{
-		super(props)
+		super(props);
 
 		this.state =
 		{
 			password: ""
-		}
+		};
 
 		this.onChangedPassword = this.onChangedPassword.bind(this);
 		this.onClickedButton = this.onClickedButton.bind(this);
@@ -66,7 +66,7 @@ class UserForm extends React.Component
 					{this.props.buttonText}
 				</Button>
 			</div>
-		)
+		);
 	}
 }
 
@@ -74,8 +74,6 @@ UserForm.propTypes =
 {
 	onClickedButton: PropTypes.func.isRequired,
 	buttonText: PropTypes.string.isRequired
-}
+};
 
-UserForm = connect(mapStateToProps, mapDispatchToProps)(UserForm);
-
-export default UserForm;
+export default connect(mapStateToProps, mapDispatchToProps)(UserForm);

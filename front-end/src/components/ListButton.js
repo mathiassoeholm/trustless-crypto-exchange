@@ -14,7 +14,7 @@ const ListButton = (props) =>
 			<ListItemIcon>
 				{props.icon}
 			</ListItemIcon>
-			<ListItemText primary={props.title} />
+			<ListItemText primary={props.text} />
 		</ListItem>
 	);
 };
@@ -22,9 +22,8 @@ const ListButton = (props) =>
 ListButton.propTypes =
 {
 	onClick: PropTypes.func.isRequired,
-	index: PropTypes.number.isRequired,
 	icon: PropTypes.object.isRequired,
-	title: PropTypes.string.isRequired
+	text: PropTypes.string.isRequired
 };
 
 export default ListButton;
