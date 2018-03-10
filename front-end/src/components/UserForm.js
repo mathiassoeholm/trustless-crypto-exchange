@@ -12,7 +12,6 @@ const mapStateToProps = (state) =>
 	username: state.auth.user ? state.auth.user.username : ''
 });
 
-
 const mapDispatchToProps = (dispatch) =>
 ({
 	onChangedUsername: (event) => dispatch(authActions.changeUsername(event.target.value))
@@ -75,7 +74,7 @@ UserForm.propTypes =
 {
 	onClickedButton: PropTypes.func.isRequired,
 	buttonText: PropTypes.string.isRequired,
-	username: PropTypes.string.isRequired,
+	username: PropTypes.string, // TODO: We get error if this is set as required, not sure why
 	onChangedUsername: PropTypes.func.isRequired
 };
 
