@@ -4,13 +4,8 @@ import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
 const ListButton = (props) =>
 {
-	const onClick = () =>
-	{
-		props.onClick(props.index);
-	};
-
 	return (
-		<ListItem button onClick={onClick}>
+		<ListItem button onClick={props.onClick}>
 			<ListItemIcon>
 				{props.icon}
 			</ListItemIcon>

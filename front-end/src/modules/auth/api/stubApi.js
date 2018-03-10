@@ -11,7 +11,6 @@ const createUser = (username, cipher, salt) =>
 		state.cipher = cipher;
 		state.salt = salt;
 		
-		console.log("Created user: " + username + " | " + cipher + " | " + salt);
 		setTimeout(resolve, fakeDelay, 
 		{ 
 			user: 

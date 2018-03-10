@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
+import { connect } from 'react-redux';
+
 import api from '../modules/auth/api';
 import authActions from '../modules/auth/actions';
-import { connect } from 'react-redux';
 
 const mapStateToProps = (state) =>
 ({
@@ -73,7 +74,9 @@ class UserForm extends React.Component
 UserForm.propTypes =
 {
 	onClickedButton: PropTypes.func.isRequired,
-	buttonText: PropTypes.string.isRequired
+	buttonText: PropTypes.string.isRequired,
+	username: PropTypes.string.isRequired,
+	onChangedUsername: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserForm);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import menuTypes from '../modules/flow/menuTypes';
 import Login from './Login';
@@ -20,5 +21,10 @@ const mapStateToProps = (state) =>
 ({
 	activeMenu: state.flow.activeMenu
 });
+
+ActiveMenu.propTypes =
+{
+	activeMenu: PropTypes.string.isRequired
+};
 
 export default connect(mapStateToProps)(ActiveMenu);
