@@ -16,3 +16,24 @@ it('creates and stores secret', async () =>
 
 	expect(result.username).toEqual('kurt');
 });
+
+it('updates progress correctly when logging in', async () =>
+{
+	let previousProgress = 0;
+
+	const progressCallback = (p) =>
+	{
+		expect(p).toBeGreaterThanOrEqual(previousProgress);
+		previousProgress = p;
+	};
+
+	await protocol.createUser({username: 'kurt'}, 'start123', progressCallback);
+
+	expect(previousProgress).toEqual(1);
+
+	previousProgress = 0;
+
+	await protocol.login('kurt', 'start123', progressCallback);
+
+	expect(previousProgress).toEqual(1);
+});

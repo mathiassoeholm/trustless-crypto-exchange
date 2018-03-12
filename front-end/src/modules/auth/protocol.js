@@ -73,11 +73,13 @@ const createUser = (user, password, progressCallback = () => {}) =>
 {
 	let salt = getRandomSalt();
 
+	progressCallback(0, "Generating Encryption Key");
+
 	return new Promise((resolve, reject) =>
 	{
 		// Generating the key with scrypt corresponds to
 		// 60% of the entire create user protocol
-		const modifiedProgressCb = (progress) => progressCallback(progress * 0.6);
+		const modifiedProgressCb = (progress) => progressCallback(progress * 0.6, "Generating Encryption Key");
 
 		resolve(generateKey(password, salt, modifiedProgressCb));
 	})
@@ -95,7 +97,7 @@ const createUser = (user, password, progressCallback = () => {}) =>
 	})
 	.then((result) =>
 	{
-		progressCallback(1);
+		progressCallback(1, "Finished");
 		return result;
 	});
 };
@@ -103,6 +105,8 @@ const createUser = (user, password, progressCallback = () => {}) =>
 const login = (username, password, progressCallback = () => {}) =>
 {
 	let cipher;
+
+	progressCallback(0, "Retrieving data from server");	
 
 	return new Promise((resolve, reject) =>
 	{
@@ -114,11 +118,11 @@ const login = (username, password, progressCallback = () => {}) =>
 		cipher = result.cipher;
 
 		// Assume server call takes 20% time
-		progressCallback(0.2);
+		progressCallback(0.2, "Generating Encryption Key");
 
 		// Generating the key with scrypt corresponds to
 		// 60% of the entire create user protocol
-		const modifiedProgressCb = (progress) => progressCallback(progress * 0.6 + 0.2);
+		const modifiedProgressCb = (progress) => progressCallback(progress * 0.6 + 0.2, "Generating Encryption Key");
 
 		return generateKey(password, salt, modifiedProgressCb);
 	})
@@ -133,7 +137,7 @@ const login = (username, password, progressCallback = () => {}) =>
 			throw 'Wrong password';
 		}
 
-		progressCallback(1);
+		progressCallback(1, "Finished");
 		return secret;
 	});
 };

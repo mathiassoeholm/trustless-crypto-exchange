@@ -88,3 +88,40 @@ it('logs in and is pure', () =>
 
 	expect(newState).toEqual(stateAfter);
 });
+
+it('updates login attempt status and is pure', () =>
+{
+	const stateBefore = 
+	{
+		loginAttemptStatus:
+		{
+			progress: 0.8,
+			message: "bob"
+		}
+	};
+
+	const action =
+	{
+		type: t.PROGRESS_UPDATE,
+		status: 
+		{
+			progress: 0.9,
+			message: "alice"
+		}
+	};
+
+	const stateAfter =
+	{
+		loginAttemptStatus:
+		{
+			progress: 0.9,
+			message: "alice"
+		}
+	};
+
+	deepFreeze(stateBefore);
+	
+	const newState = reducer(stateBefore, action);
+
+	expect(newState).toEqual(stateAfter);
+});

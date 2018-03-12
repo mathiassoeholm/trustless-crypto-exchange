@@ -1,15 +1,28 @@
 import t from './actionTypes';
 import protocol from './protocol';
 
+function updateLoginAttemptStatus(progress, message)
+{
+	return (
+	{
+		type: t.PROGRESS_UPDATE,
+		status:
+		{
+			progress,
+			message
+		}
+	});
+}
+
 function createUser(password)
 {
 	return (dispatch, getState) =>
 	{
 		const user = getState().auth.user;
 
-		const progressCallback = (p) =>
+		const progressCallback = (p, m) =>
 		{
-			console.log('progress: ' + p);
+			dispatch(updateLoginAttemptStatus(p, m));
 		};
 
 		protocol.createUser(user, password, progressCallback)
@@ -36,9 +49,9 @@ function login(password)
 	{
 		const username = getState().auth.user.username;
 
-		const progressCallback = (p) =>
+		const progressCallback = (p, m) =>
 		{
-			console.log('progress: ' + p);
+			dispatch(updateLoginAttemptStatus(p, m));
 		};
 
 		protocol.login(username, password, progressCallback)
