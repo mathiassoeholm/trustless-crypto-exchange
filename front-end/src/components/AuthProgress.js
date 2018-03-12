@@ -27,7 +27,7 @@ AuthProgress.propTypes =
 
 const mapStateToProps = (state) =>
 ({
-	open: state.auth.loginAttemptStatus && !state.auth.isLoggedIn,
+	open: state.auth.isLoggingIn,
 	progress: state.auth.loginAttemptStatus ? state.auth.loginAttemptStatus.progress : 0,
 	message: state.auth.loginAttemptStatus ? state.auth.loginAttemptStatus.message : ''
 });
