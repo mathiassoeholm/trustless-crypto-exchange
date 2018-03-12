@@ -1,4 +1,5 @@
 import t from './actionTypes';
+import utils from '../../utils';
 
 let initialState = { isLoggedIn: false, user: null };
 
@@ -7,10 +8,15 @@ const reducer = (state = initialState, action) =>
     switch (action.type)
     {
 		case t.LOG_IN:
-			return Object.assign({}, state, { isLoggedIn: true, user: action.user });
+		{
+			const deepUserCopy = utils.deepCopy(action.user);
+			return Object.assign({}, state, { isLoggedIn: true, user: deepUserCopy });
+		}
 
-        case t.LOG_OUT:
+		case t.LOG_OUT:
+		{
 			return Object.assign({}, state, { isLoggedIn: false, user: null });
+		}
 
 		case t.CHANGE_USERNAME:
 		{

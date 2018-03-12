@@ -4,7 +4,7 @@ import stubApi from './api/stubApi';
 // We use the stub api for testing purposes
 protocol.dependencies.api = stubApi;
 
-it('creates', async () =>
+it('creates a user', async () =>
 {
 	await protocol.createUser({username: 'kurt'}, 'start123');
 });
