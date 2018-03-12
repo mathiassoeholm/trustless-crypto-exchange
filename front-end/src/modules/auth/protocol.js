@@ -5,6 +5,8 @@ import aesjs from 'aes-js';
 
 import api from './api';
 
+const dependencies = { api };
+
 const getRandomSalt = () =>
 {
 	return aesjs.utils.utf8.fromBytes(crypto.randomBytes(16)).normalize('NFKC');
@@ -36,57 +38,109 @@ const decryptAES = (cipher, key) =>
 	return decryptedText;
 };
 
-const createUser = (user, password, progressCallback) =>
+const generateKey = (password, salt, progressCallback) =>
 {
 	return new Promise((resolve, reject) =>
 	{
 		// TODO: Investigate normalize
 		const passwordBuffer = Buffer.from(password.normalize('NFKC'));
-
-		const salt = getRandomSalt();
 		const saltBuffer = Buffer.from(salt);
 		
 		const N = 1024, r = 8, p = 1;
+
+		// We're using AES 256, so keys need to be 256 bits / 32 bytes
 		const keyLength = 32;
 
-		scrypt(passwordBuffer, saltBuffer, N, r, p, keyLength, (error, progress, key) =>
+		scrypt(passwordBuffer, saltBuffer, N, r, p, keyLength, (error,  progress, key) =>
 		{
-			if (error)
+			if(error) 
 			{
-				console.log("Error: " + error);
-
 				reject(error);
 			}
-			else if (key)
+			else if(key)
 			{
-				console.log(key);
-
-				// TODO encrypt using AES
-				const secret =
-				{
-					username: user.username
-				};
-
-				const secretText = JSON.stringify(secret);
-				const encryptedSecret = encryptAES(secretText, key);
-
-				api.createUser(user.username, encryptedSecret, salt).then(result =>
-				{
-					progressCallback(1);
-					resolve(result);
-				});
+				resolve(key);
 			}
 			else
 			{
-				// Generating the key with scrypt corresponds to
-				// 60% of the entire create user protocol
-				progressCallback(progress * 0.6);
+				progressCallback(progress);
 			}
 		});
 	});
 };
 
+const createUser = (user, password, progressCallback = () => {}) =>
+{
+	let salt = getRandomSalt();
+
+	return new Promise((resolve, reject) =>
+	{
+		// Generating the key with scrypt corresponds to
+		// 60% of the entire create user protocol
+		const modifiedProgressCb = (progress) => progressCallback(progress * 0.6);
+
+		resolve(generateKey(password, salt, modifiedProgressCb));
+	})
+	.then((key) =>
+	{
+		const secret =
+		{
+			username: user.username
+		};
+
+		const secretText = JSON.stringify(secret);
+		const encryptedSecret = encryptAES(secretText, key);
+
+		return dependencies.api.createUser(user.username, encryptedSecret, salt);
+	})
+	.then((result) =>
+	{
+		progressCallback(1);
+		return result;
+	});
+};
+
+const login = (username, password, progressCallback = () => {}) =>
+{
+	let cipher;
+
+	return new Promise((resolve, reject) =>
+	{
+		resolve(dependencies.api.getWallet(username));
+	})
+	.then((result) =>
+	{
+		const salt = result.salt;
+		cipher = result.cipher;
+
+		// Assume server call takes 20% time
+		progressCallback(0.2);
+
+		// Generating the key with scrypt corresponds to
+		// 60% of the entire create user protocol
+		const modifiedProgressCb = (progress) => progressCallback(progress * 0.6 + 0.2);
+
+		return generateKey(password, salt, modifiedProgressCb);
+	})
+	.then((key) =>
+	{
+		const secretJson = decryptAES(cipher, key);
+
+		const secret = JSON.parse(secretJson);
+
+		if(secret.username !== username)
+		{
+			throw 'Wrong password';
+		}
+
+		progressCallback(1);
+		return secret;
+	});
+};
+
 export default
 {
-	createUser
+	createUser,
+	login,
+	dependencies
 };

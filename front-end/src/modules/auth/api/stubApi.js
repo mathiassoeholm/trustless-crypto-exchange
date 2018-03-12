@@ -15,7 +15,7 @@ const createUser = (username, cipher, salt) =>
 		{ 
 			user: 
 			{
-				name: state.username
+				username: state.username
 			},
 			cipher: state.cipher,
 			salt: state.cipher

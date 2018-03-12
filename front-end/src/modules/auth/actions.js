@@ -1,5 +1,4 @@
 import t from './actionTypes';
-import api from './api';
 import protocol from './protocol';
 
 function createUser(password)
@@ -13,14 +12,20 @@ function createUser(password)
 			console.log('progress: ' + p);
 		};
 
-		protocol.createUser(user, password, progressCallback).then((result) =>
+		protocol.createUser(user, password, progressCallback)
+		.then((result) =>
 		{
-			dispatch({
+			dispatch(
+			{
 				type: t.LOG_IN,
 				user: result.user
 			});
 
 			console.log('created user');
+		})
+		.catch((error) =>
+		{
+			console.log('error: ' + error);
 		});
 	};
 }
@@ -31,7 +36,13 @@ function login(password)
 	{
 		const username = getState().auth.user.username;
 
-		api.getWallet().then(result =>
+		const progressCallback = (p) =>
+		{
+			console.log('progress: ' + p);
+		};
+
+		protocol.login(username, password, progressCallback)
+		.then((result) =>
 		{
 			dispatch(
 			{
@@ -39,8 +50,12 @@ function login(password)
 				user: 
 				{
 					username
-				}	
+				}
 			});
+		})
+		.catch((error) =>
+		{
+			console.log('error: ' + error);
 		});
 	};
 }
