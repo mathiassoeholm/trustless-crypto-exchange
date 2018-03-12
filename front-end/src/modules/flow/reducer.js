@@ -6,7 +6,7 @@ let initialState = { activeMenu: menuTypes.LOGIN };
 
 const changeMenu = (state, newMenu) =>
 {
-	return Object.assign({}, state, { activeMenu: newMenu });
+	return { ...state, activeMenu: newMenu };
 };
 
 const reducer = (state = initialState, action) =>
