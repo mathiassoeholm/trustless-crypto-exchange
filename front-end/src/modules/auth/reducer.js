@@ -5,8 +5,10 @@ const exampleState =
 	loginAttemptStatus:
 	{
 		progress: 0.9,
-		message: "message"
+		message: "message",
+		errorMessage: "error"
 	},
+	isLoggingIn: false,	
 	isLoggedIn: true,
 	user:
 	{
@@ -17,6 +19,7 @@ const exampleState =
 let initialState = 
 {
 	loginAttemptStatus: null,
+	isLoggingIn: false,
 	isLoggedIn: false, 
 	user: null
 };
@@ -36,6 +39,18 @@ const reducer = (state = initialState, action) =>
 
 		case t.PROGRESS_UPDATE:
 			return { ...state, loginAttemptStatus: action.status };
+
+		case t.LOGIN_ATTEMPT_FINISHED:
+		{
+			let newState = { ...state, isLoggingIn: false };
+
+			if(action.message !== null)
+			{
+				newState = { ...newState, loginAttemptStatus: { errorMessage: action.errorMessage }};
+			}
+
+			return newState;
+		}
 
         default:
             return state;

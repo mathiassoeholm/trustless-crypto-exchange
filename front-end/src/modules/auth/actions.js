@@ -1,7 +1,7 @@
 import t from './actionTypes';
 import protocol from './protocol';
 
-function updateLoginAttemptStatus(progress, message)
+function progressUpdate(progress, message)
 {
 	return (
 	{
@@ -14,6 +14,15 @@ function updateLoginAttemptStatus(progress, message)
 	});
 }
 
+function loginAttemptFinished(errorMessage = undefined)
+{
+	return (
+	{
+		type: t.LOGIN_ATTEMPT_FINISHED,
+		errorMessage
+	});
+}
+
 function createUser(password)
 {
 	return (dispatch, getState) =>
@@ -22,12 +31,14 @@ function createUser(password)
 
 		const progressCallback = (p, m) =>
 		{
-			dispatch(updateLoginAttemptStatus(p, m));
+			dispatch(progressUpdate(p, m));
 		};
 
 		protocol.createUser(user, password, progressCallback)
 		.then((result) =>
 		{
+			dispatch(loginAttemptFinished());
+
 			dispatch(
 			{
 				type: t.LOG_IN,
@@ -38,6 +49,8 @@ function createUser(password)
 		})
 		.catch((error) =>
 		{
+			dispatch(loginAttemptFinished(error));			
+			
 			console.log('error: ' + error);
 		});
 	};
@@ -51,12 +64,14 @@ function login(password)
 
 		const progressCallback = (p, m) =>
 		{
-			dispatch(updateLoginAttemptStatus(p, m));
+			dispatch(progressUpdate(p, m));
 		};
 
 		protocol.login(username, password, progressCallback)
 		.then((result) =>
 		{
+			dispatch(loginAttemptFinished());			
+
 			dispatch(
 			{
 				type: t.LOG_IN,
@@ -68,6 +83,8 @@ function login(password)
 		})
 		.catch((error) =>
 		{
+			dispatch(loginAttemptFinished(error));			
+			
 			console.log('error: ' + error);
 		});
 	};

@@ -125,3 +125,33 @@ it('updates login attempt status and is pure', () =>
 
 	expect(newState).toEqual(stateAfter);
 });
+
+it('login attempt fails and is pure', () =>
+{
+	const stateBefore = 
+	{ 
+		isLoggingIn: true, 
+		loginAttemptStatus: { } 
+	};
+
+	const action =
+	{
+		type: t.LOGIN_ATTEMPT_FINISHED,
+		errorMessage: "failed"
+	};
+
+	const stateAfter =
+	{
+		isLoggingIn: false,
+		loginAttemptStatus:
+		{
+			errorMessage: "failed"
+		}
+	};
+
+	deepFreeze(stateBefore);
+
+	const newState = reducer(stateBefore, action);
+
+	expect(newState).toEqual(stateAfter);
+});
