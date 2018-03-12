@@ -38,7 +38,7 @@ const reducer = (state = initialState, action) =>
 			return { ...state, user: { ...state.user, username: action.username } };
 
 		case t.PROGRESS_UPDATE:
-			return { ...state, loginAttemptStatus: action.status };
+			return { ...state, isLoggingIn: true, loginAttemptStatus: action.status };
 
 		case t.LOGIN_ATTEMPT_FINISHED:
 		{
