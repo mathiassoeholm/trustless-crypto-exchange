@@ -1,5 +1,6 @@
 export default
 {
 	CREATE_USER: 'CREATE_USER',
-	LOGIN: 'LOGIN'
+	LOGIN: 'LOGIN',
+	WALLET: 'WALLET'
 };
