@@ -1,52 +1,27 @@
 import t from './actionTypes';
 import api from './api';
-import crypto from 'crypto';
-import scrypt from 'scrypt-js';
-import buffer from 'buffer';
+import protocol from './protocol';
 
 function createUser(password)
 {
 	return (dispatch, getState) =>
 	{
-		const username = getState().auth.user.username;
+		const user = getState().auth.user;
 
-		// TODO: Investigate normalize
-		password = new buffer.SlowBuffer(password.normalize('NFKC'));
-
-		const randomString = crypto.randomBytes(16).toString();
-		const salt = new buffer.SlowBuffer(randomString.normalize('NFKC'));
-
-		const N = 1024, r = 8, p = 1;
-		const keyLength = 32;
-
-		scrypt(password, salt, N, r, p, keyLength, (error, progress, key) =>
+		const progressCallback = (p) =>
 		{
-			if (error)
-			{
-				console.log("Error: " + error);
-			}
-			else if (key)
-			{
-				console.log("Found: " + key);
+			console.log('progress: ' + p);
+		};
 
-				/*api.createUser(username, "cipher", "testsalt").then(result =>
-				{
-					const user = result.user;
-		
-					dispatch(
-					{
-						type: t.LOG_IN,
-						user
-					});
-				});	*/
-			}
-			else
-			{
-				console.log(progress);
-			}
+		protocol.createUser(user, password, progressCallback).then((result) =>
+		{
+			dispatch({
+				type: t.LOG_IN,
+				user: result.user
+			});
+
+			console.log('created user');
 		});
-
-		// TODO - Encrypt using generated key and AES
 	};
 }
 
