@@ -6,5 +6,6 @@ cache:
     - front-end/node_modules
 script:
   - cd front-end
+  - npm install
   - npm run build
   - npm test
