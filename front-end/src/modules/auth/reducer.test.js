@@ -116,7 +116,8 @@ it('updates login attempt status and is pure', () =>
 		{
 			progress: 0.9,
 			message: "alice"
-		}
+		},
+		isLoggingIn: true
 	};
 
 	deepFreeze(stateBefore);
