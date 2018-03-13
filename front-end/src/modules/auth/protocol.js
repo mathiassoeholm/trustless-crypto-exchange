@@ -1,5 +1,4 @@
 import scrypt from 'scrypt-js';
-import buffer from 'buffer';
 import crypto from 'crypto';
 import aesjs from 'aes-js';
 
@@ -134,7 +133,7 @@ const login = (username, password, progressCallback = () => {}) =>
 
 		if(secret.username !== username)
 		{
-			throw 'Wrong password';
+			throw Error('Wrong password');
 		}
 
 		progressCallback(1, "Finished");

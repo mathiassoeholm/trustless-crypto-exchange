@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Dialog, { DialogTitle } from 'material-ui/Dialog';
 import { LinearProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
-import { withStyles } from 'material-ui/styles';
 
 const AuthProgress = ({ title, open, progress, message }) =>
 {

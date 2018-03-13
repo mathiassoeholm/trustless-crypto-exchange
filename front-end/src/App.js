@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ResponsiveDrawer from './components/ResponsiveDrawer';
-import Typography from 'material-ui/Typography';
 import 'typeface-roboto';
 import './App.css';
 import { Provider } from 'react-redux';

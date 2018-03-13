@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 
 import menuTypes from '../modules/flow/menuTypes';
@@ -13,6 +12,8 @@ const ActiveMenuTitle = ({activeMenu}) =>
 			return 'Login';
 		case menuTypes.WALLET:
 			return 'Wallet';
+		default:
+			throw new Error('Unknown menu type');
 	}
 };
 

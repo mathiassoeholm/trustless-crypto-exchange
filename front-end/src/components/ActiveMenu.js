@@ -17,6 +17,8 @@ const ActiveMenu = ({ activeMenu }) =>
 			return <Login />;
 		case menuTypes.WALLET:
 			return <WalletDetails />;
+		default:
+			throw new Error('Unknown menu type');
 	}
 };
 

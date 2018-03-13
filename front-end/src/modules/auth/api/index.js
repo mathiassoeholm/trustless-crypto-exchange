@@ -1,4 +1,6 @@
 import stubApi from './stubApi';
-import realApi from './realApi';
+
+// Replace with real API later
+//import realApi from './realApi';
 
 export default stubApi;

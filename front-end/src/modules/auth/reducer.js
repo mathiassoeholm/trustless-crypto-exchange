@@ -1,6 +1,7 @@
 import t from './actionTypes';
 
-const exampleState =
+
+const exampleState = // eslint-disable-line no-unused-vars
 {
 	loginAttemptStatus:
 	{

@@ -4,8 +4,6 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux';
 
-
-import api from '../modules/auth/api';
 import authActions from '../modules/auth/actions';
 
 const mapStateToProps = (state) =>
