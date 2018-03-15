@@ -14,7 +14,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "scrypt-js": "^2.0.3",
-    "typeface-roboto": "0.0.54"
+    "typeface-roboto": "0.0.54",
+    "web3": "^0.20.6"
   },
   "scripts": {
     "start": "react-scripts start",
