@@ -24,11 +24,21 @@ describe('Auth Utils', () =>
 		});
 	
 		expect(previousProgress).toEqual(1);
-		expect(key).toBeDefined();
+		expect(key).not.toBeNull();
 	});
 
 	it('encrypts and decrypts successfully', async () =>
 	{
+		// Key must be 32 bytes
+		const key = "12345678912345678912345678912345";
 
+		const secretText = "secret";
+		const encryptedText = utils.encryptAES(secretText, key, false);
+
+		expect(encryptedText).not.toEqual(secretText);
+
+		const decryptedText = utils.decryptAES(encryptedText, key, false);
+
+		expect(decryptedText).toEqual(secretText);
 	});
 });
