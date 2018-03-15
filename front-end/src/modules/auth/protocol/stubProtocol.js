@@ -1,6 +1,3 @@
-import dependencies from '../../../dependencies';
-import utils from './utils';
-
 const options =
 {
 	shouldFail: false
