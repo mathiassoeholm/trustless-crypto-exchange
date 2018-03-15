@@ -8,6 +8,8 @@ end_of_line = lf
 charset = utf-8
 insert_final_newline = true
 curly_bracket_next_line = true
+trim_trailing_whitespace = false
+insert_final_newline = false
 
 [*.md]
 trim_trailing_whitespace = false
