@@ -1,5 +1,5 @@
 import t from './actionTypes';
-import protocol from './protocol';
+import dependencies from '../../dependencies';
 
 function progressUpdate(progress, message)
 {
@@ -34,7 +34,7 @@ function createUser(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		protocol.createUser(user, password, progressCallback)
+		dependencies.authProtocol.createUser(user, password, progressCallback)
 		.then((result) =>
 		{
 			dispatch(loginAttemptFinished());
@@ -67,7 +67,7 @@ function login(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		protocol.login(username, password, progressCallback)
+		dependencies.authProtocol.login(username, password, progressCallback)
 		.then((result) =>
 		{
 			dispatch(loginAttemptFinished());			
