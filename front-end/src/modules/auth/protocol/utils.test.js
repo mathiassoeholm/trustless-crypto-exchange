@@ -16,19 +16,19 @@ describe('Auth Utils', () =>
 		const salt = utils.getRandomSalt();
 		const password = "test";
 
-		let progress = 0;
+		let previousProgress = 0;
 
 		const key = await utils.generateKey(password, salt, (progress) =>
 		{
-			progress = 1;
+			previousProgress = progress;
 		});
 	
-		expect(progress).toEqual(1);
-		expect(key).toBeDefind();
+		expect(previousProgress).toEqual(1);
+		expect(key).toBeDefined();
 	});
 
 	it('encrypts and decrypts successfully', async () =>
 	{
-		
+
 	});
 });
