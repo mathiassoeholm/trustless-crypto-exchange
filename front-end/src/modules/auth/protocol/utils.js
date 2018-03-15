@@ -7,8 +7,13 @@ const getRandomSalt = () =>
 	return crypto.randomBytes(16).toString('hex').normalize('NFKC');
 };
 
-const encryptAES = (secret, key) =>
+const encryptAES = (secret, key, keyIsBuffer = true) =>
 {
+	if(!keyIsBuffer)
+	{
+		key = aesjs.utils.utf8.toBytes(key);
+	}
+
 	const secretBytes = aesjs.utils.utf8.toBytes(secret);
 
 	const aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
@@ -20,8 +25,13 @@ const encryptAES = (secret, key) =>
 	return encryptedHex;
 };
 
-const decryptAES = (cipher, key) =>
+const decryptAES = (cipher, key, keyIsBuffer = true) =>
 {
+	if(!keyIsBuffer)
+	{
+		key = aesjs.utils.utf8.toBytes(key);
+	}
+
 	// We store the encrypted secret as HEX
 	const encryptedBytes = aesjs.utils.hex.toBytes(cipher);
 

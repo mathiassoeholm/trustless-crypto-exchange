@@ -16,19 +16,29 @@ describe('Auth Utils', () =>
 		const salt = utils.getRandomSalt();
 		const password = "test";
 
-		let progress = 0;
+		let previousProgress = 0;
 
 		const key = await utils.generateKey(password, salt, (progress) =>
 		{
-			progress = 1;
+			previousProgress = progress;
 		});
 	
-		expect(progress).toEqual(1);
-		expect(key).toBeDefind();
+		expect(previousProgress).toEqual(1);
+		expect(key).not.toBeNull();
 	});
 
 	it('encrypts and decrypts successfully', async () =>
 	{
-		
+		// Key must be 32 bytes
+		const key = "12345678912345678912345678912345";
+
+		const secretText = "secret";
+		const encryptedText = utils.encryptAES(secretText, key, false);
+
+		expect(encryptedText).not.toEqual(secretText);
+
+		const decryptedText = utils.decryptAES(encryptedText, key, false);
+
+		expect(decryptedText).toEqual(secretText);
 	});
 });
