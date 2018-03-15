@@ -1,5 +1,6 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import each from 'jest-each';
 
 import t from './actionTypes';
 import actions from './actions';
@@ -66,9 +67,13 @@ describe('auth actions', () =>
 		});
 	});
 	
-	it('should dispatch for create user', () =>
+	each(
+	[
+		["create user", actions.createUser],
+		["login", actions.login]
+	]).test('should dispatch for %s', (_, action) =>
 	{
-		return store.dispatch(actions.createUser('password')).then(() =>
+		return store.dispatch(action('password')).then(() =>
 		{
 			const firstAction = store.getActions()[0];
 			const secondToLastAction = store.getActions()[store.getActions().length - 2];
@@ -84,38 +89,6 @@ describe('auth actions', () =>
 				}
 			});
 
-			expect(secondToLastAction).toEqual(
-			{
-				type: t.LOGIN_ATTEMPT_FINISHED,
-				errorMessage: undefined
-			});
-
-			expect(lastAction).toEqual(
-			{
-				type: t.LOG_IN,
-				user: initialState.auth.user
-			});
-		});
-	});
-
-	it('should dispatch for login', () =>
-	{
-		return store.dispatch(actions.login('password')).then(() =>
-		{
-			const firstAction = store.getActions()[0];
-			const secondToLastAction = store.getActions()[store.getActions().length - 2];
-			const lastAction = store.getActions()[store.getActions().length - 1];
-			
-			expect(firstAction).toEqual(
-			{
-				type: t.PROGRESS_UPDATE,
-				status:
-				{
-					progress: 1,
-					message: 'message'
-				}
-			});
-	
 			expect(secondToLastAction).toEqual(
 			{
 				type: t.LOGIN_ATTEMPT_FINISHED,
