@@ -1,6 +1,6 @@
-import protocol from './protocol';
-import stubApi from './api/stubApi';
-import dependencies from '../../dependencies';
+import protocol from './simpleProtocol';
+import stubApi from '../api/stubApi';
+import dependencies from '../../../dependencies';
 
 // We use the stub api for testing purposes
 dependencies.authApi = stubApi;
