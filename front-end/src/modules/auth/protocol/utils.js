@@ -43,7 +43,7 @@ const decryptAES = (cipher, key, keyIsBuffer = true) =>
 	return decryptedText;
 };
 
-const generateKey = (password, salt, progressCallback) =>
+const generateKey = (password, salt, progressCallback = () => {}) =>
 {
 	return new Promise((resolve, reject) =>
 	{

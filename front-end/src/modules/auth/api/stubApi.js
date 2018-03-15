@@ -31,8 +31,14 @@ const getWallet = (username) =>
 	});
 };
 
+const getState = () =>
+{
+	return { ...state };
+};
+
 export default
 {
 	createUser,
-	getWallet
+	getWallet,
+	getState
 };
