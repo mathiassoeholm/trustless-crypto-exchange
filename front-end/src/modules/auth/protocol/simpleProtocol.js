@@ -17,8 +17,6 @@ const createUser = (user, password, secret, progressCallback = () => {}) =>
 	})
 	.then((key) =>
 	{
-		secret.checkCode = salt;
-
 		const secretText = JSON.stringify(secret);
 		const encryptedSecret = utils.encryptAES(secretText, key);
 
@@ -60,14 +58,16 @@ const login = (username, password, progressCallback = () => {}) =>
 	{
 		const secretJson = utils.decryptAES(cipher, key);
 
-		const secret = JSON.parse(secretJson);
-
-		if(secret.checkCode !== salt)
+		let secret;
+		
+		try
+		{
+			secret = JSON.parse(secretJson);		
+		}
+		catch(err)
 		{
 			throw Error('Wrong password');
 		}
-
-		secret.checkCode = undefined;
 
 		progressCallback(1, "Finished");
 		return secret;

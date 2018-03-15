@@ -49,7 +49,6 @@ each(
 
 	it('encrypts secret correctly and stores on api when creating', async () =>
 	{
-		// TODO: Place secret as argument
 		const username = "bob";
 
 		const secret = 
@@ -67,5 +66,23 @@ each(
 		const decryptedCipher = utils.decryptAES(stubApi.getState().cipher, key);
 		const decryptedSecret = JSON.parse(decryptedCipher);
 		expect(decryptedSecret).toEqual(secret);
+	});
+
+	it('fails to login if wrong password supplied', async () =>
+	{
+		await protocol.createUser({username:"bob"}, "bob", {});
+
+		let error;
+
+		try
+		{
+			await protocol.login("bob", "alice");		
+		}
+		catch(err)
+		{
+			error = err;
+		}
+	
+		expect(error).not.toBeNull();
 	});
 });
