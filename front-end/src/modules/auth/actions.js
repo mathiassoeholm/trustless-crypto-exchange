@@ -34,7 +34,7 @@ function createUser(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		dependencies.authProtocol.createUser(user, password, progressCallback)
+		return dependencies.authProtocol.createUser(user, password, progressCallback)
 		.then((result) =>
 		{
 			dispatch(loginAttemptFinished());
@@ -49,9 +49,9 @@ function createUser(password)
 		})
 		.catch((error) =>
 		{
-			dispatch(loginAttemptFinished(error));			
+			dispatch(loginAttemptFinished(error.message));			
 			
-			console.log('error: ' + error);
+			console.log('error: ' + error.message);
 		});
 	};
 }
@@ -67,7 +67,7 @@ function login(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		dependencies.authProtocol.login(username, password, progressCallback)
+		return dependencies.authProtocol.login(username, password, progressCallback)
 		.then((result) =>
 		{
 			dispatch(loginAttemptFinished());			
@@ -83,7 +83,7 @@ function login(password)
 		})
 		.catch((error) =>
 		{
-			dispatch(loginAttemptFinished(error));			
+			dispatch(loginAttemptFinished(error.message));			
 			
 			console.log('error: ' + error);
 		});
