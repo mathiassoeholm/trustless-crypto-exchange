@@ -1,40 +1,47 @@
-import protocol from './simpleProtocol';
+import simpleProtocol from './simpleProtocol';
 import stubApi from '../api/stubApi';
 import dependencies from '../../../dependencies';
+import each from 'jest-each';
 
 // We use the stub api for testing purposes
 dependencies.authApi = stubApi;
 
-it('creates a user', async () =>
+each(
+[
+	["Simple Protocol", simpleProtocol]
+]).describe('%s', (protocolName, protocol) =>
 {
-	await protocol.createUser({username: 'kurt'}, 'start123');
-});
-
-it('creates and stores secret', async () =>
-{
-	await protocol.createUser({username: 'kurt'}, 'start123');
-	const result = await protocol.login('kurt', 'start123');
-
-	expect(result.username).toEqual('kurt');
-});
-
-it('updates progress correctly when logging in', async () =>
-{
-	let previousProgress = 0;
-
-	const progressCallback = (p) =>
+	it('creates a user', async () =>
 	{
-		expect(p).toBeGreaterThanOrEqual(previousProgress);
-		previousProgress = p;
-	};
+		await protocol.createUser({username: 'kurt'}, 'start123');
+	});
 
-	await protocol.createUser({username: 'kurt'}, 'start123', progressCallback);
+	it('creates and stores secret', async () =>
+	{
+		await protocol.createUser({username: 'kurt'}, 'start123');
+		const result = await protocol.login('kurt', 'start123');
 
-	expect(previousProgress).toEqual(1);
+		expect(result.username).toEqual('kurt');
+	});
 
-	previousProgress = 0;
+	it('updates progress correctly when logging in', async () =>
+	{
+		let previousProgress = 0;
 
-	await protocol.login('kurt', 'start123', progressCallback);
+		const progressCallback = (p) =>
+		{
+			expect(p).toBeGreaterThanOrEqual(previousProgress);
+			previousProgress = p;
+		};
 
-	expect(previousProgress).toEqual(1);
+		await protocol.createUser({username: 'kurt'}, 'start123', progressCallback);
+
+		expect(previousProgress).toEqual(1);
+
+		previousProgress = 0;
+
+		await protocol.login('kurt', 'start123', progressCallback);
+
+		expect(previousProgress).toEqual(1);
+	});
 });

@@ -4,7 +4,7 @@ import aesjs from 'aes-js';
 
 const getRandomSalt = () =>
 {
-	return aesjs.utils.utf8.fromBytes(crypto.randomBytes(16)).normalize('NFKC');
+	return crypto.randomBytes(16).toString('hex').normalize('NFKC');
 };
 
 const encryptAES = (secret, key) =>
