@@ -1,8 +1,9 @@
 import protocol from './protocol';
 import stubApi from './api/stubApi';
+import dependencies from '../../dependencies';
 
 // We use the stub api for testing purposes
-protocol.dependencies.api = stubApi;
+dependencies.authApi = stubApi;
 
 it('creates a user', async () =>
 {

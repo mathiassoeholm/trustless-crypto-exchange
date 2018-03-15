@@ -2,9 +2,7 @@ import scrypt from 'scrypt-js';
 import crypto from 'crypto';
 import aesjs from 'aes-js';
 
-import api from './api';
-
-const dependencies = { api };
+import dependencies from '../../dependencies';
 
 const getRandomSalt = () =>
 {
@@ -92,7 +90,7 @@ const createUser = (user, password, progressCallback = () => {}) =>
 		const secretText = JSON.stringify(secret);
 		const encryptedSecret = encryptAES(secretText, key);
 
-		return dependencies.api.createUser(user.username, encryptedSecret, salt);
+		return dependencies.authApi.createUser(user.username, encryptedSecret, salt);
 	})
 	.then((result) =>
 	{
@@ -109,7 +107,7 @@ const login = (username, password, progressCallback = () => {}) =>
 
 	return new Promise((resolve, reject) =>
 	{
-		resolve(dependencies.api.getWallet(username));
+		resolve(dependencies.authApi.getWallet(username));
 	})
 	.then((result) =>
 	{
@@ -144,6 +142,5 @@ const login = (username, password, progressCallback = () => {}) =>
 export default
 {
 	createUser,
-	login,
-	dependencies
+	login
 };
