@@ -6,8 +6,8 @@ import Button from 'material-ui/Button';
 
 describe("UserForm", () =>
 {
-  let props;
-  let mountedUserForm;
+	let props;
+	let mountedUserForm;
 
 	const userForm = () =>
 	{
