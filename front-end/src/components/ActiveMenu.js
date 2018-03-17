@@ -7,7 +7,7 @@ import Login from './Login';
 import Create from './Create';
 import WalletDetails from './WalletDetails';
 
-const ActiveMenu = ({ activeMenu }) =>
+export function ActiveMenu({ activeMenu })
 {
 	switch (activeMenu)
 	{
