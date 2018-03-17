@@ -25,6 +25,7 @@ describe('Auth Utils', () =>
 	
 		expect(previousProgress).toEqual(1);
 		expect(key).not.toBeNull();
+		expect(key).not.toEqual(undefined);
 	});
 
 	it('encrypts and decrypts successfully', async () =>
