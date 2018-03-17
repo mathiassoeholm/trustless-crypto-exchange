@@ -52,14 +52,10 @@ function createUser(password)
 				type: t.LOG_IN,
 				user: result.user
 			});
-
-			console.log('created user');
 		})
 		.catch((error) =>
 		{
 			dispatch(loginAttemptFinished(error.message));			
-			
-			console.log('error: ' + error.message);
 		});
 	};
 }
@@ -92,8 +88,6 @@ function login(password)
 		.catch((error) =>
 		{
 			dispatch(loginAttemptFinished(error.message));			
-			
-			console.log('error: ' + error);
 		});
 	};
 }
