@@ -9,7 +9,7 @@ dependencies.authApi = stubApi;
 
 each(
 [
-	["Simple Protocol", simpleProtocol]
+	["Simple Protocol", simpleProtocol],
 ]).describe('%s', (protocolName, protocol) =>
 {
 	it('creates a user', async () =>
@@ -53,7 +53,7 @@ each(
 
 		const secret = 
 		{
-			username
+			username,
 		};
 		
 		const password = "password";

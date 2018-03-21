@@ -15,10 +15,10 @@ const createUser = (username, cipher, salt) =>
 		{ 
 			user: 
 			{
-				username: state.username
+				username: state.username,
 			},
 			cipher: state.cipher,
-			salt: state.cipher
+			salt: state.cipher,
 		});
 	});
 };
@@ -40,5 +40,5 @@ export default
 {
 	createUser,
 	getWallet,
-	getState
+	getState,
 };
