@@ -5,6 +5,7 @@
     "no-console": 1,
     "no-debugger": 1,
     "no-var": 1,
-	"semi": [2, "always"]
+	"semi": [2, "always"],
+	"comma-dangle": [2, "always-multiline"]
   }
 }
