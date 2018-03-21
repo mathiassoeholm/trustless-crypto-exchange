@@ -1,7 +1,7 @@
 import dependencies from '../../../dependencies';
 import utils from './utils';
 
-const createUser = (user, password, progressCallback = () => {}) =>
+const createUser = (user, password, secret, progressCallback = () => {}) =>
 {
 	let salt = utils.getRandomSalt();
 
@@ -17,11 +17,6 @@ const createUser = (user, password, progressCallback = () => {}) =>
 	})
 	.then((key) =>
 	{
-		const secret =
-		{
-			username: user.username
-		};
-
 		const secretText = JSON.stringify(secret);
 		const encryptedSecret = utils.encryptAES(secretText, key);
 
@@ -37,6 +32,7 @@ const createUser = (user, password, progressCallback = () => {}) =>
 const login = (username, password, progressCallback = () => {}) =>
 {
 	let cipher;
+	let salt;
 
 	progressCallback(0, "Retrieving data from server");	
 
@@ -46,7 +42,7 @@ const login = (username, password, progressCallback = () => {}) =>
 	})
 	.then((result) =>
 	{
-		const salt = result.salt;
+		salt = result.salt;
 		cipher = result.cipher;
 
 		// Assume server call takes 20% time
@@ -62,9 +58,13 @@ const login = (username, password, progressCallback = () => {}) =>
 	{
 		const secretJson = utils.decryptAES(cipher, key);
 
-		const secret = JSON.parse(secretJson);
-
-		if(secret.username !== username)
+		let secret;
+		
+		try
+		{
+			secret = JSON.parse(secretJson);		
+		}
+		catch(err)
 		{
 			throw Error('Wrong password');
 		}

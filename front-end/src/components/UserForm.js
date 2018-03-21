@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) =>
 	onChangedUsername: (event) => dispatch(authActions.changeUsername(event.target.value))
 });
 
-class UserForm extends React.Component
+export class UserForm extends React.Component
 {
 	constructor(props)
 	{

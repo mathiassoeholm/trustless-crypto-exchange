@@ -3,7 +3,7 @@ const options =
 	shouldFail: false
 };
 
-const createUser = (user, password, progressCallback = () => {}) =>
+const createUser = (user, password, secret, progressCallback = () => {}) =>
 {
 	return new Promise((resolve, reject) =>
 	{
@@ -15,7 +15,7 @@ const createUser = (user, password, progressCallback = () => {}) =>
 		}
 		else
 		{
-			resolve({ user });
+			resolve(secret);
 		}
 	});
 };

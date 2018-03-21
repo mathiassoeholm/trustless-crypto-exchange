@@ -34,7 +34,15 @@ function createUser(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		return dependencies.authProtocol.createUser(user, password, progressCallback)
+		const secret = 
+		{
+			user:
+			{
+				username: user.username
+			}
+		};
+
+		return dependencies.authProtocol.createUser(user, password, secret, progressCallback)
 		.then((result) =>
 		{
 			dispatch(loginAttemptFinished());
@@ -44,14 +52,10 @@ function createUser(password)
 				type: t.LOG_IN,
 				user: result.user
 			});
-
-			console.log('created user');
 		})
 		.catch((error) =>
 		{
 			dispatch(loginAttemptFinished(error.message));			
-			
-			console.log('error: ' + error.message);
 		});
 	};
 }
@@ -84,8 +88,6 @@ function login(password)
 		.catch((error) =>
 		{
 			dispatch(loginAttemptFinished(error.message));			
-			
-			console.log('error: ' + error);
 		});
 	};
 }

@@ -71,7 +71,7 @@ describe('auth actions', () =>
 	[
 		["create user", actions.createUser],
 		["login", actions.login]
-	]).test('should dispatch for %s', (_, action) =>
+	]).it('should dispatch for %s', (_, action) =>
 	{
 		return store.dispatch(action('password')).then(() =>
 		{
