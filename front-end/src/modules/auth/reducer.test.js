@@ -1,5 +1,6 @@
-import t from './actionTypes';
 import deepFreeze from 'deep-freeze';
+
+import t from './actionTypes';
 import reducer from './reducer';
 
 it('changes username and is pure', () =>
@@ -8,25 +9,25 @@ it('changes username and is pure', () =>
 	{
 		user:
 		{
-			username: 'bob'
-		}
+			username: 'bob',
+		},
 	};
 
 	const stateAfter =
 	{
 		user:
 		{
-			username: 'alice'
-		}
+			username: 'alice',
+		},
 	};
 
 	deepFreeze(stateBefore);
 
 	const newState = reducer(stateBefore,
-	{
-		type: t.CHANGE_USERNAME,
-		username: 'alice'
-	});
+		{
+			type: t.CHANGE_USERNAME,
+			username: 'alice',
+		});
 
 	expect(newState).toEqual(stateAfter);
 });
@@ -36,21 +37,21 @@ it('logs out and is pure', () =>
 	const stateBefore =
 	{
 		isLoggedIn: true,
-		user: {}
+		user: {},
 	};
 
 	const stateAfter =
 	{
 		isLoggedIn: false,
-		user: null
+		user: null,
 	};
 
 	deepFreeze(stateBefore);
 
 	const newState = reducer(stateBefore,
-	{
-		type: t.LOG_OUT
-	});
+		{
+			type: t.LOG_OUT,
+		});
 
 	expect(newState).toEqual(stateAfter);
 });
@@ -60,12 +61,12 @@ it('logs in and is pure', () =>
 	const stateBefore =
 	{
 		isLoggedIn: false,
-		user: null
+		user: null,
 	};
 
 	const user =
 	{
-		username: "bob"
+		username: 'bob',
 	};
 
 	const stateAfter =
@@ -73,41 +74,41 @@ it('logs in and is pure', () =>
 		isLoggedIn: true,
 		user:
 		{
-			username: 'bob'
-		}
+			username: 'bob',
+		},
 	};
 
 	deepFreeze(stateBefore);
 	deepFreeze(user);
-	
-	const newState = reducer(stateBefore, 
-	{
-		type: t.LOG_IN,
-		user
-	});
+
+	const newState = reducer(stateBefore,
+		{
+			type: t.LOG_IN,
+			user,
+		});
 
 	expect(newState).toEqual(stateAfter);
 });
 
 it('updates login attempt status and is pure', () =>
 {
-	const stateBefore = 
+	const stateBefore =
 	{
 		loginAttemptStatus:
 		{
 			progress: 0.8,
-			message: "bob"
-		}
+			message: 'bob',
+		},
 	};
 
 	const action =
 	{
 		type: t.PROGRESS_UPDATE,
-		status: 
+		status:
 		{
 			progress: 0.9,
-			message: "alice"
-		}
+			message: 'alice',
+		},
 	};
 
 	const stateAfter =
@@ -115,13 +116,13 @@ it('updates login attempt status and is pure', () =>
 		loginAttemptStatus:
 		{
 			progress: 0.9,
-			message: "alice"
+			message: 'alice',
 		},
-		isLoggingIn: true
+		isLoggingIn: true,
 	};
 
 	deepFreeze(stateBefore);
-	
+
 	const newState = reducer(stateBefore, action);
 
 	expect(newState).toEqual(stateAfter);
@@ -129,16 +130,16 @@ it('updates login attempt status and is pure', () =>
 
 it('login attempt fails and is pure', () =>
 {
-	const stateBefore = 
-	{ 
-		isLoggingIn: true, 
-		loginAttemptStatus: { } 
+	const stateBefore =
+	{
+		isLoggingIn: true,
+		loginAttemptStatus: {},
 	};
 
 	const action =
 	{
 		type: t.LOGIN_ATTEMPT_FINISHED,
-		errorMessage: "failed"
+		errorMessage: 'failed',
 	};
 
 	const stateAfter =
@@ -146,8 +147,8 @@ it('login attempt fails and is pure', () =>
 		isLoggingIn: false,
 		loginAttemptStatus:
 		{
-			errorMessage: "failed"
-		}
+			errorMessage: 'failed',
+		},
 	};
 
 	deepFreeze(stateBefore);

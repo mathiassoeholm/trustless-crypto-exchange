@@ -55,7 +55,7 @@ function createUser(password)
 			})
 			.catch((error) =>
 			{
-				dispatch(loginAttemptFinished(error.message));			
+				dispatch(loginAttemptFinished(error.message));
 			});
 	};
 }
@@ -64,7 +64,7 @@ function login(password)
 {
 	return (dispatch, getState) =>
 	{
-		const username = getState().auth.user.username;
+		const { username } = getState().auth.user;
 
 		const progressCallback = (p, m) =>
 		{
@@ -72,30 +72,30 @@ function login(password)
 		};
 
 		return dependencies.authProtocol.login(username, password, progressCallback)
-		.then((result) =>
-		{
-			dispatch(loginAttemptFinished());			
-
-			dispatch(
+			.then(() =>
 			{
-				type: t.LOG_IN,
-				user: 
-				{
-					username
-				}
+				dispatch(loginAttemptFinished());
+
+				dispatch(
+					{
+						type: t.LOG_IN,
+						user:
+						{
+							username,
+						},
+					});
+			})
+			.catch((error) =>
+			{
+				dispatch(loginAttemptFinished(error.message));
 			});
-		})
-		.catch((error) =>
-		{
-			dispatch(loginAttemptFinished(error.message));			
-		});
 	};
 }
 
 function logout()
 {
 	return {
-		type: t.LOG_OUT
+		type: t.LOG_OUT,
 	};
 }
 
@@ -104,10 +104,10 @@ function changeUsername(username)
 	return (dispatch) =>
 	{
 		dispatch(
-		{
-			type: t.CHANGE_USERNAME,
-			username
-		});
+			{
+				type: t.CHANGE_USERNAME,
+				username,
+			});
 	};
 }
 
@@ -116,5 +116,5 @@ export default
 	createUser,
 	login,
 	logout,
-	changeUsername
+	changeUsername,
 };

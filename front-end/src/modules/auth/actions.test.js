@@ -19,9 +19,9 @@ describe('auth actions', () =>
 		{
 			user:
 			{
-				username: 'bob'
-			}
-		}
+				username: 'bob',
+			},
+		},
 	};
 
 	let store;
@@ -42,12 +42,12 @@ describe('auth actions', () =>
 		return store.dispatch(actions.createUser('password')).then(() =>
 		{
 			const lastAction = store.getActions()[store.getActions().length - 1];
-	
+
 			expect(lastAction).toEqual(
-			{
-				type: t.LOGIN_ATTEMPT_FINISHED,
-				errorMessage: 'error message'
-			});
+				{
+					type: t.LOGIN_ATTEMPT_FINISHED,
+					errorMessage: 'error message',
+				});
 		});
 	});
 
@@ -58,49 +58,46 @@ describe('auth actions', () =>
 		return store.dispatch(actions.login('password')).then(() =>
 		{
 			const lastAction = store.getActions()[store.getActions().length - 1];
-	
+
 			expect(lastAction).toEqual(
-			{
-				type: t.LOGIN_ATTEMPT_FINISHED,
-				errorMessage: 'error message'
-			});
+				{
+					type: t.LOGIN_ATTEMPT_FINISHED,
+					errorMessage: 'error message',
+				});
 		});
 	});
-	
-	each(
-	[
-		["create user", actions.createUser],
-		["login", actions.login]
-	]).it('should dispatch for %s', (_, action) =>
+
+	each([
+		['create user', actions.createUser],
+		['login', actions.login],
+	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
 	{
-		return store.dispatch(action('password')).then(() =>
-		{
-			const firstAction = store.getActions()[0];
-			const secondToLastAction = store.getActions()[store.getActions().length - 2];
-			const lastAction = store.getActions()[store.getActions().length - 1];
-			
-			expect(firstAction).toEqual(
+		const firstAction = store.getActions()[0];
+		const secondToLastAction = store.getActions()[store.getActions().length - 2];
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(firstAction).toEqual(
 			{
 				type: t.PROGRESS_UPDATE,
 				status:
 				{
 					progress: 1,
-					message: 'message'
-				}
+					message: 'message',
+				},
 			});
 
-			expect(secondToLastAction).toEqual(
+		expect(secondToLastAction).toEqual(
 			{
 				type: t.LOGIN_ATTEMPT_FINISHED,
-				errorMessage: undefined
+				errorMessage: undefined,
 			});
 
-			expect(lastAction).toEqual(
+		expect(lastAction).toEqual(
 			{
 				type: t.LOG_IN,
-				user: initialState.auth.user
+				user: initialState.auth.user,
 			});
-		});
-	});
+	}),
+	);
 });
 

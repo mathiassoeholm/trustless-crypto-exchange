@@ -1,14 +1,13 @@
 const options =
 {
-	shouldFail: false
+	shouldFail: false,
 };
 
-const createUser = (user, password, secret, progressCallback = () => {}) =>
-{
-	return new Promise((resolve, reject) =>
+const createUser = (user, password, secret, progressCallback = () => undefined) =>
+	new Promise((resolve, reject) =>
 	{
 		progressCallback(1, 'message');
-		
+
 		if (options.shouldFail)
 		{
 			reject(Error('error message'));
@@ -18,14 +17,12 @@ const createUser = (user, password, secret, progressCallback = () => {}) =>
 			resolve(secret);
 		}
 	});
-};
 
-const login = (username, password, progressCallback = () => {}) =>
-{
-	return new Promise((resolve, reject) =>
+const login = (username, password, progressCallback = () => undefined) =>
+	new Promise((resolve, reject) =>
 	{
 		progressCallback(1, 'message');
-		
+
 		if (options.shouldFail)
 		{
 			reject(Error('error message'));
@@ -35,11 +32,10 @@ const login = (username, password, progressCallback = () => {}) =>
 			resolve();
 		}
 	});
-};
 
 export default
 {
 	createUser,
 	login,
-	options
+	options,
 };

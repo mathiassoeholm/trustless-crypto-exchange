@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 const createUser = (user, cipher, salt) =>
 {
 	throw Error('Not implemented');
@@ -11,5 +13,5 @@ const getWallet = (username) =>
 export default
 {
 	createUser,
-	getWallet
+	getWallet,
 };
