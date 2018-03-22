@@ -1,11 +1,17 @@
 {
-  "extends": [ "react-app" ],
-  "rules":
-  {
-    "no-console": 1,
-    "no-debugger": 1,
-    "no-var": 1,
-	"semi": [2, "always"],
-	"comma-dangle": [1, "always-multiline"]
-  }
+	"extends": ["airbnb"],
+	"env":
+	{
+		"es6": true
+	},
+	"parser": "babel-eslint",
+	"rules":
+	{
+		"indent": ["error", "tab"],
+		"no-tabs": "off",
+		"brace-style": ["error", "allman"],
+		"react/jsx-indent": ["error", "tab"],
+		"react/jsx-filename-extension": "off",
+		"function-paren-newline": "off"
+	}
 }
