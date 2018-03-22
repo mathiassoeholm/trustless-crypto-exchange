@@ -4,59 +4,59 @@ import dependencies from '../../dependencies';
 function progressUpdate(progress, message)
 {
 	return (
-	{
-		type: t.PROGRESS_UPDATE,
-		status:
 		{
-			progress,
-			message
-		}
-	});
+			type: t.PROGRESS_UPDATE,
+			status:
+			{
+				progress,
+				message,
+			},
+		});
 }
 
 function loginAttemptFinished(errorMessage = undefined)
 {
 	return (
-	{
-		type: t.LOGIN_ATTEMPT_FINISHED,
-		errorMessage
-	});
+		{
+			type: t.LOGIN_ATTEMPT_FINISHED,
+			errorMessage,
+		});
 }
 
 function createUser(password)
 {
 	return (dispatch, getState) =>
 	{
-		const user = getState().auth.user;
+		const { user } = getState().auth;
 
 		const progressCallback = (p, m) =>
 		{
 			dispatch(progressUpdate(p, m));
 		};
 
-		const secret = 
+		const secret =
 		{
 			user:
 			{
-				username: user.username
-			}
+				username: user.username,
+			},
 		};
 
 		return dependencies.authProtocol.createUser(user, password, secret, progressCallback)
-		.then((result) =>
-		{
-			dispatch(loginAttemptFinished());
-
-			dispatch(
+			.then((result) =>
 			{
-				type: t.LOG_IN,
-				user: result.user
+				dispatch(loginAttemptFinished());
+
+				dispatch(
+					{
+						type: t.LOG_IN,
+						user: result.user,
+					});
+			})
+			.catch((error) =>
+			{
+				dispatch(loginAttemptFinished(error.message));			
 			});
-		})
-		.catch((error) =>
-		{
-			dispatch(loginAttemptFinished(error.message));			
-		});
 	};
 }
 

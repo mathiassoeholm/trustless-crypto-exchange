@@ -11,25 +11,25 @@ export function ActiveMenu({ activeMenu })
 {
 	switch (activeMenu)
 	{
-		case menuTypes.CREATE_USER:
-			return <Create />;
-		case menuTypes.LOGIN:
-			return <Login />;
-		case menuTypes.WALLET:
-			return <WalletDetails />;
-		default:
-			throw new Error('Unknown menu type');
+	case menuTypes.CREATE_USER:
+		return <Create />;
+	case menuTypes.LOGIN:
+		return <Login />;
+	case menuTypes.WALLET:
+		return <WalletDetails />;
+	default:
+		throw new Error('Unknown menu type');
 	}
-};
+}
 
-const mapStateToProps = (state) =>
-({
-	activeMenu: state.flow.activeMenu
-});
+const mapStateToProps = state =>
+	({
+		activeMenu: state.flow.activeMenu,
+	});
 
 ActiveMenu.propTypes =
 {
-	activeMenu: PropTypes.string.isRequired
+	activeMenu: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps)(ActiveMenu);
