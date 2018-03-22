@@ -1,18 +1,18 @@
 import React from 'react';
 
-const styles = theme => ({
-	root: 
+const styles = () => ({
+	root:
 	{
 		width: '70%',
-		display: "flex",
-		height: "400px"
-	}
+		display: 'flex',
+		height: '400px',
+	},
 });
 
-const WalletDetails = props =>
+const WalletDetails = () =>
 {
 	return (
-		<div style={styles.root}/>
+		<div style={styles.root} />
 	);
 };
 

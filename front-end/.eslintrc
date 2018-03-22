@@ -2,7 +2,9 @@
 	"extends": ["airbnb"],
 	"env":
 	{
-		"es6": true
+		"es6": true, 
+		"jest": true,
+		"browser": true
 	},
 	"parser": "babel-eslint",
 	"rules":
@@ -12,6 +14,8 @@
 		"brace-style": ["error", "allman"],
 		"react/jsx-indent": ["error", "tab"],
 		"react/jsx-filename-extension": "off",
-		"function-paren-newline": "off"
+		"react/jsx-indent-props": ["error", "tab"],
+		"function-paren-newline": "off",
+		"import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
 	}
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
 const ListButton = (props) =>
@@ -17,8 +18,8 @@ const ListButton = (props) =>
 ListButton.propTypes =
 {
 	onClick: PropTypes.func.isRequired,
-	icon: PropTypes.object.isRequired,
-	text: PropTypes.string.isRequired
+	icon: PropTypes.node.isRequired,
+	text: PropTypes.string.isRequired,
 };
 
 export default ListButton;

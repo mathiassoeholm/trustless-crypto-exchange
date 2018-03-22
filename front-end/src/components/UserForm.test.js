@@ -1,22 +1,21 @@
-import React from "react";
-import { mount } from "enzyme";
-import { UserForm } from "./UserForm";
+import React from 'react';
+import { mount } from 'enzyme';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+
+import { UserForm } from './UserForm';
 
 describe('UserForm', () =>
 {
 	let props;
 	let mountedUserForm;
-	let buttonCallbackMock = jest.fn();
+	const buttonCallbackMock = jest.fn();
 
 	const userForm = () =>
 	{
 		if (!mountedUserForm)
 		{
-			mountedUserForm = mount(
-				<UserForm {...props} />
-			);
+			mountedUserForm = mount(<UserForm {...props} />);
 		}
 
 		return mountedUserForm;
@@ -37,7 +36,7 @@ describe('UserForm', () =>
 
 	it('always renders a div', () =>
 	{
-		const divs = userForm().find("div");
+		const divs = userForm().find('div');
 		expect(divs.length).toBeGreaterThan(0);
 	});
 
@@ -60,7 +59,7 @@ describe('UserForm', () =>
 	it('updates password field and calls callback correctly', () =>
 	{
 		const pwField = userForm().find('input#password').first();
-		pwField.simulate('change', { target: { value: 'pass' }});
+		pwField.simulate('change', { target: { value: 'pass' } });
 
 		userForm().find(Button).simulate('click');
 		expect(buttonCallbackMock.mock.calls.length).toBe(1);

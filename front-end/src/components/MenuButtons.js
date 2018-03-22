@@ -14,9 +14,9 @@ import flowActions from '../modules/flow/actions';
 import authActions from '../modules/auth/actions';
 import menuTypes from '../modules/flow/menuTypes';
 
-const MenuButtons = ({isLoggedIn, username, dispatch}) =>
+const MenuButtons = ({ isLoggedIn, username, dispatch }) =>
 {
-	const onButtonClick = (menuType) => () =>
+	const onButtonClick = menuType => () =>
 	{
 		dispatch(flowActions.changeMenu(menuType));
 	};
@@ -26,7 +26,7 @@ const MenuButtons = ({isLoggedIn, username, dispatch}) =>
 		dispatch(authActions.logout());
 	};
 
-	if(!isLoggedIn)
+	if (!isLoggedIn)
 	{
 		return (
 			<List>
@@ -35,30 +35,28 @@ const MenuButtons = ({isLoggedIn, username, dispatch}) =>
 			</List>
 		);
 	}
-	else
-	{
-		return (
-			<List>
-				<ListButton text="Wallet" icon={<WalletIcon/>} onClick={onButtonClick(menuTypes.WALLET)} />
-				<Divider />
-				<Subheader>Logged in as: <b>{username}</b></Subheader>
-				<ListButton text="Logout" icon={<LogoutIcon/>} onClick={onLogoutClick} />
-			</List>	
-		);
-	}
+
+	return (
+		<List>
+			<ListButton text="Wallet" icon={<WalletIcon />} onClick={onButtonClick(menuTypes.WALLET)} />
+			<Divider />
+			<Subheader>Logged in as: <b>{username}</b></Subheader>
+			<ListButton text="Logout" icon={<LogoutIcon />} onClick={onLogoutClick} />
+		</List>
+	);
 };
 
-const mapStateToProps = (state) =>
-({
-	isLoggedIn: state.auth.isLoggedIn,
-	username: state.auth.isLoggedIn ? state.auth.user.username : null
-});
+const mapStateToProps = state =>
+	({
+		isLoggedIn: state.auth.isLoggedIn,
+		username: state.auth.isLoggedIn ? state.auth.user.username : null,
+	});
 
 MenuButtons.propTypes =
 {
 	isLoggedIn: PropTypes.bool.isRequired,
-	username: PropTypes.string,
-	dispatch: PropTypes.func.isRequired
+	username: PropTypes.string.isRequired,
+	dispatch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, null)(MenuButtons);
