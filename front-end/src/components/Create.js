@@ -11,14 +11,12 @@ const mapDispatchToProps = dispatch =>
 		onClickedButton: password => dispatch(authActions.createUser(password)),
 	});
 
-const Create = (props) =>
-{
-	return (
+const Create = props =>
+	(
 		<div>
 			<UserForm {...props} buttonText="Create" />
 			<AuthProgress title="Creating user" />
 		</div>
 	);
-};
 
 export default connect(null, mapDispatchToProps)(Create);

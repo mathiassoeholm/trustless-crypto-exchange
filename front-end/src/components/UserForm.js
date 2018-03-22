@@ -50,7 +50,7 @@ export class UserForm extends React.Component
 					label="User"
 					margin="normal"
 					value={this.props.username}
-					onChange={this.props.onChangedUsername} 
+					onChange={this.props.onChangedUsername}
 				/>
 				<br />
 				<TextField

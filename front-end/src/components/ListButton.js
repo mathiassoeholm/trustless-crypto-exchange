@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
-const ListButton = (props) =>
-{
-	return (
+const ListButton = props =>
+	(
 		<ListItem button onClick={props.onClick}>
 			<ListItemIcon>
 				{props.icon}
@@ -13,7 +12,6 @@ const ListButton = (props) =>
 			<ListItemText primary={props.text} />
 		</ListItem>
 	);
-};
 
 ListButton.propTypes =
 {

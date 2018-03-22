@@ -12,14 +12,12 @@ web3.eth.getBalance(fromAccount.address)
 		console.log(`Prev balance: ${b}`);
 	})
 	.then(() =>
-	{
-		return fromAccount.signTransaction({
+		fromAccount.signTransaction({
 			to: toAccount.address,
 			from: fromAccount.address,
 			value: '1000000001',
 			gas: '2000000',
-		});
-	})
+		}))
 	.then((transaction) =>
 	{
 		console.log(transaction);

@@ -12,8 +12,7 @@ const AuthProgress = (
 		progress,
 		message,
 	}) =>
-{
-	return (
+	(
 		<Dialog open={open} fullWidth>
 			<DialogTitle id="simple-dialog-title">{title}</DialogTitle>
 			<Typography component="p" style={{ padding: 10 }}>
@@ -23,7 +22,6 @@ const AuthProgress = (
 			<br />
 		</Dialog>
 	);
-};
 
 AuthProgress.propTypes =
 {

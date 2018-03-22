@@ -10,10 +10,8 @@ const styles = () => ({
 });
 
 const WalletDetails = () =>
-{
-	return (
+	(
 		<div style={styles.root} />
 	);
-};
 
 export default WalletDetails;
