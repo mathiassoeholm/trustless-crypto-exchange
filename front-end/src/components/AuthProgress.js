@@ -5,12 +5,18 @@ import Dialog, { DialogTitle } from 'material-ui/Dialog';
 import { LinearProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 
-const AuthProgress = ({ title, open, progress, message }) =>
+const AuthProgress = (
+	{
+		title,
+		open,
+		progress,
+		message,
+	}) =>
 {
 	return (
 		<Dialog open={open} fullWidth>
 			<DialogTitle id="simple-dialog-title">{title}</DialogTitle>
-			<Typography component="p" style={{padding: 10}}>
+			<Typography component="p" style={{ padding: 10 }}>
 				{message}
 			</Typography>
 			<LinearProgress />
@@ -21,14 +27,17 @@ const AuthProgress = ({ title, open, progress, message }) =>
 
 AuthProgress.propTypes =
 {
-	title: PropTypes.string.isRequired
+	title: PropTypes.string.isRequired,
+	open: PropTypes.bool.isRequired,
+	progress: PropTypes.number.isRequired,
+	message: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) =>
-({
-	open: state.auth.isLoggingIn,
-	progress: state.auth.loginAttemptStatus ? state.auth.loginAttemptStatus.progress : 0,
-	message: state.auth.loginAttemptStatus ? state.auth.loginAttemptStatus.message : ''
-});
+const mapStateToProps = state =>
+	({
+		open: state.auth.isLoggingIn,
+		progress: state.auth.loginAttemptStatus ? state.auth.loginAttemptStatus.progress : 0,
+		message: state.auth.loginAttemptStatus ? state.auth.loginAttemptStatus.message : '',
+	});
 
 export default connect(mapStateToProps)(AuthProgress);

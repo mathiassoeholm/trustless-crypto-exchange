@@ -6,15 +6,15 @@ import { connect } from 'react-redux';
 
 import authActions from '../modules/auth/actions';
 
-const mapStateToProps = (state) =>
-({
-	username: state.auth.user ? state.auth.user.username : ''
-});
+const mapStateToProps = state =>
+	({
+		username: state.auth.user ? state.auth.user.username : '',
+	});
 
-const mapDispatchToProps = (dispatch) =>
-({
-	onChangedUsername: (event) => dispatch(authActions.changeUsername(event.target.value))
-});
+const mapDispatchToProps = dispatch =>
+	({
+		onChangedUsername: event => dispatch(authActions.changeUsername(event.target.value)),
+	});
 
 export class UserForm extends React.Component
 {
@@ -24,7 +24,7 @@ export class UserForm extends React.Component
 
 		this.state =
 		{
-			password: ""
+			password: '',
 		};
 
 		this.onChangedPassword = this.onChangedPassword.bind(this);
@@ -33,10 +33,10 @@ export class UserForm extends React.Component
 
 	onChangedPassword(event)
 	{
-		this.setState({password: event.target.value});
+		this.setState({ password: event.target.value });
 	}
-	
-	onClickedButton(event)
+
+	onClickedButton()
 	{
 		this.props.onClickedButton(this.state.password);
 	}
@@ -50,8 +50,9 @@ export class UserForm extends React.Component
 					label="User"
 					margin="normal"
 					value={this.props.username}
-					onChange={this.props.onChangedUsername}/>
-				<br/>
+					onChange={this.props.onChangedUsername} 
+				/>
+				<br />
 				<TextField
 					id="password"
 					label="Password"
@@ -59,8 +60,9 @@ export class UserForm extends React.Component
 					autoComplete="current-password"
 					margin="normal"
 					value={this.state.password}
-					onChange={this.onChangedPassword}/>
-				<br/>
+					onChange={this.onChangedPassword}
+				/>
+				<br />
 				<Button variant="raised" color="primary" onClick={this.onClickedButton}>
 					{this.props.buttonText}
 				</Button>
@@ -74,7 +76,7 @@ UserForm.propTypes =
 	onClickedButton: PropTypes.func.isRequired,
 	buttonText: PropTypes.string.isRequired,
 	username: PropTypes.string, // TODO: We get error if this is set as required, not sure why
-	onChangedUsername: PropTypes.func.isRequired
+	onChangedUsername: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserForm);

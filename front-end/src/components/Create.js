@@ -1,25 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import UserForm from './UserForm';
 import authActions from '../modules/auth/actions';
-import { connect } from 'react-redux';
 
 import AuthProgress from './AuthProgress';
 
-const mapDispatchToProps = (dispatch) =>
-({
-	onClickedButton: (password) => dispatch(authActions.createUser(password))
-});
+const mapDispatchToProps = dispatch =>
+	({
+		onClickedButton: password => dispatch(authActions.createUser(password)),
+	});
 
-let Create = (props) =>
+const Create = (props) =>
 {
 	return (
 		<div>
-			<UserForm {...props} buttonText="Create"/>
-			<AuthProgress title="Creating user"/>
+			<UserForm {...props} buttonText="Create" />
+			<AuthProgress title="Creating user" />
 		</div>
 	);
 };
 
-Create = connect(null, mapDispatchToProps)(Create);
-
-export default Create;
+export default connect(null, mapDispatchToProps)(Create);

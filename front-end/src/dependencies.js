@@ -4,5 +4,5 @@ import authProtocol from './modules/auth/protocol';
 export default
 {
 	authApi,
-	authProtocol
+	authProtocol,
 };

@@ -1,24 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import UserForm from './UserForm';
 import authActions from '../modules/auth/actions';
-import { connect } from 'react-redux';
 import AuthProgress from './AuthProgress';
 
-const mapDispatchToProps = (dispatch) =>
-({
-	onClickedButton: (password) => dispatch(authActions.login(password))
-});
+const mapDispatchToProps = dispatch =>
+	({
+		onClickedButton: password => dispatch(authActions.login(password)),
+	});
 
-let Login = (props) =>
+const Login = (props) =>
 {
 	return (
 		<div>
-			<UserForm {...props} buttonText="Login"/>
-			<AuthProgress title="Logging in"/>
+			<UserForm {...props} buttonText="Login" />
+			<AuthProgress title="Logging in" />
 		</div>
 	);
 };
 
-Login = connect(null, mapDispatchToProps)(Login);
-
-export default Login;
+export default connect(null, mapDispatchToProps)(Login);

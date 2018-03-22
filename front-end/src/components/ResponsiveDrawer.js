@@ -60,18 +60,19 @@ class ResponsiveDrawer extends React.Component
 
 		this.state =
 		{
-			mobileOpen: false
+			mobileOpen: false,
 		};
 
 		this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
 	}
-	
+
 	handleDrawerToggle()
 	{
 		this.setState({ mobileOpen: !this.state.mobileOpen });
 	}
 
-	render() {
+	render()
+	{
 		const { classes, theme } = this.props;
 
 		const drawer = (
@@ -138,7 +139,6 @@ class ResponsiveDrawer extends React.Component
 ResponsiveDrawer.propTypes = {
 	classes: PropTypes.object.isRequired,
 	theme: PropTypes.object.isRequired,
-	title: PropTypes.string.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(ResponsiveDrawer);
