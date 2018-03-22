@@ -48,13 +48,13 @@ const generateKey = (password, salt, progressCallback = () => undefined) =>
 		// We're using AES 256, so keys need to be 256 bits / 32 bytes
 		const keyLength = 32;
 
-		scrypt(passwordBuffer, saltBuffer, N, r, p, keyLength, (error,  progress, key) =>
+		scrypt(passwordBuffer, saltBuffer, N, r, p, keyLength, (error, progress, key) =>
 		{
-			if(error) 
+			if (error)
 			{
 				reject(error);
 			}
-			else if(key)
+			else if (key)
 			{
 				resolve(key);
 			}
@@ -65,10 +65,10 @@ const generateKey = (password, salt, progressCallback = () => undefined) =>
 		});
 	});
 
-export default 
+export default
 {
 	getRandomSalt,
 	encryptAES,
 	decryptAES,
-	generateKey
+	generateKey,
 };

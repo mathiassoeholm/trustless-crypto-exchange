@@ -1,8 +1,10 @@
+
+import deepFreeze from 'deep-freeze';
+
 import flowActionTypes from './actionTypes';
 import authActionTypes from '../auth/actionTypes';
 import menuTypes from './menuTypes';
 import reducer from './reducer';
-import deepFreeze from 'deep-freeze';
 
 it('changes menu to wallet when logging in and is pure', () =>
 {
@@ -11,7 +13,7 @@ it('changes menu to wallet when logging in and is pure', () =>
 
 	const action =
 	{
-		type: authActionTypes.LOG_IN
+		type: authActionTypes.LOG_IN,
 	};
 
 	deepFreeze(stateBefore);
@@ -27,7 +29,7 @@ it('changes menu to login after logging out', () =>
 
 	const action =
 	{
-		type: authActionTypes.LOG_OUT
+		type: authActionTypes.LOG_OUT,
 	};
 
 	const newState = reducer(undefined, action);
@@ -38,11 +40,11 @@ it('changes menu to login after logging out', () =>
 it('changes menu correctly', () =>
 {
 	const stateAfter = { activeMenu: menuTypes.WALLET };
-	
+
 	const action =
 	{
 		type: flowActionTypes.CHANGE_MENU,
-		menuType: menuTypes.WALLET
+		menuType: menuTypes.WALLET,
 	};
 
 	const newState = reducer(undefined, action);
