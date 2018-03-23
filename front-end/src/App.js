@@ -9,14 +9,12 @@ import reduxStore from './redux/store';
 const classes = {};
 
 const App = () =>
-{
-	return (
+	(
 		<div className="App">
 			<Provider store={reduxStore}>
 				<ResponsiveDrawer classes={classes} theme={{}} title="Secure Ethereum Exchange" />
 			</Provider>
 		</div>
 	);
-};
 
 export default App;
