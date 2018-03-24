@@ -14,7 +14,7 @@ const AuthProgress = (
 	}) =>
 	(
 		<Dialog open={open} fullWidth>
-			<DialogTitle id="simple-dialog-title">{title}</DialogTitle>
+			<DialogTitle id="simple-dialog-title">{`${title} ${(progress * 100).toFixed(2)}%`}</DialogTitle>
 			<Typography component="p" style={{ padding: 10 }}>
 				{message}
 			</Typography>
