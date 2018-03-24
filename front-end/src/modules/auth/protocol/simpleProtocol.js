@@ -12,9 +12,8 @@ const createUser = (user, password, secret, keyGenerator, progressCallback = () 
 
 	return new Promise((resolve) =>
 	{
-		// Generating the key with scrypt corresponds to
-		// 99% of the entire create user protocol
-		const modifiedProgressCb = progress => progressCallback(progress * 0.99, 'Generating Encryption Key');
+		// Assume keyGen takes almost 100% of the time
+		const modifiedProgressCb = progress => progressCallback(progress, 'Generating Encryption Key');
 
 		resolve(keyGen(password, salt, modifiedProgressCb));
 	}).then((key) =>
@@ -46,12 +45,8 @@ const login = (username, password, keyGenerator, progressCallback = () => undefi
 		salt = result.salt;
 		cipher = result.cipher;
 
-		// Assume server call takes 1% time
-		progressCallback(0.01, 'Generating Encryption Key');
-
-		// Generating the key with scrypt corresponds to
-		// 98% of the entire create user protocol
-		const modifiedProgressCb = progress => progressCallback((progress * 0.98) + 0.01, 'Generating Encryption Key');
+		// Assume keyGen takes almost 100% of the time
+		const modifiedProgressCb = progress => progressCallback(progress, 'Generating Encryption Key');
 
 		return keyGen(password, salt, modifiedProgressCb);
 	}).then((key) =>
