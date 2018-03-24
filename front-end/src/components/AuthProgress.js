@@ -5,14 +5,14 @@ import Dialog, { DialogTitle } from 'material-ui/Dialog';
 import { LinearProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 
-const AuthProgress = (
-	{
-		title,
-		open,
-		progress,
-		message,
-	}) =>
-	(
+export function AuthProgress({
+	title,
+	open,
+	progress,
+	message,
+})
+{
+	return (
 		<Dialog open={open} fullWidth>
 			<DialogTitle id="simple-dialog-title">{`${title} ${(progress * 100).toFixed(2)}%`}</DialogTitle>
 			<Typography component="p" style={{ padding: 10 }}>
@@ -22,6 +22,7 @@ const AuthProgress = (
 			<br />
 		</Dialog>
 	);
+}
 
 AuthProgress.propTypes =
 {
