@@ -1,5 +1,4 @@
 import React from 'react';
-import each from 'jest-each';
 import { shallow } from 'enzyme';
 
 import { AuthProgress } from './AuthProgress';

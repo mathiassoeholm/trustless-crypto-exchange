@@ -42,7 +42,7 @@ function createUser(password)
 			},
 		};
 
-		return dependencies.authProtocol.createUser(user, password, secret, progressCallback)
+		return dependencies.authProtocol.createUser(user, password, secret, null, progressCallback)
 			.then((result) =>
 			{
 				dispatch(loginAttemptFinished());
@@ -71,7 +71,7 @@ function login(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		return dependencies.authProtocol.login(username, password, progressCallback)
+		return dependencies.authProtocol.login(username, password, null, progressCallback)
 			.then(() =>
 			{
 				dispatch(loginAttemptFinished());
