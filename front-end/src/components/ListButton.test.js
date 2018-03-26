@@ -50,7 +50,7 @@ describe('ListButton', () =>
 
 	it('renders the icon', () =>
 	{
-		expect(listButton().findWhere(n => n.type() === TestIcon).length).toBe(1);
+		expect(listButton().find(TestIcon).length).toBe(1);
 	});
 
 	it('calls onClick correctly', () =>
