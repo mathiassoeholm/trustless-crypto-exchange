@@ -4,11 +4,11 @@ const changeMenu = (menuType) =>
 {
 	return {
 		type: t.CHANGE_MENU,
-		menuType
+		menuType,
 	};
 };
 
 export default
 {
-	changeMenu
+	changeMenu,
 };
