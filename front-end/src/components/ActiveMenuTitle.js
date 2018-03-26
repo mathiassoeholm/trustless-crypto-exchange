@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import menuTypes from '../modules/flow/menuTypes';
 
-const ActiveMenuTitle = ({ activeMenu }) =>
+export function ActiveMenuTitle({ activeMenu })
 {
 	switch (activeMenu)
 	{
@@ -15,7 +15,7 @@ const ActiveMenuTitle = ({ activeMenu }) =>
 	default:
 		throw new Error('Unknown menu type');
 	}
-};
+}
 
 const mapStateToProps = state =>
 	({

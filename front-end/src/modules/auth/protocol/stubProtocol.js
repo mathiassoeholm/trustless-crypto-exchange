@@ -3,7 +3,7 @@ const options =
 	shouldFail: false,
 };
 
-const createUser = (user, password, secret, progressCallback = () => undefined) =>
+const createUser = (user, password, secret, keyGenerator, progressCallback = () => undefined) =>
 	new Promise((resolve, reject) =>
 	{
 		progressCallback(1, 'message');
@@ -18,7 +18,7 @@ const createUser = (user, password, secret, progressCallback = () => undefined) 
 		}
 	});
 
-const login = (username, password, progressCallback = () => undefined) =>
+const login = (username, password, keyGenerator, progressCallback = () => undefined) =>
 	new Promise((resolve, reject) =>
 	{
 		progressCallback(1, 'message');

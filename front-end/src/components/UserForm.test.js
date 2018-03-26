@@ -28,7 +28,7 @@ describe('UserForm', () =>
 			onClickedButton: buttonCallbackMock,
 			buttonText: 'Button',
 			username: 'Bob',
-			onChangedUsername: () => {},
+			onChangedUsername: () => undefined,
 		};
 
 		mountedUserForm = undefined;

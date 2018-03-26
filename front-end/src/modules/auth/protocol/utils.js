@@ -34,41 +34,42 @@ const decryptAES = (cipher, key, keyIsBuffer = true) =>
 	return decryptedText;
 };
 
-const generateKey = (password, salt, progressCallback = () => undefined) =>
-	new Promise((resolve, reject) =>
-	{
-		// TODO: Investigate normalize
-		const passwordBuffer = Buffer.from(password.normalize('NFKC'));
-		const saltBuffer = Buffer.from(salt);
-
-		const N = 1024;
-		const r = 8;
-		const p = 1;
-
-		// We're using AES 256, so keys need to be 256 bits / 32 bytes
-		const keyLength = 32;
-
-		scrypt(passwordBuffer, saltBuffer, N, r, p, keyLength, (error, progress, key) =>
+const keyGenerator = N =>
+	(password, salt, progressCallback = () => undefined) =>
+		new Promise((resolve, reject) =>
 		{
-			if (error)
+			// TODO: Investigate normalize
+			const passwordBuffer = Buffer.from(password.normalize('NFKC'));
+			const saltBuffer = Buffer.from(salt);
+
+			const r = 8;
+			const p = 1;
+
+			// We're using AES 256, so keys need to be 256 bits / 32 bytes
+			const keyLength = 32;
+
+			scrypt(passwordBuffer, saltBuffer, N, r, p, keyLength, (error, progress, key) =>
 			{
-				reject(error);
-			}
-			else if (key)
-			{
-				resolve(key);
-			}
-			else
-			{
-				progressCallback(progress);
-			}
+				if (error)
+				{
+					reject(error);
+				}
+				else if (key)
+				{
+					resolve(key);
+				}
+				else
+				{
+					progressCallback(progress);
+				}
+			});
 		});
-	});
+
 
 export default
 {
 	getRandomSalt,
 	encryptAES,
 	decryptAES,
-	generateKey,
+	keyGenerator,
 };

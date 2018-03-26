@@ -1,8 +1,11 @@
 import dependencies from '../../../dependencies';
 import utils from './utils';
 
-const createUser = (user, password, secret, progressCallback = () => undefined) =>
+const defaultKeyGenerator = utils.keyGenerator(2 ** 18);
+
+const createUser = (user, password, secret, keyGenerator, progressCallback = () => undefined) =>
 {
+	const keyGen = keyGenerator || defaultKeyGenerator;
 	const salt = utils.getRandomSalt();
 
 	progressCallback(0, 'Generating Encryption Key');
@@ -10,10 +13,10 @@ const createUser = (user, password, secret, progressCallback = () => undefined) 
 	return new Promise((resolve) =>
 	{
 		// Generating the key with scrypt corresponds to
-		// 60% of the entire create user protocol
-		const modifiedProgressCb = progress => progressCallback(progress * 0.6, 'Generating Encryption Key');
+		// 99% of the entire create user protocol
+		const modifiedProgressCb = progress => progressCallback(progress * 0.99, 'Generating Encryption Key');
 
-		resolve(utils.generateKey(password, salt, modifiedProgressCb));
+		resolve(keyGen(password, salt, modifiedProgressCb));
 	}).then((key) =>
 	{
 		const secretText = JSON.stringify(secret);
@@ -27,8 +30,9 @@ const createUser = (user, password, secret, progressCallback = () => undefined) 
 	});
 };
 
-const login = (username, password, progressCallback = () => undefined) =>
+const login = (username, password, keyGenerator, progressCallback = () => undefined) =>
 {
+	const keyGen = keyGenerator || defaultKeyGenerator;
 	let cipher;
 	let salt;
 
@@ -42,14 +46,14 @@ const login = (username, password, progressCallback = () => undefined) =>
 		salt = result.salt;
 		cipher = result.cipher;
 
-		// Assume server call takes 20% time
-		progressCallback(0.2, 'Generating Encryption Key');
+		// Assume server call takes 1% time
+		progressCallback(0.01, 'Generating Encryption Key');
 
 		// Generating the key with scrypt corresponds to
-		// 60% of the entire create user protocol
-		const modifiedProgressCb = progress => progressCallback((progress * 0.6) + 0.2, 'Generating Encryption Key');
+		// 98% of the entire create user protocol
+		const modifiedProgressCb = progress => progressCallback((progress * 0.98) + 0.01, 'Generating Encryption Key');
 
-		return utils.generateKey(password, salt, modifiedProgressCb);
+		return keyGen(password, salt, modifiedProgressCb);
 	}).then((key) =>
 	{
 		const secretJson = utils.decryptAES(cipher, key);
