@@ -6,7 +6,7 @@ describe('Auth Utils', () =>
 	{
 		const salt = utils.getRandomSalt();
 
-		// Since the salt is generated in hex, a symbol is 4 bits or 1/2 bytes. 
+		// Since the salt is generated in hex, a symbol is 4 bits or 1/2 bytes.
 		// Since we generate 16 byte salts, 32 symbols are expected.
 		expect(salt.length).toEqual(32);
 	});

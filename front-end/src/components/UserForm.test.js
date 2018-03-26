@@ -9,7 +9,7 @@ describe('UserForm', () =>
 {
 	let props;
 	let mountedUserForm;
-	const buttonCallbackMock = jest.fn();
+	let buttonCallbackMock;
 
 	const userForm = () =>
 	{
@@ -23,6 +23,8 @@ describe('UserForm', () =>
 
 	beforeEach(() =>
 	{
+		buttonCallbackMock = jest.fn();
+
 		props =
 		{
 			onClickedButton: buttonCallbackMock,
