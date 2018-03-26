@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -67,7 +66,7 @@ describe('MenuButtons', () =>
 	});
 
 	it('renders login menu button when logged out', () =>
-	{	
+	{
 		initialState.auth.isLoggedIn = false;
 		expect(menuButtons().findWhere(n => n.props().text === 'Login').length).toBe(1);
 	});
