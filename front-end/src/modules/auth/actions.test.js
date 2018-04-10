@@ -7,6 +7,7 @@ import actions from './actions';
 import dependencies from '../../dependencies';
 import stubApi from './api/stubApi';
 import stubProtocol from './protocol/stubProtocol';
+import stubWalletProvider from '../wallet/provider/stubProvider';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -30,6 +31,7 @@ describe('auth actions', () =>
 	{
 		dependencies.authApi = stubApi;
 		dependencies.authProtocol = stubProtocol;
+		dependencies.transactionProvider = stubWalletProvider;
 		stubProtocol.options.shouldFail = false;
 
 		store = mockStore(initialState);
@@ -96,6 +98,7 @@ describe('auth actions', () =>
 			{
 				type: t.LOG_IN,
 				user: initialState.auth.user,
+				secret: {},
 			});
 	}),
 	);

@@ -23,6 +23,15 @@ function loginAttemptFinished(errorMessage = undefined)
 		});
 }
 
+function loginAction(user, secret)
+{
+	return {
+		type: t.LOG_IN,
+		secret,
+		user,
+	};
+}
+
 function createUser(password)
 {
 	return (dispatch, getState) =>
@@ -34,15 +43,14 @@ function createUser(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		const secret =
-		{
-			user:
-			{
-				username: user.username,
-			},
-		};
+		let secret;
 
-		return dependencies.authProtocol.createUser(user, password, secret, null, progressCallback)
+		return dependencies.walletProvider.generateSecret()
+			.then((s) =>
+			{
+				secret = s;
+				return dependencies.authProtocol.createUser(user, password, secret, null, progressCallback);
+			})
 			.then((result) =>
 			{
 				dispatch(loginAttemptFinished());
@@ -51,6 +59,7 @@ function createUser(password)
 					{
 						type: t.LOG_IN,
 						user: result.user,
+						secret,
 					});
 			})
 			.catch((error) =>
@@ -72,18 +81,11 @@ function login(password)
 		};
 
 		return dependencies.authProtocol.login(username, password, null, progressCallback)
-			.then(() =>
+			.then((secret) =>
 			{
 				dispatch(loginAttemptFinished());
 
-				dispatch(
-					{
-						type: t.LOG_IN,
-						user:
-						{
-							username,
-						},
-					});
+				dispatch(loginAction({ username	}, secret));
 			})
 			.catch((error) =>
 			{

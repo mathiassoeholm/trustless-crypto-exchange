@@ -14,7 +14,7 @@ const createUser = (user, password, secret, keyGenerator, progressCallback = () 
 		}
 		else
 		{
-			resolve(secret);
+			resolve({ user });
 		}
 	});
 
@@ -29,7 +29,7 @@ const login = (username, password, keyGenerator, progressCallback = () => undefi
 		}
 		else
 		{
-			resolve();
+			resolve({});
 		}
 	});
 
