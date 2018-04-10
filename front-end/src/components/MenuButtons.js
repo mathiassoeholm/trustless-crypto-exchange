@@ -11,8 +11,10 @@ import Divider from 'material-ui/Divider';
 
 import ListButton from './ListButton';
 import flowActions from '../modules/flow/actions';
-import authActions from '../modules/auth/actions';
+import AuthActions from '../modules/auth/actions';
 import menuTypes from '../modules/flow/menuTypes';
+
+const authActions = AuthActions();
 
 const MenuButtons = ({ isLoggedIn, username, dispatch }) =>
 {

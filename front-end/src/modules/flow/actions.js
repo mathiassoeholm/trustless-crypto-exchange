@@ -1,12 +1,10 @@
 import t from './actionTypes';
 
-const changeMenu = (menuType) =>
-{
-	return {
+const changeMenu = menuType =>
+	({
 		type: t.CHANGE_MENU,
 		menuType,
-	};
-};
+	});
 
 export default
 {
