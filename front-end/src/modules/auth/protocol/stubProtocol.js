@@ -1,41 +1,32 @@
-const options =
-{
-	shouldFail: false,
-};
+export default (shouldFail = false) =>
+	({
+		createUser: (user, password, secret, progressCallback = () => undefined) =>
+			new Promise((resolve, reject) =>
+			{
+				progressCallback(1, 'message');
 
-const createUser = (user, password, secret, keyGenerator, progressCallback = () => undefined) =>
-	new Promise((resolve, reject) =>
-	{
-		progressCallback(1, 'message');
+				if (shouldFail)
+				{
+					reject(Error('error message'));
+				}
+				else
+				{
+					resolve({ user });
+				}
+			}),
 
-		if (options.shouldFail)
-		{
-			reject(Error('error message'));
-		}
-		else
-		{
-			resolve({ user });
-		}
+		login: (username, password, progressCallback = () => undefined) =>
+			new Promise((resolve, reject) =>
+			{
+				progressCallback(1, 'message');
+
+				if (shouldFail)
+				{
+					reject(Error('error message'));
+				}
+				else
+				{
+					resolve({});
+				}
+			}),
 	});
-
-const login = (username, password, keyGenerator, progressCallback = () => undefined) =>
-	new Promise((resolve, reject) =>
-	{
-		progressCallback(1, 'message');
-
-		if (options.shouldFail)
-		{
-			reject(Error('error message'));
-		}
-		else
-		{
-			resolve({});
-		}
-	});
-
-export default
-{
-	createUser,
-	login,
-	options,
-};

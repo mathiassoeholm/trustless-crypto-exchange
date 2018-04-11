@@ -1,10 +1,10 @@
 import t from './actionTypes';
-import dependencies from '../../dependencies';
+import config from '../../config';
 
-function progressUpdate(progress, message)
+export default (authProtocol = config.AuthProtocol(), walletProvider = config.walletProvider) =>
 {
-	return (
-		{
+	const progressUpdate = (progress, message) =>
+		({
 			type: t.PROGRESS_UPDATE,
 			status:
 			{
@@ -12,29 +12,21 @@ function progressUpdate(progress, message)
 				message,
 			},
 		});
-}
 
-function loginAttemptFinished(errorMessage = undefined)
-{
-	return (
-		{
+	const loginAttemptFinished = (errorMessage = undefined) =>
+		({
 			type: t.LOGIN_ATTEMPT_FINISHED,
 			errorMessage,
 		});
-}
 
-function loginAction(user, secret)
-{
-	return {
-		type: t.LOG_IN,
-		secret,
-		user,
-	};
-}
+	const loginAction = (user, secret) =>
+		({
+			type: t.LOG_IN,
+			secret,
+			user,
+		});
 
-function createUser(password)
-{
-	return (dispatch, getState) =>
+	const createUser = password => (dispatch, getState) =>
 	{
 		const { user } = getState().auth;
 
@@ -45,33 +37,25 @@ function createUser(password)
 
 		let secret;
 
-		return dependencies.walletProvider.generateSecret()
+		return walletProvider.generateSecret()
 			.then((s) =>
 			{
 				secret = s;
-				return dependencies.authProtocol.createUser(user, password, secret, null, progressCallback);
+				return authProtocol.createUser(user, password, secret, progressCallback);
 			})
 			.then((result) =>
 			{
 				dispatch(loginAttemptFinished());
 
-				dispatch(
-					{
-						type: t.LOG_IN,
-						user: result.user,
-						secret,
-					});
+				dispatch(loginAction(result.user, secret));
 			})
 			.catch((error) =>
 			{
 				dispatch(loginAttemptFinished(error.message));
 			});
 	};
-}
 
-function login(password)
-{
-	return (dispatch, getState) =>
+	const login = password => (dispatch, getState) =>
 	{
 		const { username } = getState().auth.user;
 
@@ -80,7 +64,7 @@ function login(password)
 			dispatch(progressUpdate(p, m));
 		};
 
-		return dependencies.authProtocol.login(username, password, null, progressCallback)
+		return authProtocol.login(username, password, progressCallback)
 			.then((secret) =>
 			{
 				dispatch(loginAttemptFinished());
@@ -92,31 +76,22 @@ function login(password)
 				dispatch(loginAttemptFinished(error.message));
 			});
 	};
-}
 
-function logout()
-{
+	const logout = () =>
+		({
+			type: t.LOG_OUT,
+		});
+
+	const changeUsername = username =>
+		({
+			type: t.CHANGE_USERNAME,
+			username,
+		});
+
 	return {
-		type: t.LOG_OUT,
+		createUser,
+		login,
+		logout,
+		changeUsername,
 	};
-}
-
-function changeUsername(username)
-{
-	return (dispatch) =>
-	{
-		dispatch(
-			{
-				type: t.CHANGE_USERNAME,
-				username,
-			});
-	};
-}
-
-export default
-{
-	createUser,
-	login,
-	logout,
-	changeUsername,
 };

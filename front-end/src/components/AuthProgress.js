@@ -14,11 +14,11 @@ export function AuthProgress({
 {
 	return (
 		<Dialog open={open} fullWidth>
-			<DialogTitle id="simple-dialog-title">{`${title} ${(progress * 100).toFixed(2)}%`}</DialogTitle>
+			<DialogTitle id="simple-dialog-title">{title}</DialogTitle>
 			<Typography component="p" style={{ padding: 10 }}>
-				{message}
+				{`${message} ${(progress * 100).toFixed(2)}%`}
 			</Typography>
-			<LinearProgress />
+			<LinearProgress variant="determinate" value={progress * 100} />
 			<br />
 		</Dialog>
 	);
