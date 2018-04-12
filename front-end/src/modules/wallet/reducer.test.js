@@ -1,6 +1,7 @@
 import deepFreeze from 'deep-freeze';
 
 import authActionTypes from '../auth/actionTypes';
+import walletActionTypes from './actionTypes';
 import reducer from './reducer';
 
 describe('Transaction Reducer', () =>
@@ -38,5 +39,19 @@ describe('Transaction Reducer', () =>
 		const stateAfter = reducer(undefined, { type: authActionTypes.LOG_OUT });
 
 		expect(stateAfter.secret).toBeNull();
+	});
+
+	it('update balance and is pure', () =>
+	{
+		const stateBefore =
+		{
+			balance: 50,
+		};
+
+		deepFreeze(stateBefore);
+
+		const stateAfter = reducer(undefined, { type: walletActionTypes.UPDATE_BALANCE, balance: 100 });
+
+		expect(stateAfter.balance).toBe(100);
 	});
 });
