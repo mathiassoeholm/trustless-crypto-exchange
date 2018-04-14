@@ -3,8 +3,11 @@ import walletActionTypes from './actionTypes';
 
 const initialState =
 {
+	transactionStatus: null,
 	secret: null,
 	balance: null,
+	amount: null,
+	receiver: null,
 };
 
 const reducer = (state = initialState, action) =>
@@ -17,6 +20,12 @@ const reducer = (state = initialState, action) =>
 		return { ...state, secret: null };
 	case walletActionTypes.UPDATE_BALANCE:
 		return { ...state, balance: action.balance };
+	case walletActionTypes.TRANSACTION_STATUS_UPDATE:
+		return { ...state, transactionStatus: action.status };
+	case walletActionTypes.CHANGE_AMOUNT:
+		return { ...state, amount: action.amount };
+	case walletActionTypes.CHANGE_RECEIVER:
+		return { ...state, receiver: action.receiver };
 	default:
 		return state;
 	}

@@ -23,7 +23,33 @@ export default (walletProvider = config.walletProvider) =>
 			});
 	};
 
+	const statusUpdate = (receiver, amount, message) =>
+		({
+			receiver,
+			amount,
+			message,
+		});
+
+	const performTransaction = () => (dispatch, getState) =>
+	{
+	};
+
+	const changeAmount = amount =>
+		({
+			type: walletActionTypes.CHANGE_AMOUNT,
+			amount,
+		});
+
+	const changeReceiver = receiver =>
+		({
+			type: walletActionTypes.CHANGE_RECEIVER,
+			receiver,
+		});
+
 	return {
 		updateBalance,
+		performTransaction,
+		changeAmount,
+		changeReceiver,
 	};
 };

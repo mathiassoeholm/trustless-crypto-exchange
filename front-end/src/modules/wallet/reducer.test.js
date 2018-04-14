@@ -1,4 +1,5 @@
 import deepFreeze from 'deep-freeze';
+import each from 'jest-each';
 
 import authActionTypes from '../auth/actionTypes';
 import walletActionTypes from './actionTypes';
@@ -36,22 +37,32 @@ describe('Transaction Reducer', () =>
 
 		deepFreeze(stateBefore);
 
-		const stateAfter = reducer(undefined, { type: authActionTypes.LOG_OUT });
+		const stateAfter = reducer(stateBefore, { type: authActionTypes.LOG_OUT });
 
 		expect(stateAfter.secret).toBeNull();
 	});
 
-	it('update balance and is pure', () =>
+	each(
+		[
+			['balance', { balance: 50 }, { balance: 100 }, { type: walletActionTypes.UPDATE_BALANCE, balance: 100 }],
+			['transaction status',
+				{ transactionStatus: null },
+				{
+					transactionStatus: 'message',
+				},
+				{
+					type: walletActionTypes.TRANSACTION_STATUS_UPDATE,
+					status: 'message',
+				},
+			],
+			['amount', { amount: 25 }, { amount: 50 }, { type: walletActionTypes.CHANGE_AMOUNT, amount: 50 }],
+			['receiver', { receiver: null }, { receiver: '1010' }, { type: walletActionTypes.CHANGE_RECEIVER, receiver: '1010' }],
+		]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 	{
-		const stateBefore =
-		{
-			balance: 50,
-		};
-
 		deepFreeze(stateBefore);
 
-		const stateAfter = reducer(undefined, { type: walletActionTypes.UPDATE_BALANCE, balance: 100 });
+		const newState = reducer(stateBefore, action);
 
-		expect(stateAfter.balance).toBe(100);
+		expect(newState).toEqual(stateAfter);
 	});
 });
