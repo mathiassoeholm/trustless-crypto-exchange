@@ -28,7 +28,7 @@ export default (walletProvider = config.WalletProvider()) =>
 						balance,
 					});
 			})
-			.catch(error => dispatch(balanceUpdateFailed(error)));
+			.catch(error => dispatch(balanceUpdateFailed(error.message)));
 	};
 
 	const statusUpdate = (isFinished, errorMessage) =>
@@ -74,13 +74,13 @@ export default (walletProvider = config.WalletProvider()) =>
 
 		dispatch(statusUpdate(false, null));
 
-		return walletProvider
-			.sendCurrency(secret, receiver, amount)
+		return walletProvider.sendCurrency(secret, receiver, amount)
 			.then(() =>
 			{
 				dispatch(statusUpdate(true, null));
 				return dispatch(updateBalance(secret));
-			});
+			})
+			.catch(error => dispatch(statusUpdate(true, error.message)));
 	};
 
 	const changeAmount = amount =>

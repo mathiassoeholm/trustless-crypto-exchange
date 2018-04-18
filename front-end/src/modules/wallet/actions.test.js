@@ -1,8 +1,6 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import each from 'jest-each';
 
-import t from './actionTypes';
 import Actions from './actions';
 import walletActionTypes from './actionTypes';
 import StubWalletProvider from '../wallet/provider/stubProvider';
@@ -18,11 +16,16 @@ describe('wallet actions', () =>
 		wallet:
 		{
 			secret: {},
+			amount: 10,
+			receiver: 'test',
 		},
 	};
 
 	let store;
 	let actions;
+
+	const lastActionFromStore = () => store.getActions()[store.getActions().length - 1];
+	const firstActionFromStore = () => store.getActions()[0];
 
 	beforeEach(() =>
 	{
@@ -37,7 +40,7 @@ describe('wallet actions', () =>
 
 		return store.dispatch(actions.updateBalance()).then(() =>
 		{
-			expect(store.getActions()[0]).toEqual(
+			expect(firstActionFromStore()).toEqual(
 				{
 					type: walletActionTypes.UPDATE_BALANCE,
 					balance: 100,
@@ -63,7 +66,7 @@ describe('wallet actions', () =>
 		store = mockStore({ wallet: { secret: {}, amount: 10 } });
 
 		await store.dispatch(actions.performTransaction());
-		expect(store.getActions()[0]).toEqual(
+		expect(firstActionFromStore()).toEqual(
 			{
 				type: walletActionTypes.INVALID_RECEIVER_ERROR,
 				error: walletErrorMessages.NO_RECEIVER_WHEN_SENDING,
@@ -72,7 +75,7 @@ describe('wallet actions', () =>
 		store = mockStore({ wallet: { secret: {}, receiver: 'test' } });
 
 		await store.dispatch(actions.performTransaction());
-		expect(store.getActions()[0]).toEqual(
+		expect(firstActionFromStore()).toEqual(
 			{
 				type: walletActionTypes.INVALID_AMOUNT_ERROR,
 				error: walletErrorMessages.NO_AMOUNT_WHEN_SENDING,
@@ -81,7 +84,6 @@ describe('wallet actions', () =>
 
 	it('dispatches status updates correctly when performing transaction', async () =>
 	{
-		store = mockStore({ wallet: { secret: {}, receiver: 'test', amount: 10 } });
 		await store.dispatch(actions.performTransaction());
 
 		const storeActions = store.getActions();
@@ -109,11 +111,36 @@ describe('wallet actions', () =>
 
 	it('updates balance after transaction is finished', async () =>
 	{
-		store = mockStore({ wallet: { secret: {}, receiver: 'test', amount: 10 } });
 		await store.dispatch(actions.performTransaction());
 
-		const storeActions = store.getActions();
+		expect(lastActionFromStore().type).toEqual(walletActionTypes.UPDATE_BALANCE);
+	});
 
-		expect(storeActions[storeActions.length - 1].type).toEqual(walletActionTypes.UPDATE_BALANCE);
+	it('dispatches error action when updating balance', async () =>
+	{
+		actions = Actions(StubWalletProvider(true));
+		await store.dispatch(actions.updateBalance());
+
+		expect(lastActionFromStore()).toEqual(
+			{
+				type: walletActionTypes.BALANCE_UPDATE_FAILED,
+				error: 'error',
+			});
+	});
+
+	it('dispatches error action when performing transaction', async () =>
+	{
+		actions = Actions(StubWalletProvider(true));
+		await store.dispatch(actions.performTransaction());
+
+		expect(lastActionFromStore()).toEqual(
+			{
+				type: walletActionTypes.TRANSACTION_STATUS_UPDATE,
+				status:
+				{
+					isFinished: true,
+					errorMessage: 'error',
+				},
+			});
 	});
 });
