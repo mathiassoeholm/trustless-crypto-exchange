@@ -5,7 +5,7 @@ import each from 'jest-each';
 import t from './actionTypes';
 import Actions from './actions';
 import StubProtocol from './protocol/stubProtocol';
-import stubWalletProvider from '../wallet/provider/stubProvider';
+import StubWalletProvider from '../wallet/provider/stubProvider';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -28,7 +28,7 @@ describe('auth actions', () =>
 
 	beforeEach(() =>
 	{
-		actions = Actions(StubProtocol(), stubWalletProvider);
+		actions = Actions(StubProtocol(), StubWalletProvider());
 
 		store = mockStore(initialState);
 	});
@@ -66,8 +66,8 @@ describe('auth actions', () =>
 	});
 
 	each([
-		['create user', Actions(StubProtocol(), stubWalletProvider).createUser],
-		['login', Actions(StubProtocol(), stubWalletProvider).login],
+		['create user', Actions(StubProtocol(), StubWalletProvider()).createUser],
+		['login', Actions(StubProtocol(), StubWalletProvider()).login],
 	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
 	{
 		const firstAction = store.getActions()[0];

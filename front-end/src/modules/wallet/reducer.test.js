@@ -48,15 +48,30 @@ describe('Transaction Reducer', () =>
 			['transaction status',
 				{ transactionStatus: null },
 				{
-					transactionStatus: 'message',
+					transactionStatus:
+					{
+						isFinished: false,
+						errorMessage: null,
+					},
 				},
 				{
 					type: walletActionTypes.TRANSACTION_STATUS_UPDATE,
-					status: 'message',
+					status:
+					{
+						isFinished: false,
+						errorMessage: null,
+					},
 				},
 			],
 			['amount', { amount: 25 }, { amount: 50 }, { type: walletActionTypes.CHANGE_AMOUNT, amount: 50 }],
 			['receiver', { receiver: null }, { receiver: '1010' }, { type: walletActionTypes.CHANGE_RECEIVER, receiver: '1010' }],
+			['balance update error',
+				{ balanceUpdateError: null },
+				{ balanceUpdateError: 'error' },
+				{ type: walletActionTypes.BALANCE_UPDATE_FAILED, error: 'error' },
+			],
+			['amountError', { amountError: 'test' }, { amountError: 'error' }, { type: walletActionTypes.INVALID_AMOUNT_ERROR, error: 'error' }],
+			['receiverError', { receiverError: 'test' }, { receiverError: 'error' }, { type: walletActionTypes.INVALID_RECEIVER_ERROR, error: 'error' }],
 		]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 	{
 		deepFreeze(stateBefore);

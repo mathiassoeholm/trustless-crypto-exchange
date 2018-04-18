@@ -1,31 +1,26 @@
-let currentBalance = 0;
-
-const generateSecret = () => new Promise((resolve) =>
+export default (shouldFail = false, balance = 0) =>
 {
-	resolve({});
-});
+	let currentBalance = balance;
 
-const sendCurrency = (secret, to, amount) => new Promise((resolve, reject) =>
-{
-	currentBalance -= amount;
-	resolve();
-});
+	const generateSecret = () => new Promise((resolve) =>
+	{
+		resolve({});
+	});
 
-const getBalance = () => new Promise((resolve) =>
-{
-	resolve(currentBalance);
-});
+	const sendCurrency = (secret, to, amount) => new Promise((resolve, reject) =>
+	{
+		currentBalance -= amount;
+		resolve();
+	});
 
-// Testing function
-const setBalance = (amount) =>
-{
-	currentBalance = amount;
-};
+	const getBalance = () => new Promise((resolve) =>
+	{
+		resolve(currentBalance);
+	});
 
-export default
-{
-	generateSecret,
-	sendCurrency,
-	getBalance,
-	setBalance,
+	return {
+		generateSecret,
+		sendCurrency,
+		getBalance,
+	};
 };

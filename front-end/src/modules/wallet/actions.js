@@ -1,18 +1,25 @@
 import config from '../../config';
 import walletActionTypes from './actionTypes';
+import errorMessages from './errorMessages';
 
-export default (walletProvider = config.walletProvider) =>
+export default (walletProvider = config.WalletProvider()) =>
 {
+	const balanceUpdateFailed = error =>
+		({
+			type: walletActionTypes.BALANCE_UPDATE_FAILED,
+			error,
+		});
+
 	const updateBalance = () => (dispatch, getState) =>
 	{
 		const { secret } = getState().wallet;
 
 		if (!secret)
 		{
-			throw Error('Cannot get balance if there is no secret');
+			throw Error(errorMessages.NO_SECRET_WHEN_UPDATING_BALANCE);
 		}
 
-		return walletProvider.getBalance()
+		return walletProvider.getBalance(secret)
 			.then((balance) =>
 			{
 				dispatch(
@@ -20,18 +27,60 @@ export default (walletProvider = config.walletProvider) =>
 						type: walletActionTypes.UPDATE_BALANCE,
 						balance,
 					});
-			});
+			})
+			.catch(error => dispatch(balanceUpdateFailed(error)));
 	};
 
-	const statusUpdate = (receiver, amount, message) =>
+	const statusUpdate = (isFinished, errorMessage) =>
 		({
-			receiver,
-			amount,
-			message,
+			type: walletActionTypes.TRANSACTION_STATUS_UPDATE,
+			status:
+			{
+				isFinished,
+				errorMessage,
+			},
+		});
+
+	const invalidAmount = error =>
+		({
+			type: walletActionTypes.INVALID_AMOUNT_ERROR,
+			error,
+		});
+
+	const invalidReceiver = error =>
+		({
+			type: walletActionTypes.INVALID_RECEIVER_ERROR,
+			error,
 		});
 
 	const performTransaction = () => (dispatch, getState) =>
 	{
+		const { secret, amount, receiver } = getState().wallet;
+
+		if (!secret)
+		{
+			throw Error(errorMessages.NO_SECRET_WHEN_SENDING);
+		}
+		else if (!amount)
+		{
+			dispatch(invalidAmount(errorMessages.NO_AMOUNT_WHEN_SENDING));
+			return null;
+		}
+		else if (!receiver)
+		{
+			dispatch(invalidReceiver(errorMessages.NO_RECEIVER_WHEN_SENDING));
+			return null;
+		}
+
+		dispatch(statusUpdate(false, null));
+
+		return walletProvider
+			.sendCurrency(secret, receiver, amount)
+			.then(() =>
+			{
+				dispatch(statusUpdate(true, null));
+				return dispatch(updateBalance(secret));
+			});
 	};
 
 	const changeAmount = amount =>

@@ -46,7 +46,7 @@ const reducer = (state = initialState, action) =>
 
 		if (action.message !== null)
 		{
-			newState = { ...newState, loginAttemptStatus: { errorMessage: action.errorMessage }};
+			newState = { ...newState, loginAttemptStatus: { errorMessage: action.errorMessage } };
 		}
 
 		return newState;
