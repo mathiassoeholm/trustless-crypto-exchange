@@ -3,28 +3,30 @@ import utils from './utils';
 
 import simpleProtocol from './simpleProtocol';
 import stubApi from '../api/stubApi';
-import dependencies from '../../../dependencies';
-
-// We use the stub api for testing purposes
-dependencies.authApi = stubApi;
 
 each(
 	[
 		['Simple Protocol', simpleProtocol],
-	]).describe('%s', (protocolName, protocol) =>
+	]).describe('%s', (protocolName, chosenProtocol) =>
 {
+	let protocol;
 	const testKeyGenerator = utils.keyGenerator(1);
+
+	beforeEach(() =>
+	{
+		protocol = chosenProtocol(testKeyGenerator, stubApi);
+	});
 
 	it('creates a user', async () =>
 	{
-		await protocol.createUser({ username: 'kurt' }, 'start123', {}, testKeyGenerator);
+		await protocol.createUser({ username: 'kurt' }, 'start123', {});
 		expect(stubApi.getState().username).toEqual('kurt');
 	});
 
 	it('creates and stores secret', async () =>
 	{
-		await protocol.createUser({ username: 'kurt' }, 'start123', { username: 'kurt' }, testKeyGenerator);
-		const result = await protocol.login('kurt', 'start123', testKeyGenerator);
+		await protocol.createUser({ username: 'kurt' }, 'start123', { username: 'kurt' });
+		const result = await protocol.login('kurt', 'start123');
 
 		expect(result.username).toEqual('kurt');
 	});
@@ -39,13 +41,13 @@ each(
 			previousProgress = p;
 		};
 
-		await protocol.createUser({ username: 'kurt' }, 'start123', {}, testKeyGenerator, progressCallback);
+		await protocol.createUser({ username: 'kurt' }, 'start123', {}, progressCallback);
 
 		expect(previousProgress).toEqual(1);
 
 		previousProgress = 0;
 
-		await protocol.login('kurt', 'start123', testKeyGenerator, progressCallback);
+		await protocol.login('kurt', 'start123', progressCallback);
 
 		expect(previousProgress).toEqual(1);
 	});
@@ -61,7 +63,7 @@ each(
 
 		const password = 'password';
 
-		await protocol.createUser({ username }, password, secret, testKeyGenerator);
+		await protocol.createUser({ username }, password, secret);
 
 		const { salt } = stubApi.getState();
 		const key = await testKeyGenerator(password, salt);
@@ -73,13 +75,13 @@ each(
 
 	it('fails to login if wrong password supplied', async () =>
 	{
-		await protocol.createUser({ username: 'bob' }, 'bob', {}, testKeyGenerator);
+		await protocol.createUser({ username: 'bob' }, 'bob', {});
 
 		let error;
 
 		try
 		{
-			await protocol.login('bob', 'alice', testKeyGenerator);
+			await protocol.login('bob', 'alice');
 		}
 		catch (err)
 		{
