@@ -4,7 +4,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { shallow } from 'enzyme';
 
-import WalletDetails from './WalletDetails';
+import WalletDetailsBuilder from './WalletDetails';
 import walletActionTypes from '../modules/wallet/actionTypes';
 
 const middlewares = [thunk];
@@ -17,13 +17,31 @@ describe('WalletDetails', () =>
 
 	let initialState;
 
-	const walletDetails = () =>
+	const mockActions =
+	{
+		performTransaction: () =>
+			({
+				type: 'TRANSACTION_TEST',
+			}),
+	};
+
+	const walletDetails = (useMockActions) =>
 	{
 		store = mockStore(initialState);
 
 		if (!wrapper)
 		{
-			wrapper = shallow(<WalletDetails store={store} />).dive();
+			let WalletDetails = WalletDetailsBuilder();
+			let WalletDetailsWithMock = WalletDetailsBuilder(() => mockActions);
+
+			if (useMockActions)
+			{
+				wrapper = shallow(<WalletDetailsWithMock store={store} />).dive();
+			}
+			else
+			{
+				wrapper = shallow(<WalletDetails store={store} />).dive();
+			}
 		}
 
 		return wrapper;
@@ -35,6 +53,7 @@ describe('WalletDetails', () =>
 			wallet:
 			{
 				amount: 10,
+				receiver: '0000',
 			},
 		};
 
@@ -60,5 +79,29 @@ describe('WalletDetails', () =>
 				type: walletActionTypes.CHANGE_AMOUNT,
 				amount: 20,
 			});
+	});
+
+	it('renders receiver properly', () =>
+	{
+		expect(walletDetails().find('#receiverField').props().value).toBe(initialState.wallet.receiver);
+	});
+
+	it('dispatches receiverChanged action correctly', () =>
+	{
+		const amountField = walletDetails().find('#receiverField').first();
+		amountField.simulate('change', { target: { value: '1111' } });
+		expect(store.getActions()[0]).toEqual(
+			{
+				type: walletActionTypes.CHANGE_RECEIVER,
+				receiver: '1111',
+			});
+	});
+
+	it('dispatches performTransaction correctly', () =>
+	{
+		const submitButton = walletDetails(true).find('#submitButton').first();
+		submitButton.simulate('click');
+
+		expect(store.getActions()[0].type).toBe('TRANSACTION_TEST');
 	});
 });
