@@ -7,7 +7,7 @@ const initialState =
 	balanceUpdateError: null,
 	secret: null,
 	balance: null,
-	amount: null,
+	amount: 0,
 	amountError: null,
 	receiver: null,
 	receiverError: null,
