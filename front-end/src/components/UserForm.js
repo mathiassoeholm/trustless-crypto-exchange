@@ -55,7 +55,7 @@ export class UserForm extends React.Component
 				<br />
 				<TextField
 					id="password"
-					label="Password"
+					label="Passphrase"
 					type="password"
 					autoComplete="current-password"
 					margin="normal"
