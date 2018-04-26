@@ -31,8 +31,8 @@ describe('WalletDetails', () =>
 
 		if (!wrapper)
 		{
-			let WalletDetails = WalletDetailsBuilder();
-			let WalletDetailsWithMock = WalletDetailsBuilder(() => mockActions);
+			const WalletDetails = WalletDetailsBuilder();
+			const WalletDetailsWithMock = WalletDetailsBuilder(() => mockActions);
 
 			if (useMockActions)
 			{
