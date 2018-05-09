@@ -7,15 +7,6 @@ import Button from 'material-ui/Button';
 
 import DefaultWalletActions from '../modules/wallet/actions';
 
-const styles = () => ({
-	root:
-	{
-		width: '70%',
-		display: 'flex',
-		height: '400px',
-	},
-});
-
 const WalletDetails = ({
 	amount,
 	onAmountChanged,
