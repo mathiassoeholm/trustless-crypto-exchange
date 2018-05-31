@@ -1,7 +1,9 @@
 import t from './actionTypes';
 import config from '../../config';
 
-export default (authProtocol = config.AuthProtocol(), walletProvider = config.WalletProvider()) =>
+export default (
+	authProtocol = config.MakeAuthProtocol(),
+	walletProvider = config.WalletProvider()) =>
 {
 	const progressUpdate = (progress, message) =>
 		({

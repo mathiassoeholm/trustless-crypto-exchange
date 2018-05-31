@@ -3,9 +3,9 @@ import thunk from 'redux-thunk';
 import each from 'jest-each';
 
 import t from './actionTypes';
-import Actions from './actions';
-import StubProtocol from './protocol/stubProtocol';
 import StubWalletProvider from '../wallet/provider/stubProvider';
+import authActions from './actions';
+import makeStubProtocol from './protocol/stubProtocol';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -28,14 +28,13 @@ describe('auth actions', () =>
 
 	beforeEach(() =>
 	{
-		actions = Actions(StubProtocol(), StubWalletProvider());
-
+		actions = authActions(makeStubProtocol(), StubWalletProvider());
 		store = mockStore(initialState);
 	});
 
 	it('should give error for create user', () =>
 	{
-		actions = Actions(StubProtocol(true));
+		actions = authActions(makeStubProtocol(true));
 
 		return store.dispatch(actions.createUser('password')).then(() =>
 		{
@@ -51,7 +50,7 @@ describe('auth actions', () =>
 
 	it('should give error for login', () =>
 	{
-		actions = Actions(StubProtocol(true));
+		actions = authActions(makeStubProtocol(true));
 
 		return store.dispatch(actions.login('password')).then(() =>
 		{
@@ -66,8 +65,8 @@ describe('auth actions', () =>
 	});
 
 	each([
-		['create user', Actions(StubProtocol(), StubWalletProvider()).createUser],
-		['login', Actions(StubProtocol(), StubWalletProvider()).login],
+		['create user', authActions(makeStubProtocol(), StubWalletProvider()).createUser],
+		['login', authActions(makeStubProtocol(), StubWalletProvider()).login],
 	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
 	{
 		const firstAction = store.getActions()[0];
