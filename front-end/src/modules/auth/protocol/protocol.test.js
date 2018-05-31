@@ -1,30 +1,23 @@
-import each from 'jest-each';
 import utils from './utils';
 
-import simpleProtocol from './simpleProtocol';
-import authenticatedProtocol from './authenticated-protocol';
+import makeProtocol from './protocol';
 import stubApi from '../api/stubApi';
 
-each(
-	[
-		[
-			'Simple Protocol',
-			simpleProtocol,
-			[
-				{ username: 'kurt' }, // User
-				'start123', // Password
-				{ username: 'kurt' }, // Secret
-			],
-		],
-		//['Authenticated Protocol', authenticatedProtocol],
-	]).describe('%s', (protocolName, chosenProtocol, createArguments) =>
+describe('Protocol', () =>
 {
 	let protocol;
 	const testKeyGenerator = utils.keyGenerator(1);
 
+	const createArguments =
+	[
+		{ username: 'kurt' }, // User
+		'start123', // Password
+		{ username: 'kurt' }, // Secret
+	];
+
 	beforeEach(() =>
 	{
-		protocol = chosenProtocol(testKeyGenerator, stubApi);
+		protocol = makeProtocol(testKeyGenerator, stubApi);
 	});
 
 	it('creates a user', async () =>

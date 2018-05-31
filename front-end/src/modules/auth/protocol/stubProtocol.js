@@ -1,4 +1,4 @@
-export default (shouldFail = false) =>
+const makeStubProtocol = (shouldFail = false) =>
 	({
 		createUser: (user, password, secret, progressCallback = () => undefined) =>
 			new Promise((resolve, reject) =>
@@ -30,3 +30,5 @@ export default (shouldFail = false) =>
 				}
 			}),
 	});
+
+export default makeStubProtocol;

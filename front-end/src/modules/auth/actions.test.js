@@ -5,7 +5,7 @@ import each from 'jest-each';
 import t from './actionTypes';
 import authActions from './actions';
 import stubApi from './api/stubApi';
-import stubProtocol from './protocol/stubProtocol';
+import makeStubProtocol from './protocol/stubProtocol';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -28,14 +28,14 @@ describe('auth actions', () =>
 
 	beforeEach(() =>
 	{
-		actions = authActions(stubProtocol());
+		actions = authActions(makeStubProtocol());
 
 		store = mockStore(initialState);
 	});
 
 	it('should give error for create user', () =>
 	{
-		actions = authActions(stubProtocol(true));
+		actions = authActions(makeStubProtocol(true));
 
 		return store.dispatch(actions.createUser('password')).then(() =>
 		{
@@ -51,7 +51,7 @@ describe('auth actions', () =>
 
 	it('should give error for login', () =>
 	{
-		actions = authActions(stubProtocol(true));
+		actions = authActions(makeStubProtocol(true));
 
 		return store.dispatch(actions.login('password')).then(() =>
 		{
@@ -66,8 +66,8 @@ describe('auth actions', () =>
 	});
 
 	each([
-		['create user', authActions(stubProtocol()).createUser],
-		['login', authActions(stubProtocol()).login],
+		['create user', authActions(makeStubProtocol()).createUser],
+		['login', authActions(makeStubProtocol()).login],
 	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
 	{
 		const firstAction = store.getActions()[0];

@@ -1,10 +1,10 @@
 import stubApi from '../modules/auth/api/stubApi';
-import simpleProtocol from '../modules/auth/protocol/simpleProtocol';
+import makeProtocol from '../modules/auth/protocol/protocol';
 import utils from '../modules/auth/protocol/utils';
 
 export default
 {
 	authApi: stubApi,
-	AuthProtocol: simpleProtocol,
+	MakeAuthProtocol: makeProtocol,
 	keyGenerator: utils.keyGenerator(2 ** 18),
 };

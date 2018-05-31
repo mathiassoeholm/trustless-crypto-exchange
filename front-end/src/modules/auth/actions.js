@@ -1,7 +1,7 @@
 import t from './actionTypes';
 import config from '../../config';
 
-export default (authProtocol = config.AuthProtocol()) =>
+export default (authProtocol = config.MakeAuthProtocol()) =>
 {
 	const progressUpdate = (progress, message) =>
 		({
