@@ -35,14 +35,15 @@ const makeProtocol = (keyGen = config.keyGenerator, authApi = config.authApi) =>
 		{
 			progressCallback(0, 'Retrieving data from server');
 
-			const salt1 = await authApi.getSalt1();
+			const { salt1 } = await authApi.getSalt1(username);
 
-			const { cipher, salt2 } = await authApi.getWallet(username);
+			const authenticationKeyProgess = progress => progressCallback(progress * 0.5, 'Generating Authentication Key');
+			const authenticationKey = await keyGen(password, salt1, authenticationKeyProgess);
 
-			// Assume keyGen takes almost 100% of the time
-			const modifiedProgressCb = progress => progressCallback(progress, 'Generating Decryption Key');
+			const { cipher, salt2 } = await authApi.getWallet(username, authenticationKey);
 
-			const decryptionKey = await keyGen(password, salt2, modifiedProgressCb);
+			const decryptionKeyProgess = progress => progressCallback(0.5 + (progress * 0.5), 'Generating Decryption Key');
+			const decryptionKey = await keyGen(password, salt2, decryptionKeyProgess);
 
 			const secretJson = utils.decryptAES(cipher, decryptionKey);
 
