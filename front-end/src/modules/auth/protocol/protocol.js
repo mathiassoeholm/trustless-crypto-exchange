@@ -1,7 +1,7 @@
 import config from '../../../config';
 import utils from './utils';
 
-export default (keyGen = config.keyGenerator, authApi = config.authApi) =>
+const makeProtocol = (keyGen = config.keyGenerator, authApi = config.authApi) =>
 	({
 		createUser: (user, password, secret, progressCallback = () => undefined) =>
 		{
@@ -67,3 +67,5 @@ export default (keyGen = config.keyGenerator, authApi = config.authApi) =>
 			});
 		},
 	});
+
+export default makeProtocol;
