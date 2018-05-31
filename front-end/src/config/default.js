@@ -6,5 +6,5 @@ export default
 {
 	authApi: stubApi,
 	MakeAuthProtocol: makeProtocol,
-	keyGenerator: utils.keyGenerator(2 ** 18),
+	keyGenerator: utils.keyGenerator(2 ** 17),
 };

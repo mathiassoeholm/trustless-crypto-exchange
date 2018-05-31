@@ -1,13 +1,17 @@
-const fakeDelay = 500; // milliseconds
+const fakeDelay = 0; // milliseconds
 
 // The stub api supports a single user
 const state = {};
 
-const createUser = (username, cipher, salt) => new Promise((resolve) =>
+const createUser = (username, cipher, salt1, salt2, authenticationKey) => new Promise((resolve) =>
 {
 	state.username = username;
 	state.cipher = cipher;
-	state.salt = salt;
+	state.salt1 = salt1;
+	state.salt2 = salt2;
+
+	// Will be a hashed version in real API
+	state.authenticationKey = authenticationKey;
 
 	setTimeout(resolve, fakeDelay,
 		{
@@ -15,14 +19,17 @@ const createUser = (username, cipher, salt) => new Promise((resolve) =>
 			{
 				username: state.username,
 			},
-			cipher: state.cipher,
-			salt: state.cipher,
 		});
+});
+
+const getSalt1 = () => new Promise((resolve) =>
+{
+	setTimeout(resolve, fakeDelay, { salt1: state.salt1 });
 });
 
 const getWallet = () => new Promise((resolve) =>
 {
-	setTimeout(resolve, fakeDelay, { cipher: state.cipher, salt: state.salt });
+	setTimeout(resolve, fakeDelay, { cipher: state.cipher, salt2: state.salt2 });
 });
 
 const getState = () => Object.assign({}, state);
@@ -30,6 +37,7 @@ const getState = () => Object.assign({}, state);
 export default
 {
 	createUser,
+	getSalt1,
 	getWallet,
 	getState,
 };
