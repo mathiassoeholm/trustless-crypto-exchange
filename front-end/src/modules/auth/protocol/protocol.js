@@ -1,20 +1,25 @@
 import config from '../../../config';
 import utils from './utils';
 
-const makeProtocol = (keyGen = config.keyGenerator, authApi = config.authApi) =>
+const authKeyPercentage = 0.2;
+
+const makeProtocol = (
+	encKeyGen = config.slowKeyGenerator,
+	authKeyGen = config.fastKeyGenerator,
+	authApi = config.authApi) =>
 	({
 		createUser: async (user, password, secret, progressCallback = () => undefined) =>
 		{
 			progressCallback(0, 'Generating Encryption Key');
 
-			const authenticationKeyProgess = progress => progressCallback(progress * 0.5, 'Generating Authentication Key');
-			const encryptionKeyProgess = progress => progressCallback(0.5 + (progress * 0.5), 'Generating Encryption Key');
+			const authenticationKeyProgess = progress => progressCallback(progress * authKeyPercentage, 'Generating Authentication Key');
+			const encryptionKeyProgess = progress => progressCallback(authKeyPercentage + (progress * (1 - authKeyPercentage)), 'Generating Encryption Key');
 
 			const salt1 = utils.getRandomSalt();
 			const salt2 = utils.getRandomSalt();
 
-			const authenticationKey = await keyGen(password, salt1, authenticationKeyProgess);
-			const encryptionKey = await keyGen(password, salt2, encryptionKeyProgess);
+			const authenticationKey = await authKeyGen(password, salt1, authenticationKeyProgess);
+			const encryptionKey = await encKeyGen(password, salt2, encryptionKeyProgess);
 
 			const secretText = JSON.stringify(secret);
 			const encryptedSecret = utils.encryptAES(secretText, encryptionKey);
@@ -37,13 +42,13 @@ const makeProtocol = (keyGen = config.keyGenerator, authApi = config.authApi) =>
 
 			const { salt1 } = await authApi.getSalt1(username);
 
-			const authenticationKeyProgess = progress => progressCallback(progress * 0.5, 'Generating Authentication Key');
-			const authenticationKey = await keyGen(password, salt1, authenticationKeyProgess);
+			const authenticationKeyProgess = progress => progressCallback(progress * authKeyPercentage, 'Generating Authentication Key');
+			const authenticationKey = await authKeyGen(password, salt1, authenticationKeyProgess);
 
 			const { cipher, salt2 } = await authApi.getWallet(username, authenticationKey);
 
-			const decryptionKeyProgess = progress => progressCallback(0.5 + (progress * 0.5), 'Generating Decryption Key');
-			const decryptionKey = await keyGen(password, salt2, decryptionKeyProgess);
+			const decryptionKeyProgess = progress => progressCallback(authKeyPercentage + (progress * (1 - authKeyPercentage)), 'Generating Decryption Key');
+			const decryptionKey = await encKeyGen(password, salt2, decryptionKeyProgess);
 
 			const secretJson = utils.decryptAES(cipher, decryptionKey);
 

@@ -21,7 +21,7 @@ describe('Protocol', () =>
 
 	beforeEach(() =>
 	{
-		protocol = makeProtocol(testKeyGenerator, stubApi);
+		protocol = makeProtocol(testKeyGenerator, testKeyGenerator, stubApi);
 	});
 
 	it('creates a user', async () =>
