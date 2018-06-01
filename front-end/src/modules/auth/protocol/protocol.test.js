@@ -6,7 +6,7 @@ import stubApi from '../api/stubApi';
 describe('Protocol', () =>
 {
 	let protocol;
-	const testKeyGenerator = utils.keyGenerator(1);
+	const testKeyGenerator = utils.makeKeyGenerator(1);
 
 	const createArguments =
 	[

@@ -18,7 +18,7 @@ describe('Auth Utils', () =>
 
 		let previousProgress = 0;
 
-		const key = await utils.keyGenerator(1)(password, salt, (progress) =>
+		const key = await utils.makeKeyGenerator(1)(password, salt, (progress) =>
 		{
 			previousProgress = progress;
 		});

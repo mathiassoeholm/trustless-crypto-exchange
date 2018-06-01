@@ -34,7 +34,7 @@ const decryptAES = (cipher, key, keyIsBuffer = true) =>
 	return decryptedText;
 };
 
-const keyGenerator = N =>
+const makeKeyGenerator = N =>
 	(password, salt, progressCallback = () => undefined) =>
 		new Promise((resolve, reject) =>
 		{
@@ -71,5 +71,5 @@ export default
 	getRandomSalt,
 	encryptAES,
 	decryptAES,
-	keyGenerator,
+	makeKeyGenerator,
 };
