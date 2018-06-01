@@ -2,7 +2,7 @@ import t from './actionTypes';
 import config from '../../config';
 
 export default (
-	authProtocol = config.MakeAuthProtocol(),
+	authProtocol = config.makeAuthProtocol(),
 	walletProvider = config.makeWalletProvider()) =>
 {
 	const setUsernameError = errorMessage =>

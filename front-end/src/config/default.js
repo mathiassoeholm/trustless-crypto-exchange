@@ -7,7 +7,7 @@ export default
 {
 	authApi: stubApi,
 	makeWalletProvider: makeEthereumProvider,
-	MakeAuthProtocol: makeProtocol,
+	makeAuthProtocol: makeProtocol,
 	slowKeyGenerator: utils.makeKeyGenerator(2 ** 17),
 	fastKeyGenerator: utils.makeKeyGenerator(2 ** 13),
 };
