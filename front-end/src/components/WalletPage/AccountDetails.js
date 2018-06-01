@@ -15,14 +15,19 @@ const styles = theme =>
 		},
 	});
 
-const AccountDetails = ({ classes, balance }) =>
+const AccountDetails = ({ classes, balance, address }) =>
 	(
 		<Paper className={classes.root}>
 			<Typography variant="headline">Your Account</Typography>
-			<div>
-				<Typography style={{ float: 'left' }} variant="subheading">Balance:</Typography>
-				<Typography style={{ float: 'right' }} variant="subheading">{balance}$</Typography>
-			</div>
+			<Grid container spacing={8}>
+				<Grid item xs={12} lg={6}>
+					<Typography variant="subheading">Balance: {balance}$</Typography>
+				</Grid>
+
+				<Grid item xs={12} lg={6}>
+					<Typography variant="subheading">Address: {address}</Typography>
+				</Grid>
+			</Grid>
 		</Paper>
 	);
 
@@ -30,11 +35,13 @@ AccountDetails.propTypes =
 {
 	classes: PropTypes.object.isRequired,
 	balance: PropTypes.number.isRequired,
+	address: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state =>
 	({
 		balance: state.wallet.balance ? state.wallet.balance : 0,
+		address: state.wallet.secret ? state.wallet.secret.address : 'Invalid address',
 	});
 
 export default connect(mapStateToProps)(withStyles(styles)(AccountDetails));

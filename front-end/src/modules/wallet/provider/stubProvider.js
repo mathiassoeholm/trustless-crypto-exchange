@@ -14,7 +14,7 @@ export default (shouldFail = false, balance = 0) =>
 	{
 		failIfShould();
 
-		resolve({});
+		resolve({ address: 'testAddress', privateKey: 'testKey' });
 	});
 
 	const sendCurrency = (secret, to, amount) => new Promise((resolve) =>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -9,7 +10,16 @@ import Typography from '@material-ui/core/Typography';
 
 import DefaultWalletActions from '../../modules/wallet/actions';
 
+const styles = theme =>
+	({
+		root:
+		{
+			padding: theme.spacing.unit,
+		},
+	});
+
 const SendCurrency = ({
+	classes,
 	amount,
 	onAmountChanged,
 	receiver,
@@ -17,7 +27,7 @@ const SendCurrency = ({
 	onClickedSubmit,
 }) =>
 	(
-		<Paper>
+		<Paper className={classes.root}>
 			<Typography variant="headline">Send Ethereum</Typography>
 
 			<TextField
@@ -45,6 +55,7 @@ const SendCurrency = ({
 
 SendCurrency.propTypes =
 {
+	classes: PropTypes.object.isRequired,
 	amount: PropTypes.number.isRequired,
 	onAmountChanged: PropTypes.func.isRequired,
 	receiver: PropTypes.string.isRequired,
@@ -69,5 +80,5 @@ export default (WalletActions) =>
 			onClickedSubmit: () => dispatch(walletActions.performTransaction()),
 		});
 
-	return connect(mapStateToProps, mapDispatchToProps)(SendCurrency);
+	return withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SendCurrency));
 };
