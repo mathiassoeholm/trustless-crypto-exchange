@@ -3,10 +3,21 @@ import config from '../../config';
 
 export default (authProtocol = config.MakeAuthProtocol()) =>
 {
-	const setUsernameError = error =>
+	const setUsernameError = errorMessage =>
 		({
 			type: t.SET_USERNAME_ERROR,
-			error,
+			errorMessage,
+		});
+
+	const setPasswordError = errorMessage =>
+		({
+			type: t.SET_PASSWORD_ERROR,
+			errorMessage,
+		});
+
+	const clearPasswordError = () =>
+		({
+			type: t.CLEAR_PASSWORD_ERROR,
 		});
 
 	const progressUpdate = (progress, message) =>
@@ -25,15 +36,32 @@ export default (authProtocol = config.MakeAuthProtocol()) =>
 			errorMessage,
 		});
 
+	const validateInput = (user, password, dispatch) =>
+	{
+		let didErr = false;
+
+		if (!password)
+		{
+			dispatch(setPasswordError('Provide a passphrase'));
+			didErr = true;
+		}
+
+		if (!user || !user.username)
+		{
+			dispatch(setUsernameError('Provide a username'));
+			didErr = true;
+		}
+
+		return !didErr;
+	};
+
 	const createUser = password => (dispatch, getState) =>
 	{
 		const user = getState().auth && getState().auth.user;
 
-		if (!user)
+		if (!validateInput(user, password, dispatch))
 		{
-			return Promise.resolve(
-				dispatch(setUsernameError(new Error('Please provide a username')))
-			);
+			return Promise.resolve(undefined);
 		}
 
 		const progressCallback = (p, m) =>
@@ -68,7 +96,14 @@ export default (authProtocol = config.MakeAuthProtocol()) =>
 
 	const login = password => (dispatch, getState) =>
 	{
-		const { username } = getState().auth.user;
+		const user = getState().auth && getState().auth.user;
+
+		if (!validateInput(user, password, dispatch))
+		{
+			return Promise.resolve(undefined);
+		}
+
+		const { username } = user;
 
 		const progressCallback = (p, m) =>
 		{
@@ -107,6 +142,7 @@ export default (authProtocol = config.MakeAuthProtocol()) =>
 		});
 
 	return {
+		clearPasswordError,
 		createUser,
 		login,
 		logout,

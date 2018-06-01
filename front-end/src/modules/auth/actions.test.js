@@ -49,7 +49,29 @@ describe('auth actions', () =>
 		});
 	});
 
-	it('should dispatch username error if user is undefined', async () =>
+	it('should dispatch username error if username is empty', async () =>
+	{
+		const noUsernameState =
+		{
+			auth:
+			{
+				user:
+				{
+					username: '',
+				},
+			},
+		};
+
+		store = mockStore(noUsernameState);
+
+		await store.dispatch(actions.createUser('password'));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
+	});
+
+	it('should dispatch username error if user is undefined for create', async () =>
 	{
 		store = mockStore({});
 
@@ -58,6 +80,35 @@ describe('auth actions', () =>
 		const lastAction = store.getActions()[store.getActions().length - 1];
 
 		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
+	});
+
+	it('should dispatch username error if user is undefined for login', async () =>
+	{
+		store = mockStore({});
+
+		await store.dispatch(actions.login('password'));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
+	});
+
+	it('should dispatch password error for create', async () =>
+	{
+		await store.dispatch(actions.createUser(''));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_PASSWORD_ERROR);
+	});
+
+	it('should dispatch password error for login', async () =>
+	{
+		await store.dispatch(actions.login(''));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_PASSWORD_ERROR);
 	});
 
 	it('should give error for login', () =>

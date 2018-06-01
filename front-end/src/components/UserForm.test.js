@@ -31,6 +31,7 @@ describe('UserForm', () =>
 			buttonText: 'Button',
 			username: 'Bob',
 			onChangedUsername: () => undefined,
+			clearPasswordError: () => undefined,
 		};
 
 		mountedUserForm = undefined;
