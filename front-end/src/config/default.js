@@ -7,7 +7,7 @@ import utils from '../modules/auth/protocol/utils';
 export default
 {
 	authApi: stubApi,
-	WalletProvider: EthereumWalletProvider,
+	WalletProvider: StubWalletProvider,
 	MakeAuthProtocol: makeProtocol,
 	slowKeyGenerator: utils.keyGenerator(2),
 	fastKeyGenerator: utils.keyGenerator(2),

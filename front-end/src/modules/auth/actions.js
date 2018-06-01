@@ -39,6 +39,8 @@ export default (
 
 		let secret;
 
+		progressCallback(0, 'Generating Wallet');
+
 		return walletProvider.generateSecret()
 			.then((s) =>
 			{
