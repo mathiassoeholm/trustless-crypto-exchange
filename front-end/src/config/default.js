@@ -9,6 +9,6 @@ export default
 	authApi: stubApi,
 	WalletProvider: EthereumWalletProvider,
 	MakeAuthProtocol: makeProtocol,
-	slowKeyGenerator: utils.keyGenerator(2 ** 17),
-	fastKeyGenerator: utils.keyGenerator(2 ** 13),
+	slowKeyGenerator: utils.keyGenerator(2),
+	fastKeyGenerator: utils.keyGenerator(2),
 };

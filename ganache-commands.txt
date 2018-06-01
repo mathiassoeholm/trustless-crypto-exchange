@@ -1,0 +1,1 @@
+ganache-cli --defaultBalanceEther 9000000000000000000000 --db C:\Ganache-DB
