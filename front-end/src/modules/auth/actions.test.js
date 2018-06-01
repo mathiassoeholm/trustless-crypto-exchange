@@ -131,11 +131,11 @@ describe('auth actions', () =>
 		['login', authActions(makeStubProtocol(), makeStubWalletProvider()).login],
 	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
 	{
-		const firstAction = store.getActions()[0];
+		const thirdToLastAction = store.getActions()[store.getActions().length - 3];
 		const secondToLastAction = store.getActions()[store.getActions().length - 2];
 		const lastAction = store.getActions()[store.getActions().length - 1];
 
-		expect(firstAction).toEqual(
+		expect(thirdToLastAction).toEqual(
 			{
 				type: t.PROGRESS_UPDATE,
 				status:

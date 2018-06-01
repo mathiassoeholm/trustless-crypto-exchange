@@ -14,7 +14,7 @@ const makeStubProvider = (shouldFail = false, balance = 0) =>
 	{
 		failIfShould();
 
-		resolve({ address: 'testAddress', privateKey: 'testKey' });
+		resolve({});
 	});
 
 	const sendCurrency = (secret, to, amount) => new Promise((resolve) =>
