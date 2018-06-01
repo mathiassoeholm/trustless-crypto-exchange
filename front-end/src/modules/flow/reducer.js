@@ -1,6 +1,6 @@
-import t from './actionTypes';
-import authActionTypes from '../auth/actionTypes';
-import menuTypes from './menuTypes';
+import t from './action-types';
+import authActionTypes from '../auth/action-types';
+import menuTypes from './menu-types';
 
 const initialState = { activeMenu: menuTypes.LOGIN };
 

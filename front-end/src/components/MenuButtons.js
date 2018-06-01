@@ -13,7 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import ListButton from './ListButton';
 import flowActions from '../modules/flow/actions';
 import AuthActions from '../modules/auth/actions';
-import menuTypes from '../modules/flow/menuTypes';
+import menuTypes from '../modules/flow/menu-types';
 
 const authActions = AuthActions();
 

@@ -1,4 +1,4 @@
-import stubApi from '../modules/auth/api/stubApi';
+import stubApi from '../modules/auth/api/stub-api';
 import makeProtocol from '../modules/auth/protocol/protocol';
 import utils from '../modules/auth/protocol/utils';
 
