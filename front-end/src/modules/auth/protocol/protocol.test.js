@@ -30,12 +30,6 @@ describe('Protocol', () =>
 		expect(stubApi.getState().username).toEqual('kurt');
 	});
 
-	it('creates a user', async () =>
-	{
-		await protocol.createUser(...createArguments);
-		expect(stubApi.getState().username).toEqual('kurt');
-	});
-
 	it('creates and returns secret', async () =>
 	{
 		await protocol.createUser(...createArguments);
