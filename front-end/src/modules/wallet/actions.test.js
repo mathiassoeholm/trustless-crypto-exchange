@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 
 import Actions from './actions';
 import walletActionTypes from './actionTypes';
-import StubWalletProvider from '../wallet/provider/stubProvider';
+import makeStubWalletProvider from '../wallet/provider/stubProvider';
 import walletErrorMessages from './errorMessages';
 
 const middlewares = [thunk];
@@ -29,14 +29,14 @@ describe('wallet actions', () =>
 
 	beforeEach(() =>
 	{
-		actions = Actions(StubWalletProvider());
+		actions = Actions(makeStubWalletProvider());
 
 		store = mockStore(initialState);
 	});
 
 	it('updates balance properly', () =>
 	{
-		actions = Actions(StubWalletProvider(false, 100));
+		actions = Actions(makeStubWalletProvider(false, 100));
 
 		return store.dispatch(actions.updateBalance()).then(() =>
 		{
@@ -118,7 +118,7 @@ describe('wallet actions', () =>
 
 	it('dispatches error action when updating balance', async () =>
 	{
-		actions = Actions(StubWalletProvider(true));
+		actions = Actions(makeStubWalletProvider(true));
 		await store.dispatch(actions.updateBalance());
 
 		expect(lastActionFromStore()).toEqual(
@@ -130,7 +130,7 @@ describe('wallet actions', () =>
 
 	it('dispatches error action when performing transaction', async () =>
 	{
-		actions = Actions(StubWalletProvider(true));
+		actions = Actions(makeStubWalletProvider(true));
 		await store.dispatch(actions.performTransaction());
 
 		expect(lastActionFromStore()).toEqual(

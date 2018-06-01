@@ -1,4 +1,4 @@
-export default (shouldFail = false, balance = 0) =>
+const makeStubProvider = (shouldFail = false, balance = 0) =>
 {
 	let currentBalance = balance;
 
@@ -38,3 +38,5 @@ export default (shouldFail = false, balance = 0) =>
 		getBalance,
 	};
 };
+
+export default makeStubProvider;
