@@ -3,6 +3,12 @@ import config from '../../config';
 
 export default (authProtocol = config.MakeAuthProtocol()) =>
 {
+	const setUsernameError = error =>
+		({
+			type: t.SET_USERNAME_ERROR,
+			error,
+		});
+
 	const progressUpdate = (progress, message) =>
 		({
 			type: t.PROGRESS_UPDATE,
@@ -21,7 +27,14 @@ export default (authProtocol = config.MakeAuthProtocol()) =>
 
 	const createUser = password => (dispatch, getState) =>
 	{
-		const { user } = getState().auth;
+		const user = getState().auth && getState().auth.user;
+
+		if (!user)
+		{
+			return Promise.resolve(
+				dispatch(setUsernameError(new Error('Please provide a username')))
+			);
+		}
 
 		const progressCallback = (p, m) =>
 		{

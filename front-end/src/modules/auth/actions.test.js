@@ -49,6 +49,17 @@ describe('auth actions', () =>
 		});
 	});
 
+	it('should dispatch username error if user is undefined', async () =>
+	{
+		store = mockStore({});
+
+		await store.dispatch(actions.createUser('password'));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
+	});
+
 	it('should give error for login', () =>
 	{
 		actions = authActions(makeStubProtocol(true));
