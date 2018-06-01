@@ -10,7 +10,7 @@ import walletActionTypes from '../../modules/wallet/action-types';
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-describe('WalletDetails', () =>
+describe('SendCurrency', () =>
 {
 	let wrapper;
 	let store;
@@ -25,7 +25,7 @@ describe('WalletDetails', () =>
 			}),
 	};
 
-	const walletDetails = (useMockActions) =>
+	const sendCurrency = (useMockActions) =>
 	{
 		store = mockStore(initialState);
 
@@ -62,17 +62,17 @@ describe('WalletDetails', () =>
 
 	it('renders without crashing', () =>
 	{
-		expect(walletDetails().exists()).toBe(true);
+		expect(sendCurrency().exists()).toBe(true);
 	});
 
 	it('renders amount properly', () =>
 	{
-		expect(walletDetails().find('#amountField').props().value).toBe(initialState.wallet.amount);
+		expect(sendCurrency().find('#amountField').props().value).toBe(initialState.wallet.amount);
 	});
 
 	it('dispatches amountChanged action correctly', () =>
 	{
-		const amountField = walletDetails().find('#amountField').first();
+		const amountField = sendCurrency().find('#amountField').first();
 		amountField.simulate('change', { target: { value: 20 } });
 		expect(store.getActions()[0]).toEqual(
 			{
@@ -83,12 +83,12 @@ describe('WalletDetails', () =>
 
 	it('renders receiver properly', () =>
 	{
-		expect(walletDetails().find('#receiverField').props().value).toBe(initialState.wallet.receiver);
+		expect(sendCurrency().find('#receiverField').props().value).toBe(initialState.wallet.receiver);
 	});
 
 	it('dispatches receiverChanged action correctly', () =>
 	{
-		const amountField = walletDetails().find('#receiverField').first();
+		const amountField = sendCurrency().find('#receiverField').first();
 		amountField.simulate('change', { target: { value: '1111' } });
 		expect(store.getActions()[0]).toEqual(
 			{
@@ -99,7 +99,7 @@ describe('WalletDetails', () =>
 
 	it('dispatches performTransaction correctly', () =>
 	{
-		const submitButton = walletDetails(true).find('#submitButton').first();
+		const submitButton = sendCurrency(true).find('#submitButton').first();
 		submitButton.simulate('click');
 
 		expect(store.getActions()[0].type).toBe('TRANSACTION_TEST');
