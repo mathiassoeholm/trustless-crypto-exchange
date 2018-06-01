@@ -1,9 +1,9 @@
 
 import deepFreeze from 'deep-freeze';
 
-import flowActionTypes from './actionTypes';
-import authActionTypes from '../auth/actionTypes';
-import menuTypes from './menuTypes';
+import flowActionTypes from './action-types';
+import authActionTypes from '../auth/action-types';
+import menuTypes from './menu-types';
 import reducer from './reducer';
 
 it('changes menu to wallet when logging in and is pure', () =>

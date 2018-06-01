@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze';
 
-import t from './actionTypes';
+import t from './action-types';
 import reducer from './reducer';
 
 it('changes username and is pure', () =>

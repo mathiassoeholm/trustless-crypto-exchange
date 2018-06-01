@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import menuTypes from '../modules/flow/menuTypes';
+import menuTypes from '../modules/flow/menu-types';
 import Login from './Login';
 import Create from './Create';
 import WalletPage from './WalletPage/WalletPage';

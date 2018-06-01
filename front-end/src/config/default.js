@@ -1,5 +1,5 @@
-import stubApi from '../modules/auth/api/stubApi';
 import makeEthereumProvider from '../modules/wallet/provider/ethereumProvider';
+import stubApi from '../modules/auth/api/stub-api';
 import makeProtocol from '../modules/auth/protocol/protocol';
 import utils from '../modules/auth/protocol/utils';
 

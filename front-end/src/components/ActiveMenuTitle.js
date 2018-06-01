@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import menuTypes from '../modules/flow/menuTypes';
+import menuTypes from '../modules/flow/menu-types';
 
 export function ActiveMenuTitle({ activeMenu })
 {

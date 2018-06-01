@@ -2,10 +2,10 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import each from 'jest-each';
 
-import t from './actionTypes';
 import makeStubWalletProvider from '../wallet/provider/stubProvider';
+import t from './action-types';
 import authActions from './actions';
-import makeStubProtocol from './protocol/stubProtocol';
+import makeStubProtocol from './protocol/stub-protocol';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);

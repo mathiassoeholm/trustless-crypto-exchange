@@ -2,7 +2,7 @@ import React from 'react';
 import each from 'jest-each';
 import { shallow } from 'enzyme';
 
-import menuTypes from '../modules/flow/menuTypes';
+import menuTypes from '../modules/flow/menu-types';
 import { ActiveMenuTitle } from './ActiveMenuTitle';
 
 each(

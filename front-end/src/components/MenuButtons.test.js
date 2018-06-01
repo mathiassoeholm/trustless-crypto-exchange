@@ -6,10 +6,10 @@ import thunk from 'redux-thunk';
 import { shallow } from 'enzyme';
 
 import MenuButtons from './MenuButtons';
-import authActionTypes from '../modules/auth/actionTypes';
-import flowActionTypes from '../modules/flow/actionTypes';
+import authActionTypes from '../modules/auth/action-types';
+import flowActionTypes from '../modules/flow/action-types';
 
-import menuTypes from '../modules/flow/menuTypes';
+import menuTypes from '../modules/flow/menu-types';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
