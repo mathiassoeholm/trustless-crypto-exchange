@@ -6,6 +6,9 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 import appConfig from './config';
+import firebaseSetup from './firebase-setup';
+
+firebaseSetup();
 
 const app = express();
 
