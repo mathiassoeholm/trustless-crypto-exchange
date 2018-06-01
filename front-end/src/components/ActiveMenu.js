@@ -5,9 +5,8 @@ import PropTypes from 'prop-types';
 import menuTypes from '../modules/flow/menuTypes';
 import Login from './Login';
 import Create from './Create';
-import WalletDetailsBuilder from './WalletDetails';
+import WalletPage from './WalletPage/WalletPage';
 
-const WalletDetails = WalletDetailsBuilder();
 
 export function ActiveMenu({ activeMenu })
 {
@@ -18,7 +17,7 @@ export function ActiveMenu({ activeMenu })
 	case menuTypes.LOGIN:
 		return <Login />;
 	case menuTypes.WALLET:
-		return <WalletDetails />;
+		return <WalletPage />;
 	default:
 		throw new Error('Unknown menu type');
 	}

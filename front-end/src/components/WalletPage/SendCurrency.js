@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import DefaultWalletActions from '../modules/wallet/actions';
+import DefaultWalletActions from '../../modules/wallet/actions';
 
-const WalletDetails = ({
+const SendCurrency = ({
 	amount,
 	onAmountChanged,
 	receiver,
@@ -18,43 +17,33 @@ const WalletDetails = ({
 	onClickedSubmit,
 }) =>
 	(
-		<Grid container spacing={24}>
-			<Grid item xs={12} lg={6}>
-				<Paper>
-					<Typography variant="headline">Your account</Typography>
-				</Paper>
-			</Grid>
+		<Paper>
+			<Typography variant="headline">Send Ethereum</Typography>
 
-			<Grid item xs={12} lg={6}>
-				<Paper>
-					<Typography variant="headline">Send Ethereum</Typography>
-
-					<TextField
-						id="amountField"
-						label="Amount"
-						margin="normal"
-						type="number"
-						value={amount}
-						onChange={onAmountChanged}
-					/>
-					<br />
-					<TextField
-						id="receiverField"
-						label="Receiver"
-						margin="normal"
-						value={receiver}
-						onChange={onReceiverChanged}
-					/>
-					<br />
-					<Button id="submitButton" variant="raised" color="primary" onClick={onClickedSubmit}>
-						Perform Transaction
-					</Button>
-				</Paper>
-			</Grid>
-		</Grid>
+			<TextField
+				id="amountField"
+				label="Amount"
+				margin="normal"
+				type="number"
+				value={amount}
+				onChange={onAmountChanged}
+			/>
+			<br />
+			<TextField
+				id="receiverField"
+				label="Receiver"
+				margin="normal"
+				value={receiver}
+				onChange={onReceiverChanged}
+			/>
+			<br />
+			<Button id="submitButton" variant="raised" color="primary" onClick={onClickedSubmit}>
+				Perform Transaction
+			</Button>
+		</Paper>
 	);
 
-WalletDetails.propTypes =
+SendCurrency.propTypes =
 {
 	amount: PropTypes.number.isRequired,
 	onAmountChanged: PropTypes.func.isRequired,
@@ -80,5 +69,5 @@ export default (WalletActions) =>
 			onClickedSubmit: () => dispatch(walletActions.performTransaction()),
 		});
 
-	return connect(mapStateToProps, mapDispatchToProps)(WalletDetails);
+	return connect(mapStateToProps, mapDispatchToProps)(SendCurrency);
 };

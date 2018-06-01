@@ -4,8 +4,8 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { shallow } from 'enzyme';
 
-import WalletDetailsBuilder from './WalletDetails';
-import walletActionTypes from '../modules/wallet/actionTypes';
+import SendCurrencyBuilder from './SendCurrency';
+import walletActionTypes from '../../modules/wallet/actionTypes';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -31,16 +31,16 @@ describe('WalletDetails', () =>
 
 		if (!wrapper)
 		{
-			const WalletDetails = WalletDetailsBuilder();
-			const WalletDetailsWithMock = WalletDetailsBuilder(() => mockActions);
+			const SendCurrency = SendCurrencyBuilder();
+			const SendCurrencyWithMock = SendCurrencyBuilder(() => mockActions);
 
 			if (useMockActions)
 			{
-				wrapper = shallow(<WalletDetailsWithMock store={store} />).dive();
+				wrapper = shallow(<SendCurrencyWithMock store={store} />).dive();
 			}
 			else
 			{
-				wrapper = shallow(<WalletDetails store={store} />).dive();
+				wrapper = shallow(<SendCurrency store={store} />).dive();
 			}
 		}
 
