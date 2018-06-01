@@ -2,7 +2,7 @@ import config from '../../config';
 import walletActionTypes from './actionTypes';
 import errorMessages from './errorMessages';
 
-export default (walletProvider = config.WalletProvider()) =>
+export default (walletProvider = config.makeWalletProvider()) =>
 {
 	const balanceUpdateFailed = error =>
 		({

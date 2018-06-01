@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import each from 'jest-each';
 
 import t from './actionTypes';
-import StubWalletProvider from '../wallet/provider/stubProvider';
+import makeStubWalletProvider from '../wallet/provider/stubProvider';
 import authActions from './actions';
 import makeStubProtocol from './protocol/stubProtocol';
 
@@ -28,13 +28,13 @@ describe('auth actions', () =>
 
 	beforeEach(() =>
 	{
-		actions = authActions(makeStubProtocol(), StubWalletProvider());
+		actions = authActions(makeStubProtocol(), makeStubWalletProvider());
 		store = mockStore(initialState);
 	});
 
 	it('should give error for create user', () =>
 	{
-		actions = authActions(makeStubProtocol(true));
+		actions = authActions(makeStubProtocol(true), makeStubWalletProvider());
 
 		return store.dispatch(actions.createUser('password')).then(() =>
 		{
@@ -46,6 +46,68 @@ describe('auth actions', () =>
 					errorMessage: 'error message',
 				});
 		});
+	});
+
+	it('should dispatch username error if username is empty', async () =>
+	{
+		const noUsernameState =
+		{
+			auth:
+			{
+				user:
+				{
+					username: '',
+				},
+			},
+		};
+
+		store = mockStore(noUsernameState);
+
+		await store.dispatch(actions.createUser('password'));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
+	});
+
+	it('should dispatch username error if user is undefined for create', async () =>
+	{
+		store = mockStore({});
+
+		await store.dispatch(actions.createUser('password'));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
+	});
+
+	it('should dispatch username error if user is undefined for login', async () =>
+	{
+		store = mockStore({});
+
+		await store.dispatch(actions.login('password'));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
+	});
+
+	it('should dispatch password error for create', async () =>
+	{
+		await store.dispatch(actions.createUser(''));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_PASSWORD_ERROR);
+	});
+
+	it('should dispatch password error for login', async () =>
+	{
+		await store.dispatch(actions.login(''));
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_PASSWORD_ERROR);
 	});
 
 	it('should give error for login', () =>
@@ -65,8 +127,8 @@ describe('auth actions', () =>
 	});
 
 	each([
-		['create user', authActions(makeStubProtocol(), StubWalletProvider()).createUser],
-		['login', authActions(makeStubProtocol(), StubWalletProvider()).login],
+		['create user', authActions(makeStubProtocol(), makeStubWalletProvider()).createUser],
+		['login', authActions(makeStubProtocol(), makeStubWalletProvider()).login],
 	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
 	{
 		const firstAction = store.getActions()[0];

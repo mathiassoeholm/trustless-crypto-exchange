@@ -12,7 +12,7 @@ const bankAccountSecret =
 		privateKey: '0x3db10de27107813c20c9203f0d11735d2a1d931dec5fd568f5f04a350226e047',
 	};
 
-export default () =>
+const makeEthereumProvider = () =>
 {
 	const sendCurrency = (secret, to, amount) =>
 	{
@@ -51,3 +51,5 @@ export default () =>
 		getBalance,
 	};
 };
+
+export default makeEthereumProvider;

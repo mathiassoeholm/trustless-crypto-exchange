@@ -8,6 +8,8 @@ const exampleState = // eslint-disable-line no-unused-vars
 		message: 'message',
 		errorMessage: 'error',
 	},
+	usernameError: 'Please provide a username',
+	passwordError: 'Please provide a password',
 	isLoggingIn: false,
 	isLoggedIn: true,
 	user:
@@ -35,10 +37,23 @@ const reducer = (state = initialState, action) =>
 		return { ...state, isLoggedIn: false, user: null };
 
 	case t.CHANGE_USERNAME:
-		return { ...state, user: { ...state.user, username: action.username } };
+		return {
+			...state,
+			user: { ...state.user, username: action.username },
+			usernameError: undefined,
+		};
 
 	case t.PROGRESS_UPDATE:
 		return { ...state, isLoggingIn: true, loginAttemptStatus: action.status };
+
+	case t.SET_USERNAME_ERROR:
+		return { ...state, usernameError: action.errorMessage };
+
+	case t.SET_PASSWORD_ERROR:
+		return { ...state, passwordError: action.errorMessage };
+
+	case t.CLEAR_PASSWORD_ERROR:
+		return { ...state, passwordError: undefined };
 
 	case t.LOGIN_ATTEMPT_FINISHED:
 	{
