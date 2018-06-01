@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import morgan from 'morgan';
 import cors from 'cors';
 import https from 'https';
@@ -11,10 +10,6 @@ import appConfig from './config';
 const app = express();
 
 app.use(cors());
-
-// mongoose instance connection url connection
-mongoose.Promise = global.Promise;
-mongoose.connect(appConfig.database, { useMongoClient: true });
 
 // parse application/json
 app.use(bodyParser.json());
