@@ -1,5 +1,5 @@
-import authActionTypes from '../auth/actionTypes';
-import walletActionTypes from './actionTypes';
+import authActionTypes from '../auth/action-types';
+import walletActionTypes from './action-types';
 
 const initialState =
 {

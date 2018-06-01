@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import { shallow } from 'enzyme';
 
 import SendCurrencyBuilder from './SendCurrency';
-import walletActionTypes from '../../modules/wallet/actionTypes';
+import walletActionTypes from '../../modules/wallet/action-types';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);

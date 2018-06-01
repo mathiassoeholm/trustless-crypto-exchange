@@ -2,7 +2,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import each from 'jest-each';
 
-import makeStubWalletProvider from '../wallet/provider/stubProvider';
+import makeStubWalletProvider from '../wallet/provider/stub-provider';
 import t from './action-types';
 import authActions from './actions';
 import makeStubProtocol from './protocol/stub-protocol';

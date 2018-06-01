@@ -1,6 +1,6 @@
 import config from '../../config';
-import walletActionTypes from './actionTypes';
-import errorMessages from './errorMessages';
+import walletActionTypes from './action-types';
+import errorMessages from './error-messages';
 
 export default (walletProvider = config.makeWalletProvider()) =>
 {

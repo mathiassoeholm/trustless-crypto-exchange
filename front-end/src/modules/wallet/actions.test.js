@@ -2,9 +2,9 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import Actions from './actions';
-import walletActionTypes from './actionTypes';
-import makeStubWalletProvider from '../wallet/provider/stubProvider';
-import walletErrorMessages from './errorMessages';
+import walletActionTypes from './action-types';
+import makeStubWalletProvider from '../wallet/provider/stub-provider';
+import walletErrorMessages from './error-messages';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);

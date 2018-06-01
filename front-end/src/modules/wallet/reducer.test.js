@@ -1,8 +1,8 @@
 import deepFreeze from 'deep-freeze';
 import each from 'jest-each';
 
-import authActionTypes from '../auth/actionTypes';
-import walletActionTypes from './actionTypes';
+import authActionTypes from '../auth/action-types';
+import walletActionTypes from './action-types';
 import reducer from './reducer';
 
 describe('Transaction Reducer', () =>
