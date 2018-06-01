@@ -1,3 +1,5 @@
+import admin from 'firebase-admin';
+
 export default
 {
 	createUser: ({ username, cipher, salt1, salt2, hashedAuthKey }) =>

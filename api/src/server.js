@@ -5,8 +5,11 @@ import cors from 'cors';
 import https from 'https';
 import fs from 'fs';
 import path from 'path';
+
 import appConfig from './config';
 import firebaseSetup from './firebase-setup';
+import authRoutes from './auth/auth-routes';
+
 
 firebaseSetup();
 
@@ -22,6 +25,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
+
+
+authRoutes(app);
 
 // Important that we check routes before handling 404 
 app.use((req, res) =>

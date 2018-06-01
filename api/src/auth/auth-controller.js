@@ -9,13 +9,8 @@ const makeAuthController = (database) =>
 			const hashedAuthKey = utils.hash(req.body.authenticationKey);
 
 			await database.createUser({ ...req.body, hashedAuthKey });
-		}
-		catch (error)
-		{
-			res.status(500).send(error);
-		}
 
-		const response =
+			const response =
 			({
 				user:
 				{
@@ -23,7 +18,12 @@ const makeAuthController = (database) =>
 				}
 			});
 
-		res.json(response);
+			res.json(response);
+		}
+		catch (error)
+		{
+			res.status(500).send(error.message);
+		}
 	},
 });
 
