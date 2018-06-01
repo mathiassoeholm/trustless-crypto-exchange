@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Paper from 'material-ui/Paper';
-import Grid from 'material-ui/Grid';
-import TextField from 'material-ui/TextField';
-import Button from 'material-ui/Button';
-import { Typography } from 'material-ui';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import DefaultWalletActions from '../modules/wallet/actions';
 

@@ -12,12 +12,16 @@ describe('Protocol', () =>
 	[
 		{ username: 'kurt' }, // User
 		'start123', // Password
-		{ username: 'kurt' }, // Secret
+		{ topSecret: 'yes' }, // Secret
 	];
+
+	const { username } = createArguments[0];
+	const password = createArguments[1];
+	const secret = createArguments[2];
 
 	beforeEach(() =>
 	{
-		protocol = makeProtocol(testKeyGenerator, stubApi);
+		protocol = makeProtocol(testKeyGenerator, testKeyGenerator, stubApi);
 	});
 
 	it('creates a user', async () =>
@@ -26,12 +30,22 @@ describe('Protocol', () =>
 		expect(stubApi.getState().username).toEqual('kurt');
 	});
 
-	it('creates and stores secret', async () =>
+	it('creates and returns secret', async () =>
 	{
 		await protocol.createUser(...createArguments);
 		const result = await protocol.login('kurt', 'start123');
 
-		expect(result.username).toEqual('kurt');
+		expect(result.topSecret).toEqual('yes');
+	});
+
+	it('creates the correct authentication key', async () =>
+	{
+		await protocol.createUser(...createArguments);
+
+		const { salt1, authenticationKey } = stubApi.getState();
+		const ak = await testKeyGenerator(password, salt1);
+
+		expect(authenticationKey).toEqual(ak);
 	});
 
 	it('updates progress correctly when logging in', async () =>
@@ -44,26 +58,23 @@ describe('Protocol', () =>
 			previousProgress = p;
 		};
 
-		await protocol.createUser({ username: 'kurt' }, 'start123', {}, progressCallback);
+		await protocol.createUser(...createArguments, progressCallback);
 
 		expect(previousProgress).toEqual(1);
 
 		previousProgress = 0;
 
-		await protocol.login('kurt', 'start123', progressCallback);
+		await protocol.login(username, password, progressCallback);
 
 		expect(previousProgress).toEqual(1);
 	});
 
 	it('encrypts secret correctly and stores on api when creating', async () =>
 	{
-		const password = createArguments[1];
-		const secret = createArguments[2];
-
 		await protocol.createUser(...createArguments);
 
-		const { salt } = stubApi.getState();
-		const key = await testKeyGenerator(password, salt);
+		const { salt2 } = stubApi.getState();
+		const key = await testKeyGenerator(password, salt2);
 
 		const decryptedCipher = utils.decryptAES(stubApi.getState().cipher, key);
 		const decryptedSecret = JSON.parse(decryptedCipher);

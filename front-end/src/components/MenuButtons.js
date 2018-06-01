@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import CreateUserIcon from 'material-ui-icons/Face';
-import LoginIcon from 'material-ui-icons/VpnKey';
-import LogoutIcon from 'material-ui-icons/ExitToApp';
-import WalletIcon from 'material-ui-icons/AccountBalanceWallet';
-import List from 'material-ui/List';
-import Subheader from 'material-ui/List/ListSubheader';
-import Divider from 'material-ui/Divider';
+
+import CreateUserIcon from '@material-ui/icons/Face';
+import LoginIcon from '@material-ui/icons/VpnKey';
+import LogoutIcon from '@material-ui/icons/ExitToApp';
+import WalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Divider from '@material-ui/core/Divider';
 
 import ListButton from './ListButton';
 import flowActions from '../modules/flow/actions';
@@ -42,7 +43,7 @@ const MenuButtons = ({ isLoggedIn, username, dispatch }) =>
 		<List>
 			<ListButton text="Wallet" icon={<WalletIcon />} onClick={onButtonClick(menuTypes.WALLET)} />
 			<Divider />
-			<Subheader>Logged in as: <b>{username}</b></Subheader>
+			<ListSubheader>Logged in as: <b>{username}</b></ListSubheader>
 			<ListButton text="Logout" icon={<LogoutIcon />} onClick={onLogoutClick} />
 		</List>
 	);
