@@ -9,16 +9,6 @@ import AuthActions from '../modules/auth/actions';
 
 const authActions = AuthActions();
 
-const mapStateToProps = state =>
-	({
-		username: state.auth.user ? state.auth.user.username : '',
-	});
-
-const mapDispatchToProps = dispatch =>
-	({
-		onChangedUsername: event => dispatch(authActions.changeUsername(event.target.value)),
-	});
-
 export class UserForm extends React.Component
 {
 	constructor(props)
@@ -36,6 +26,7 @@ export class UserForm extends React.Component
 
 	onChangedPassword(event)
 	{
+		this.props.clearPasswordError();
 		this.setState({ password: event.target.value });
 	}
 
@@ -50,7 +41,8 @@ export class UserForm extends React.Component
 			<div>
 				<TextField
 					id="username"
-					label="User"
+					error={!!this.props.usernameError}
+					label={this.props.usernameError || 'User'}
 					margin="normal"
 					value={this.props.username}
 					onChange={this.props.onChangedUsername}
@@ -58,7 +50,8 @@ export class UserForm extends React.Component
 				<br />
 				<TextField
 					id="password"
-					label="Passphrase"
+					error={!!this.props.passwordError}
+					label={this.props.passwordError || 'Passphrase'}
 					type="password"
 					autoComplete="current-password"
 					margin="normal"
@@ -78,8 +71,24 @@ UserForm.propTypes =
 {
 	onClickedButton: PropTypes.func.isRequired,
 	buttonText: PropTypes.string.isRequired,
+	usernameError: PropTypes.string,
+	passwordError: PropTypes.string,
 	username: PropTypes.string, // TODO: We get error if this is set as required, not sure why
 	onChangedUsername: PropTypes.func.isRequired,
+	clearPasswordError: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = state =>
+	({
+		username: state.auth.user ? state.auth.user.username : '',
+		usernameError: state.auth.usernameError,
+		passwordError: state.auth.passwordError,
+	});
+
+const mapDispatchToProps = dispatch =>
+	({
+		onChangedUsername: event => dispatch(authActions.changeUsername(event.target.value)),
+		clearPasswordError: () => dispatch(authActions.clearPasswordError()),
+	});
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserForm);
