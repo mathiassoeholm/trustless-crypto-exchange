@@ -1,6 +1,8 @@
-const makeStubProvider = (shouldFail = false, balance = 0) =>
+let currentBalance;
+
+const makeStubProvider = (shouldFail = false, balance = 1000) =>
 {
-	let currentBalance = balance;
+	currentBalance = balance;
 
 	const failIfShould = () =>
 	{

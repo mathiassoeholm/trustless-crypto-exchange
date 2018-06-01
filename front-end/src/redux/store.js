@@ -1,10 +1,17 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
 
 import rootReducer from './root-reducer';
+import rootSaga from './root-saga';
 
-const enhancer = compose(applyMiddleware(thunk, logger));
+const sagaMiddleware = createSagaMiddleware();
+
+const enhancer = compose(applyMiddleware(sagaMiddleware, thunk, logger));
+const store = createStore(rootReducer, enhancer);
+
+sagaMiddleware.run(rootSaga);
 
 // Connect our store to the reducer
-export default createStore(rootReducer, enhancer);
+export default store;

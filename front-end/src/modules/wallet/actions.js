@@ -10,26 +10,11 @@ export default (walletProvider = config.makeWalletProvider()) =>
 			error,
 		});
 
-	const updateBalance = () => (dispatch, getState) =>
-	{
-		const { secret } = getState().wallet;
-
-		if (!secret)
-		{
-			throw Error(errorMessages.NO_SECRET_WHEN_UPDATING_BALANCE);
-		}
-
-		return walletProvider.getBalance(secret)
-			.then((balance) =>
-			{
-				dispatch(
-					{
-						type: walletActionTypes.UPDATE_BALANCE,
-						balance,
-					});
-			})
-			.catch(error => dispatch(balanceUpdateFailed(error.message)));
-	};
+	const updateBalance = balance =>
+		({
+			type: walletActionTypes.UPDATE_BALANCE,
+			balance,
+		});
 
 	const statusUpdate = (isFinished, errorMessage) =>
 		({
@@ -51,6 +36,11 @@ export default (walletProvider = config.makeWalletProvider()) =>
 		({
 			type: walletActionTypes.INVALID_RECEIVER_ERROR,
 			error,
+		});
+
+	const transactionFinished = () =>
+		({
+			type: walletActionTypes.TRANSACTION_FINISHED,
 		});
 
 	const performTransaction = () => (dispatch, getState) =>
@@ -78,7 +68,7 @@ export default (walletProvider = config.makeWalletProvider()) =>
 			.then(() =>
 			{
 				dispatch(statusUpdate(true, null));
-				return dispatch(updateBalance(secret));
+				dispatch(transactionFinished());
 			})
 			.catch(error => dispatch(statusUpdate(true, error.message)));
 	};
@@ -96,9 +86,10 @@ export default (walletProvider = config.makeWalletProvider()) =>
 		});
 
 	return {
-		updateBalance,
 		performTransaction,
 		changeAmount,
 		changeReceiver,
+		balanceUpdateFailed,
+		updateBalance,
 	};
 };
