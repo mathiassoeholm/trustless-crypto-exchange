@@ -4,13 +4,13 @@
   "main": "src/server.js",
   "scripts": {
     "start": "nodemon src/server.js --exec babel-node",
-    "custom-dev": "cross-env NODE_ENV=custom npm run start",
+    "custom-dev": "cross-env NODE_ENV=custom yarn start",
     "clean-dist": "rimraf ./dist && mkdir dist",
-    "prebuild": "npm run clean-dist",
+    "prebuild": "yarn clean-dist",
     "build": "babel src -d dist",
-    "staging": "npm run build && cross-env NODE_ENV=staging node dist/server.js",
-    "custom-staging": "npm run build && cross-env NODE_ENV=custom node dist/server.js",
-    "build-production": "npm run build",
+    "staging": "yarn build && cross-env NODE_ENV=staging node dist/server.js",
+    "custom-staging": "yarn build && cross-env NODE_ENV=custom node dist/server.js",
+    "build-production": "yarn build",
     "rename-production": "rimraf ./deploy && renamer --find dist --replace deploy dist",
     "production": "cross-env NODE_ENV=production forever start deploy/server.js",
     "productionStop": "forever stop deploy/server.js"
