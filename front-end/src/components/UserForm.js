@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux';
+
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import AuthActions from '../modules/auth/actions';
 

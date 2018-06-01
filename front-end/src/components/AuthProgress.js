@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Dialog, { DialogTitle } from 'material-ui/Dialog';
-import { LinearProgress } from 'material-ui/Progress';
-import Typography from 'material-ui/Typography';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@material-ui/core/Typography';
 
 export function AuthProgress({
 	title,
