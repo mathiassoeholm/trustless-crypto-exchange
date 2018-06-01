@@ -11,6 +11,15 @@ export default () =>
 		databaseURL: 'https://trustless-ether-wallet.firebaseio.com',
 	});
 
+	var db = admin.firestore();
+
+	var docRef = db.collection('users').doc('testuser');
+
+	var setUser = docRef.set({
+		username: 'Ada',
+		cipher: 'asdfasfdasf',
+	});
+
 };
 
 
