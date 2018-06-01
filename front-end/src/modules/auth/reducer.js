@@ -1,4 +1,4 @@
-import t from './actionTypes';
+import t from './action-types';
 
 const exampleState = // eslint-disable-line no-unused-vars
 {

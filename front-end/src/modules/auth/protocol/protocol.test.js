@@ -1,7 +1,7 @@
 import utils from './utils';
 
 import makeProtocol from './protocol';
-import stubApi from '../api/stubApi';
+import stubApi from '../api/stub-api';
 
 describe('Protocol', () =>
 {
