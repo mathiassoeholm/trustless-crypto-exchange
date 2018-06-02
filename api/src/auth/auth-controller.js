@@ -22,7 +22,14 @@ const makeAuthController = (database) =>
 		}
 		catch (error)
 		{
-			res.status(500).send(error.message);
+			if(error.message === 'user-exists')
+			{
+				res.status(400).send(error.message);
+			}
+			else
+			{
+				res.status(500).send(error.message);
+			}
 		}
 	},
 

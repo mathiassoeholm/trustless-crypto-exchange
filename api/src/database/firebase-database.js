@@ -2,14 +2,24 @@ import admin from 'firebase-admin';
 
 export default
 {
-	createUser: ({ username, cipher, salt1, salt2, hashedAuthKey }) =>
-		admin.firestore().collection('users').doc(username).set(
+	createUser: async ({ username, cipher, salt1, salt2, hashedAuthKey }) =>
+	{
+		const userDoc = admin.firestore().collection('users').doc(username);
+		const userData = await userDoc.get();
+
+		if (userData.exists)
+		{
+			throw new Error('user-exists');
+		}
+
+		await userDoc.set(
 		{
 			cipher,
 			salt1,
 			salt2,
 			hashedAuthKey,
-		}),
+		});
+	},
 
 	getUser: username =>
 		admin.firestore().collection('users').doc(username).get()

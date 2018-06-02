@@ -92,6 +92,33 @@ describe('auth controller', () =>
 		getAuthController().createUser(reqMock, resMock);
 	});
 
+	it('should give 400 for existing user', (done) =>
+	{
+		databaseMock =
+		{
+			...databaseMock,
+			createUser: username =>
+			{
+				throw Error('user-exists');
+			},
+		};
+
+		resMock =
+		{
+			...resMock,
+			status: code =>
+			({
+				send: error =>
+				{
+					expect(code).toBe(400);
+					done();
+				},
+			})
+		};
+
+		getAuthController().createUser(reqMock, resMock);
+	});
+
 	it('should give 400 for unknown user', (done) =>
 	{
 		databaseMock =
