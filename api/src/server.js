@@ -1,20 +1,21 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import morgan from 'morgan';
 import cors from 'cors';
 import https from 'https';
 import fs from 'fs';
 import path from 'path';
+
 import appConfig from './config';
+import firebaseSetup from './firebase-setup';
+import authRoutes from './auth/auth-routes';
+
+
+firebaseSetup();
 
 const app = express();
 
 app.use(cors());
-
-// mongoose instance connection url connection
-mongoose.Promise = global.Promise;
-mongoose.connect(appConfig.database, { useMongoClient: true });
 
 // parse application/json
 app.use(bodyParser.json());
@@ -24,6 +25,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
+
+
+authRoutes(app);
 
 // Important that we check routes before handling 404 
 app.use((req, res) =>
