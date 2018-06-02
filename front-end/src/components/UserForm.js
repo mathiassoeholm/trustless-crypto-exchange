@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import AuthActions from '../modules/auth/actions';
 
@@ -59,6 +60,12 @@ export class UserForm extends React.Component
 					onChange={this.onChangedPassword}
 				/>
 				<br />
+				{ this.props.loginAttemptError &&
+					<div>
+						<Typography variant="subheading" color="error">{this.props.loginAttemptError}</Typography>
+						<br />
+					</div>
+				}
 				<Button variant="raised" color="primary" onClick={this.onClickedButton}>
 					{this.props.buttonText}
 				</Button>
@@ -76,6 +83,7 @@ UserForm.propTypes =
 	username: PropTypes.string, // TODO: We get error if this is set as required, not sure why
 	onChangedUsername: PropTypes.func.isRequired,
 	clearPasswordError: PropTypes.func.isRequired,
+	loginAttemptError: PropTypes.string,
 };
 
 const mapStateToProps = state =>
@@ -83,6 +91,9 @@ const mapStateToProps = state =>
 		username: state.auth.user ? state.auth.user.username : '',
 		usernameError: state.auth.usernameError,
 		passwordError: state.auth.passwordError,
+		loginAttemptError: state.auth.loginAttemptStatus ?
+			state.auth.loginAttemptStatus.errorMessage :
+			null,
 	});
 
 const mapDispatchToProps = dispatch =>

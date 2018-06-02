@@ -2,6 +2,11 @@ import axios from 'axios';
 
 import config from '../../../config';
 
+const unknownError = (error) =>
+{
+	return Error(`Unknown server error occured: ${error.response.status}`);
+};
+
 const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 {
 	const body =
@@ -13,24 +18,61 @@ const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 		authenticationKey,
 	};
 
-	const response = await axios.post(`${config.apiUrl}/auth/createuser`, body);
-	return response.data;
+	try
+	{
+		const response = await axios.post(`${config.apiUrl}/auth/createuser`, body);
+		return response.data;
+	}
+	catch (error)
+	{
+		console.log(error);
+		if (error.response.status === 400)
+		{
+			throw Error('Username is already taken');
+		}
+
+		throw unknownError(error);
+	}
 };
 
 const getSalt1 = async (username) =>
 {
-	const response = await axios.get(`${config.apiUrl}/auth/salt1?username=${username}`);
-	return response.data;
+	try
+	{
+		const response = await axios.get(`${config.apiUrl}/auth/salt1?username=${username}`);
+		return response.data;
+	}
+	catch (error)
+	{
+		if (error.response.status === 400)
+		{
+			throw Error('Not account exists with the specified username');
+		}
+
+		throw unknownError(error);
+	}
 };
 
 const getWallet = async (username, authenticationKey) =>
 {
 	const encodedAuthKey = encodeURIComponent(authenticationKey);
 
-	const response = await axios.get(
-		`${config.apiUrl}/auth/privatedata?username=${username}&authenticationKey=${encodedAuthKey}`);
+	try
+	{
+		const response = await axios.get(
+			`${config.apiUrl}/auth/privatedata?username=${username}&authenticationKey=${encodedAuthKey}`);
 
-	return response.data;
+		return response.data;
+	}
+	catch (error)
+	{
+		if (error.response.status === 403)
+		{
+			throw Error('Invalid username or password');
+		}
+
+		throw unknownError(error);
+	}
 };
 
 export default

@@ -8,7 +8,7 @@ import rootSaga from './root-saga';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const enhancer = compose(applyMiddleware(sagaMiddleware, thunk, logger));
+const enhancer = compose(applyMiddleware(sagaMiddleware, thunk));
 const store = createStore(rootReducer, enhancer);
 
 sagaMiddleware.run(rootSaga);

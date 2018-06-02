@@ -1,4 +1,5 @@
 import t from './action-types';
+import flowActionTypes from '../flow/action-types';
 
 const exampleState = // eslint-disable-line no-unused-vars
 {
@@ -66,6 +67,9 @@ const reducer = (state = initialState, action) =>
 
 		return newState;
 	}
+
+	case flowActionTypes.CHANGE_MENU:
+		return { ...state, loginAttemptStatus: { ...state.loginAttemptStatus, errorMessage: null } };
 
 	default:
 		return state;
