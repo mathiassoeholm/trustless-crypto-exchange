@@ -21,7 +21,7 @@ export default
 				}
 				else
 				{
-					throw new Error('User does not exist');
+					throw new Error('unknown-user');
 				}
 			}),
 };

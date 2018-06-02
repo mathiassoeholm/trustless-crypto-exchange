@@ -35,7 +35,14 @@ const makeAuthController = (database) =>
 		}
 		catch (error)
 		{
-			res.status(500).send(error.message);
+			if(error.message === 'unknown-user')
+			{
+				res.status(400).send(error.message);
+			}
+			else
+			{
+				res.status(500).send(error.message);
+			}
 		}
 	},
 
@@ -49,7 +56,7 @@ const makeAuthController = (database) =>
 
 			if (user.hashedAuthKey !== utils.hash(req.query.authenticationKey))
 			{
-				res.status(400).send('wrong authentication key');
+				res.status(403).send('wrong authentication key');
 			}
 			else
 			{
@@ -58,7 +65,14 @@ const makeAuthController = (database) =>
 		}
 		catch (error)
 		{
-			res.status(500).send(error.message);
+			if(error.message === 'unknown-user')
+			{
+				res.status(400).send(error.message);
+			}
+			else
+			{
+				res.status(500).send(error.message);
+			}
 		}
 	},
 });
