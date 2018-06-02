@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import DefaultWalletActions from '../../modules/wallet/actions';
+import walletActions from '../../modules/wallet/actions';
 
 const styles = theme =>
 	({
@@ -63,22 +63,17 @@ SendCurrency.propTypes =
 	onClickedSubmit: PropTypes.func.isRequired,
 };
 
-export default (WalletActions) =>
-{
-	const walletActions = WalletActions ? WalletActions() : DefaultWalletActions();
+const mapStateToProps = state =>
+	({
+		amount: state.wallet.amount ? state.wallet.amount : 0,
+		receiver: state.wallet.receiver ? state.wallet.receiver : '',
+	});
 
-	const mapStateToProps = state =>
-		({
-			amount: state.wallet.amount ? state.wallet.amount : 0,
-			receiver: state.wallet.receiver ? state.wallet.receiver : '',
-		});
+const mapDispatchToProps = dispatch =>
+	({
+		onAmountChanged: event => dispatch(walletActions.changeAmount(event.target.value)),
+		onReceiverChanged: event => dispatch(walletActions.changeReceiver(event.target.value)),
+		onClickedSubmit: () => dispatch(walletActions.startTransaction()),
+	});
 
-	const mapDispatchToProps = dispatch =>
-		({
-			onAmountChanged: event => dispatch(walletActions.changeAmount(event.target.value)),
-			onReceiverChanged: event => dispatch(walletActions.changeReceiver(event.target.value)),
-			onClickedSubmit: () => dispatch(walletActions.performTransaction()),
-		});
-
-	return withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SendCurrency));
-};
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SendCurrency));

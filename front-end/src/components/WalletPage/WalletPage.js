@@ -2,10 +2,8 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
-import SendCurrencyBuilder from './SendCurrency';
+import SendCurrency from './SendCurrency';
 import AccountDetails from './AccountDetails';
-
-const SendCurrency = SendCurrencyBuilder();
 
 const WalletPage = () =>
 	(
