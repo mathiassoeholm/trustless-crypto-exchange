@@ -95,6 +95,7 @@ describe('auth controller', () =>
 	each([
 		['create user', (authController) => authController.createUser],
 		['get salt 1', (authController) => authController.getSalt1],
+		['get private data', (authController) => authController.getPrivateData],
 	]).it('%s responds with 500 if database errors', (_, getFunc, done) =>
 	{
 		databaseMock =
@@ -104,7 +105,7 @@ describe('auth controller', () =>
 			{
 				throw Error('Test error');
 			},
-			getSalt1: username =>
+			getUser: username =>
 			{
 				throw Error('Test error');
 			},
@@ -148,7 +149,7 @@ describe('auth controller', () =>
 		databaseMock =
 		{
 			...databaseMock,
-			getSalt1: username =>
+			getUser: username =>
 			{
 				expect(username).toEqual(reqMock.query.username);
 				done();
@@ -163,7 +164,7 @@ describe('auth controller', () =>
 		databaseMock =
 		{
 			...databaseMock,
-			getSalt1: username => Promise.resolve('salt123'),
+			getUser: username => Promise.resolve({ salt1: 'salt123'}),
 		};
 
 		resMock =
@@ -171,11 +172,83 @@ describe('auth controller', () =>
 			...resMock,
 			json: body =>
 			{
-				expect(body.salt1).toEqual('salt123');
+				expect(body).toEqual({salt1: 'salt123'});
 				done();
 			}
 		};
 
 		getAuthController().getSalt1(reqMock, resMock);
 	});
+
+	it('gets salt2 and cipher with correct hash', done =>
+	{
+		const userInfo =
+		{
+			cipher: 'cipher',
+			salt2: 'salt 2',
+			hashedAuthKey: '9b74c9897bac770ffc029102a200c5de',
+		};
+
+		databaseMock =
+		{
+			...databaseMock,
+			getUser: username => Promise.resolve(userInfo),
+		};
+
+		reqMock =
+		{
+			...reqMock,
+			query:
+			{
+				username: 'user',
+				authenticationKey: 'braitsch',
+			}
+		}
+
+		resMock =
+		{
+			...resMock,
+			json: body =>
+			{
+				expect(body).toEqual({ cipher: 'cipher', salt2: 'salt 2' });
+				done();
+			}
+		};
+
+		getAuthController().getPrivateData(reqMock, resMock);
+	});
+
+	it('fails with wrong auth key', done =>
+	{
+		reqMock =
+		{
+			...reqMock,
+			query:
+			{
+				username: 'user',
+				authenticationKey: 'not-correct',
+			},
+		};
+
+		databaseMock =
+		{
+			...databaseMock,
+			getUser: username => Promise.resolve({hashedAuthKey: '9b74c9897bac770ffc029102a200c5de'}),
+		};
+
+		resMock =
+		{
+			...resMock,
+			status: code =>
+			({
+				send: error =>
+				{
+					expect(code).toBe(400);
+					done();
+				},
+			})
+		};
+
+		getAuthController().getPrivateData(reqMock, resMock);
+	})
 });

@@ -30,9 +30,31 @@ const makeAuthController = (database) =>
 	{
 		try
 		{
-			const salt1 = await database.getSalt1(req.query.username);
-
+			const { salt1 } = await database.getUser(req.query.username);
 			res.json({ salt1 });
+		}
+		catch (error)
+		{
+			res.status(500).send(error.message);
+		}
+	},
+
+	getPrivateData: async (req, res) =>
+	{
+		let user;
+
+		try
+		{
+			user = await database.getUser(req.query.username);
+
+			if (user.hashedAuthKey !== utils.hash(req.query.authenticationKey))
+			{
+				res.status(400).send('wrong authentication key');
+			}
+			else
+			{
+				res.json({ cipher: user.cipher, salt2: user.salt2 });
+			}
 		}
 		catch (error)
 		{
