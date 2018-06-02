@@ -2,9 +2,9 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import each from 'jest-each';
 
+import makeStubWalletProvider from '../wallet/provider/stub-provider';
 import t from './action-types';
 import authActions from './actions';
-import stubApi from './api/stub-api';
 import makeStubProtocol from './protocol/stub-protocol';
 
 const middlewares = [thunk];
@@ -28,14 +28,13 @@ describe('auth actions', () =>
 
 	beforeEach(() =>
 	{
-		actions = authActions(makeStubProtocol());
-
+		actions = authActions(makeStubProtocol(), makeStubWalletProvider());
 		store = mockStore(initialState);
 	});
 
 	it('should give error for create user', () =>
 	{
-		actions = authActions(makeStubProtocol(true));
+		actions = authActions(makeStubProtocol(true), makeStubWalletProvider());
 
 		return store.dispatch(actions.createUser('password')).then(() =>
 		{
@@ -128,15 +127,15 @@ describe('auth actions', () =>
 	});
 
 	each([
-		['create user', authActions(makeStubProtocol()).createUser],
-		['login', authActions(makeStubProtocol()).login],
+		['create user', authActions(makeStubProtocol(), makeStubWalletProvider()).createUser],
+		['login', authActions(makeStubProtocol(), makeStubWalletProvider()).login],
 	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
 	{
-		const firstAction = store.getActions()[0];
+		const thirdToLastAction = store.getActions()[store.getActions().length - 3];
 		const secondToLastAction = store.getActions()[store.getActions().length - 2];
 		const lastAction = store.getActions()[store.getActions().length - 1];
 
-		expect(firstAction).toEqual(
+		expect(thirdToLastAction).toEqual(
 			{
 				type: t.PROGRESS_UPDATE,
 				status:
@@ -156,6 +155,7 @@ describe('auth actions', () =>
 			{
 				type: t.LOG_IN,
 				user: initialState.auth.user,
+				secret: {},
 			});
 	}),
 	);

@@ -1,7 +1,9 @@
 import t from './action-types';
 import config from '../../config';
 
-export default (authProtocol = config.MakeAuthProtocol()) =>
+export default (
+	authProtocol = config.makeAuthProtocol(),
+	walletProvider = config.makeWalletProvider()) =>
 {
 	const setUsernameError = errorMessage =>
 		({
@@ -34,6 +36,13 @@ export default (authProtocol = config.MakeAuthProtocol()) =>
 		({
 			type: t.LOGIN_ATTEMPT_FINISHED,
 			errorMessage,
+		});
+
+	const loginAction = (user, secret) =>
+		({
+			type: t.LOG_IN,
+			secret,
+			user,
 		});
 
 	const validateInput = (user, password, dispatch) =>
@@ -69,24 +78,21 @@ export default (authProtocol = config.MakeAuthProtocol()) =>
 			dispatch(progressUpdate(p, m));
 		};
 
-		const secret =
-		{
-			user:
-			{
-				username: user.username,
-			},
-		};
+		let secret;
 
-		return authProtocol.createUser(user, password, secret, progressCallback)
+		progressCallback(0, 'Generating Wallet');
+
+		return walletProvider.generateSecret()
+			.then((s) =>
+			{
+				secret = s;
+				return authProtocol.createUser(user, password, secret, progressCallback);
+			})
 			.then((result) =>
 			{
 				dispatch(loginAttemptFinished());
 
-				dispatch(
-					{
-						type: t.LOG_IN,
-						user: result.user,
-					});
+				dispatch(loginAction(result.user, secret));
 			})
 			.catch((error) =>
 			{
@@ -111,18 +117,11 @@ export default (authProtocol = config.MakeAuthProtocol()) =>
 		};
 
 		return authProtocol.login(username, password, progressCallback)
-			.then(() =>
+			.then((secret) =>
 			{
 				dispatch(loginAttemptFinished());
 
-				dispatch(
-					{
-						type: t.LOG_IN,
-						user:
-						{
-							username,
-						},
-					});
+				dispatch(loginAction({ username	}, secret));
 			})
 			.catch((error) =>
 			{
