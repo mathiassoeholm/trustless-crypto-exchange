@@ -92,6 +92,33 @@ describe('auth controller', () =>
 		getAuthController().createUser(reqMock, resMock);
 	});
 
+	it('should give 400 for unknown user', (done) =>
+	{
+		databaseMock =
+		{
+			...databaseMock,
+			getUser: username =>
+			{
+				throw Error('unknown-user');
+			},
+		};
+
+		resMock =
+		{
+			...resMock,
+			status: code =>
+			({
+				send: error =>
+				{
+					expect(code).toBe(400);
+					done();
+				},
+			})
+		};
+
+		getAuthController().getSalt1(reqMock, resMock);
+	});
+
 	each([
 		['create user', (authController) => authController.createUser],
 		['get salt 1', (authController) => authController.getSalt1],
@@ -243,7 +270,7 @@ describe('auth controller', () =>
 			({
 				send: error =>
 				{
-					expect(code).toBe(400);
+					expect(code).toBe(403);
 					done();
 				},
 			})
