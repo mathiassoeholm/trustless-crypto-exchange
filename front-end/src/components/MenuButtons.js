@@ -52,7 +52,7 @@ const MenuButtons = ({ isLoggedIn, username, dispatch }) =>
 const mapStateToProps = state =>
 	({
 		isLoggedIn: state.auth.isLoggedIn,
-		username: state.auth.isLoggedIn ? state.auth.user.username : null,
+		username: state.auth.isLoggedIn ? state.auth.user.username : '',
 	});
 
 MenuButtons.propTypes =

@@ -11,7 +11,7 @@ const makeStubProtocol = (shouldFail = false) =>
 				}
 				else
 				{
-					resolve(secret);
+					resolve({ user });
 				}
 			}),
 
@@ -26,7 +26,7 @@ const makeStubProtocol = (shouldFail = false) =>
 				}
 				else
 				{
-					resolve();
+					resolve({});
 				}
 			}),
 	});
