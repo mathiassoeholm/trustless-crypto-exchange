@@ -18,7 +18,8 @@ const makeProtocol = (
 			const salt1 = utils.getRandomSalt();
 			const salt2 = utils.getRandomSalt();
 
-			const authenticationKey = await authKeyGen(password, salt1, authenticationKeyProgess);
+			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
+			const authenticationKeyString = utils.bytesToBase64String(authenticationKeyBuffer);
 			const encryptionKey = await encKeyGen(password, salt2, encryptionKeyProgess);
 
 			const secretText = JSON.stringify(secret);
@@ -29,7 +30,7 @@ const makeProtocol = (
 				encryptedSecret,
 				salt1,
 				salt2,
-				authenticationKey);
+				authenticationKeyString);
 
 			progressCallback(1, 'Finished');
 
@@ -43,9 +44,10 @@ const makeProtocol = (
 			const { salt1 } = await authApi.getSalt1(username);
 
 			const authenticationKeyProgess = progress => progressCallback(progress * authKeyPercentage, 'Generating Authentication Key');
-			const authenticationKey = await authKeyGen(password, salt1, authenticationKeyProgess);
+			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
+			const authenticationKeyString = utils.bytesToBase64String(authenticationKeyBuffer);
 
-			const { cipher, salt2 } = await authApi.getWallet(username, authenticationKey);
+			const { cipher, salt2 } = await authApi.getWallet(username, authenticationKeyString);
 
 			const decryptionKeyProgess = progress => progressCallback(authKeyPercentage + (progress * (1 - authKeyPercentage)), 'Generating Decryption Key');
 			const decryptionKey = await encKeyGen(password, salt2, decryptionKeyProgess);

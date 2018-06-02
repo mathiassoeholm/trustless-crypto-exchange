@@ -1,17 +1,41 @@
-/* eslint-disable no-unused-vars */
+import axios from 'axios';
 
-const createUser = (user, cipher, salt) =>
+import config from '../../../config';
+
+const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 {
-	throw Error('Not implemented');
+	const body =
+	{
+		username,
+		cipher,
+		salt1,
+		salt2,
+		authenticationKey,
+	};
+
+	const response = await axios.post(`${config.apiUrl}/auth/createuser`, body);
+	return response.data;
 };
 
-const getWallet = (username) =>
+const getSalt1 = async (username) =>
 {
-	throw Error('Not implemented');
+	const response = await axios.get(`${config.apiUrl}/auth/salt1?username=${username}`);
+	return response.data;
+};
+
+const getWallet = async (username, authenticationKey) =>
+{
+	const encodedAuthKey = encodeURIComponent(authenticationKey);
+
+	const response = await axios.get(
+		`${config.apiUrl}/auth/privatedata?username=${username}&authenticationKey=${encodedAuthKey}`);
+
+	return response.data;
 };
 
 export default
 {
 	createUser,
+	getSalt1,
 	getWallet,
 };

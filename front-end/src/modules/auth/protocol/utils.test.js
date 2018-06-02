@@ -2,6 +2,11 @@ import utils from './utils';
 
 describe('Auth Utils', () =>
 {
+	it('Can convert byte array to string', () =>
+	{
+		expect(utils.bytesToBase64String([97, 98, 99])).toEqual('YWJj');
+	});
+
 	it('generates random salt of correct length', () =>
 	{
 		const salt = utils.getRandomSalt();

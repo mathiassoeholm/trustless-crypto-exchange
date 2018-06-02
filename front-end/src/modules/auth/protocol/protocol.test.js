@@ -45,7 +45,7 @@ describe('Protocol', () =>
 		const { salt1, authenticationKey } = stubApi.getState();
 		const ak = await testKeyGenerator(password, salt1);
 
-		expect(authenticationKey).toEqual(ak);
+		expect(authenticationKey).toEqual(utils.bytesToBase64String(ak));
 	});
 
 	it('updates progress correctly when logging in', async () =>

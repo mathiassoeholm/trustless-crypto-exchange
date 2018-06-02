@@ -2,6 +2,9 @@ import scrypt from 'scrypt-js';
 import crypto from 'crypto';
 import aesjs from 'aes-js';
 
+const bytesToBase64String = bytes =>
+	btoa(String.fromCharCode.apply(null, bytes));
+
 const getRandomSalt = () => crypto.randomBytes(16).toString('hex').normalize('NFKC');
 
 const encryptAES = (secret, key, keyIsBuffer = true) =>
@@ -68,6 +71,7 @@ const makeKeyGenerator = N =>
 
 export default
 {
+	bytesToBase64String,
 	getRandomSalt,
 	encryptAES,
 	decryptAES,
