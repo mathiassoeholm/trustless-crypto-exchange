@@ -1,3 +1,5 @@
+import each from 'jest-each';
+
 import makeAuthController from './auth-controller';
 import utils from './utils';
 
@@ -42,6 +44,10 @@ describe('auth controller', () =>
 				salt1: 'salt1',
 				salt2: 'salt2',
 				authenticationKey: 'authenticationKey',
+			},
+			query:
+			{
+				username: 'query user',
 			}
 		};
 	});
@@ -86,15 +92,22 @@ describe('auth controller', () =>
 		getAuthController().createUser(reqMock, resMock);
 	});
 
-	it('responds with 500 if database errors', (done) =>
+	each([
+		['create user', (authController) => authController.createUser],
+		['get salt 1', (authController) => authController.getSalt1],
+	]).it('%s responds with 500 if database errors', (_, getFunc, done) =>
 	{
 		databaseMock =
 		{
 			...databaseMock,
-			createUser: user =>
+			createUser: params =>
 			{
 				throw Error('Test error');
-			}
+			},
+			getSalt1: username =>
+			{
+				throw Error('Test error');
+			},
 		};
 
 		resMock =
@@ -105,13 +118,13 @@ describe('auth controller', () =>
 				send: error =>
 				{
 					expect(code).toBe(500);
-					expect(error.message).toBe('Test error');
+					expect(error).toBe('Test error');
 					done();
 				},
 			})
 		};
 
-		getAuthController().createUser(reqMock, resMock);
+		getFunc(getAuthController())(reqMock, resMock);
 	});
 
 	it('hashes the auth key', (done) =>
@@ -128,5 +141,41 @@ describe('auth controller', () =>
 		};
 
 		getAuthController().createUser(reqMock, resMock);
+	});
+
+	it('uses the username to get salt 1', done =>
+	{
+		databaseMock =
+		{
+			...databaseMock,
+			getSalt1: username =>
+			{
+				expect(username).toEqual(reqMock.query.username);
+				done();
+			}
+		};
+
+		getAuthController().getSalt1(reqMock, resMock);
+	});
+
+	it('returns the salt', done =>
+	{
+		databaseMock =
+		{
+			...databaseMock,
+			getSalt1: username => Promise.resolve('salt123'),
+		};
+
+		resMock =
+		{
+			...resMock,
+			json: body =>
+			{
+				expect(body.salt1).toEqual('salt123');
+				done();
+			}
+		};
+
+		getAuthController().getSalt1(reqMock, resMock);
 	});
 });

@@ -6,4 +6,6 @@ export default (app) =>
 	const authController = makeAuthController(firebaseDatabase);
 
 	app.route('/auth/createuser').post(authController.createUser);
+
+	app.route('/auth/salt1').get(authController.getSalt1);
 };

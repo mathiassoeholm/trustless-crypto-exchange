@@ -25,6 +25,20 @@ const makeAuthController = (database) =>
 			res.status(500).send(error.message);
 		}
 	},
+
+	getSalt1: async (req, res) =>
+	{
+		try
+		{
+			const salt1 = await database.getSalt1(req.query.username);
+
+			res.json({ salt1 });
+		}
+		catch (error)
+		{
+			res.status(500).send(error.message);
+		}
+	},
 });
 
 export default makeAuthController;
