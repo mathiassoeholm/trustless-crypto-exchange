@@ -11,13 +11,13 @@ export default
 			hashedAuthKey,
 		}),
 
-	getSalt1: username =>
+	getUser: username =>
 		admin.firestore().collection('users').doc(username).get()
 			.then(doc =>
 			{
 				if (doc.exists)
 				{
-					return doc.data().salt1;
+					return doc.data();
 				}
 				else
 				{
