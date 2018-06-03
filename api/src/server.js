@@ -35,7 +35,30 @@ app.use((req, res) =>
 	res.status(404).send({url: req.originalUrl + ' not found'});
 });
 
-app.listen(appConfig.port, () =>
+if(appConfig.ssl)
 {
-	console.log('We are live on ' + appConfig.port + ' without SSL');
-});
+	const options =
+	{
+		key: fs.readFileSync(path.join( __dirname, '../ssl/key.pem')),
+		cert: fs.readFileSync(path.join( __dirname, '../ssl/cert.pem')),
+	};
+	
+	https.createServer(options, app).listen(appConfig.port, (err) =>
+	{
+		if (err)
+		{
+			console.error(err);
+		}
+		else
+		{
+			console.log('We are live on ' + appConfig.port + ' with SSL');
+		}
+	});
+}
+else
+{
+	app.listen(appConfig.port, () =>
+	{
+		console.log('We are live on ' + appConfig.port + ' without SSL');
+	});
+}
