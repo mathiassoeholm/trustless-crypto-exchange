@@ -9,8 +9,8 @@ export default
 {
 	authApi: realApi,
 	makeAuthProtocol: makeProtocol,
-	slowKeyGenerator: utils.makeKeyGenerator(2 ** 1),
-	fastKeyGenerator: utils.makeKeyGenerator(2 ** 1),
+	slowKeyGenerator: utils.makeKeyGenerator(2 ** 20),
+	fastKeyGenerator: utils.makeKeyGenerator(2 ** 13),
 	apiUrl: 'http://localhost:3001',
 	makeWalletProvider: makeStubProvider,
 };
