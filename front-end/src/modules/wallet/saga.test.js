@@ -102,7 +102,7 @@ describe('wallet saga', () =>
 				.toEqual(put(walletActions.statusUpdate(true, null)));
 
 			expect(generator.next().value)
-				.toEqual(put(walletActions.transactionFinished()));
+				.toEqual(put(walletActions.transactionSuccess()));
 		});
 
 		it('yields correctly when transaction fails', () =>

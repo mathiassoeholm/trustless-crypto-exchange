@@ -57,7 +57,7 @@ export const makePerformTransaction = (walletProvider = config.makeWalletProvide
 			yield call(walletProvider.sendCurrency, secret, receiver, amount);
 
 			yield put(walletActions.statusUpdate(true, null));
-			yield put(walletActions.transactionFinished());
+			yield put(walletActions.transactionSuccess());
 		}
 		catch (error)
 		{
@@ -71,7 +71,7 @@ export default function* ()
 		takeLatest(
 			[
 				authActionTypes.LOG_IN,
-				walletActionTypes.TRANSACTION_FINISHED,
+				walletActionTypes.TRANSACTIN_SUCCESS,
 			], makeUpdateBalance()),
 
 		takeLatest(walletActionTypes.START_TRANSACTION, makePerformTransaction()),

@@ -1,8 +1,14 @@
-import t from './action-types';
+import flowActionTypes from './action-types';
 import authActionTypes from '../auth/action-types';
+import walletActionTypes from '../wallet/action-types';
 import menuTypes from './menu-types';
+import { toASCII } from 'punycode';
 
-const initialState = { activeMenu: menuTypes.LOGIN };
+const initialState =
+{
+	activeMenu: menuTypes.LOGIN,
+	sendConfirmationOpen: false,
+};
 
 const changeMenu = (state, newMenu) => ({ ...state, activeMenu: newMenu });
 
@@ -17,8 +23,16 @@ const reducer = (state = initialState, action) =>
 	case authActionTypes.LOG_OUT:
 		return changeMenu(state, menuTypes.LOGIN);
 
-	case t.CHANGE_MENU:
+	case flowActionTypes.CHANGE_MENU:
 		return changeMenu(state, action.menuType);
+
+	case flowActionTypes.SET_SEND_CONFIRMATION_OPEN:
+		return { ...state, sendConfirmationOpen: action.open };
+
+	case walletActionTypes.TRANSACTION_STATUS_UPDATE:
+		return action.status.isFinished
+			? { ...state, sendConfirmationOpen: false }
+			: state;
 
 	default:
 		return state;

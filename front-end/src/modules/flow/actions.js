@@ -6,7 +6,14 @@ const changeMenu = menuType =>
 		menuType,
 	});
 
+const setSendConfirmationOpen = open =>
+	({
+		type: t.SET_SEND_CONFIRMATION_OPEN,
+		open,
+	});
+
 export default
 {
 	changeMenu,
+	setSendConfirmationOpen,
 };
