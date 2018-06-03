@@ -1,19 +1,21 @@
 import Web3 from 'web3';
 
+import config from '../../../config';
+
 // Current run ganache command:
 // ganache-cli --defaultBalanceEther 9000000000000000000000 --db C:\Ganache-DB
-
-const provider = new Web3.providers.HttpProvider('http://localhost:8545');
-const web3 = new Web3(provider);
 
 const bankAccountSecret =
 	{
 		// Insert a private key from Ganache here, remember to prepend "0x"
-		privateKey: '0x3db10de27107813c20c9203f0d11735d2a1d931dec5fd568f5f04a350226e047',
+		privateKey: '0x8b82b245196b2b26bd5e21e06155e18d993d530399864d444360fda2310f6289',
 	};
 
 const makeEthereumProvider = () =>
 {
+	const provider = new Web3.providers.HttpProvider(config.ganacheUrl);
+	const web3 = new Web3(provider);
+
 	const sendCurrency = (secret, to, amount) =>
 	{
 		const account = web3.eth.accounts.privateKeyToAccount(secret.privateKey);
