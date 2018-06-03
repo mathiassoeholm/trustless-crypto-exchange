@@ -1,4 +1,5 @@
 export default
 {
 	CHANGE_MENU: 'flow/CHANGE_MENU',
+	SET_SEND_CONFIRMATION_OPEN: 'flow/SET_SEND_COFIRMATION_OPEN',
 };

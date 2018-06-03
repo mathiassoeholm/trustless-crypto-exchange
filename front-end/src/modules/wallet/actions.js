@@ -1,5 +1,4 @@
 import walletActionTypes from './action-types';
-import errorMessages from './error-messages';
 
 const balanceUpdateFailed = error =>
 	({
@@ -35,9 +34,9 @@ const invalidReceiver = error =>
 		error,
 	});
 
-const transactionFinished = () =>
+const transactionSuccess = () =>
 	({
-		type: walletActionTypes.TRANSACTION_FINISHED,
+		type: walletActionTypes.TRANSACTION_SUCCESS,
 	});
 
 const startTransaction = () =>
@@ -66,5 +65,5 @@ export default {
 	invalidAmount,
 	invalidReceiver,
 	statusUpdate,
-	transactionFinished,
+	transactionSuccess,
 };
