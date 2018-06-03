@@ -12,13 +12,13 @@ const updateBalance = balance =>
 		balance,
 	});
 
-const statusUpdate = (isFinished, errorMessage) =>
+const statusUpdate = (isFinished, error) =>
 	({
 		type: walletActionTypes.TRANSACTION_STATUS_UPDATE,
 		status:
 		{
 			isFinished,
-			errorMessage,
+			error,
 		},
 	});
 

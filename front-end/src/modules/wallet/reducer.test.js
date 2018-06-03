@@ -4,6 +4,7 @@ import each from 'jest-each';
 import authActionTypes from '../auth/action-types';
 import walletActionTypes from './action-types';
 import reducer from './reducer';
+import flowActions from '../flow/actions';
 
 describe('Transaction Reducer', () =>
 {
@@ -51,7 +52,7 @@ describe('Transaction Reducer', () =>
 					transactionStatus:
 					{
 						isFinished: false,
-						errorMessage: null,
+						error: null,
 					},
 				},
 				{
@@ -59,7 +60,7 @@ describe('Transaction Reducer', () =>
 					status:
 					{
 						isFinished: false,
-						errorMessage: null,
+						error: null,
 					},
 				},
 			],
@@ -72,6 +73,12 @@ describe('Transaction Reducer', () =>
 			],
 			['amountError', { amountError: 'test' }, { amountError: 'error' }, { type: walletActionTypes.INVALID_AMOUNT_ERROR, error: 'error' }],
 			['receiverError', { receiverError: 'test' }, { receiverError: 'error' }, { type: walletActionTypes.INVALID_RECEIVER_ERROR, error: 'error' }],
+			[
+				'transactionStatus when closing confirmation',
+				{ transactionStatus: {} },
+				{ transactionStatus: null },
+				flowActions.setSendConfirmationOpen(false),
+			],
 		]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 	{
 		deepFreeze(stateBefore);

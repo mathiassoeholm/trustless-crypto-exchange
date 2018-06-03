@@ -29,11 +29,6 @@ const reducer = (state = initialState, action) =>
 	case flowActionTypes.SET_SEND_CONFIRMATION_OPEN:
 		return { ...state, sendConfirmationOpen: action.open };
 
-	case walletActionTypes.TRANSACTION_STATUS_UPDATE:
-		return action.status.isFinished
-			? { ...state, sendConfirmationOpen: false }
-			: state;
-
 	default:
 		return state;
 	}

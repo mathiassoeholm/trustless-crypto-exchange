@@ -44,12 +44,6 @@ each(
 	[
 		['sendConfirmationOpen', { sendConfirmationOpen: false }, { sendConfirmationOpen: true }, flowActions.setSendConfirmationOpen(true)],
 		['menu', { activeMenu: menuTypes.LOGIN }, { activeMenu: menuTypes.WALLET }, flowActions.changeMenu(menuTypes.WALLET)],
-		[
-			'sendConfirmationOpen when transaction finished',
-			{ sendConfirmationOpen: true },
-			{ sendConfirmationOpen: false },
-			walletActions.statusUpdate(true, null),
-		],
 	]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 {
 	deepFreeze(stateBefore);
