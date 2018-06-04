@@ -45,7 +45,9 @@ const makeEthereumProvider = () =>
 				}));
 	};
 
-	const getBalance = secret => web3.eth.getBalance(secret.address);
+	const getBalance = secret => 
+		web3.eth.getBalance(secret.address)
+			.then(b => b * (10 ** -18));
 
 	return {
 		generateSecret,
