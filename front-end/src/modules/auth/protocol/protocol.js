@@ -19,7 +19,10 @@ const makeProtocol = (
 			const salt2 = utils.getRandomSalt();
 
 			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
+
+			// Get the key as a string, since we need to store it server-side
 			const authenticationKeyString = utils.bytesToBase64String(authenticationKeyBuffer);
+
 			const encryptionKey = await encKeyGen(password, salt2, encryptionKeyProgess);
 
 			const secretText = JSON.stringify(secret);
