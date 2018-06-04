@@ -28,11 +28,8 @@ const makeEthereumProvider = () =>
 			value: ether,
 			gas: '21000',
 		})
-			.then((transaction) =>
-			{
-				console.log(transaction);
-				return web3.eth.sendSignedTransaction(transaction.rawTransaction);
-			});
+			.then(transaction =>
+				web3.eth.sendSignedTransaction(transaction.rawTransaction));
 	};
 
 	const generateSecret = () =>

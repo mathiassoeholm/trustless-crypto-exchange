@@ -2,10 +2,7 @@ import axios from 'axios';
 
 import config from '../../../config';
 
-const unknownError = (error) =>
-{
-	return Error(`Unknown server error occured: ${error.response.status}`);
-};
+const unknownError = error => Error(`Unknown server error occured: ${error.response.status}`);
 
 const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 {
@@ -25,7 +22,6 @@ const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 	}
 	catch (error)
 	{
-		console.log(error);
 		if (error.response.status === 400)
 		{
 			throw Error('Username is already taken');

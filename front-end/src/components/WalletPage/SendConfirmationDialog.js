@@ -41,7 +41,7 @@ const styles = theme =>
 
 		errorTitle:
 		{
-			color: red[500],	
+			color: red[500],
 		},
 	});
 
@@ -134,9 +134,15 @@ SendConfirmationDialog.propTypes =
 	open: PropTypes.bool.isRequired,
 	closeWindow: PropTypes.func.isRequired,
 	onConfirm: PropTypes.func.isRequired,
-	amount: PropTypes.number.isRequired,
-	receiver: PropTypes.string.isRequired,
+	amount: PropTypes.number,
+	receiver: PropTypes.string,
 	transactionStatus: PropTypes.object,
+};
+
+SendConfirmationDialog.defaultProps =
+{
+	amount: 0,
+	receiver: '',
 };
 
 const mapStateToProps = state =>

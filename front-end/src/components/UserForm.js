@@ -86,6 +86,14 @@ UserForm.propTypes =
 	loginAttemptError: PropTypes.string,
 };
 
+UserForm.defaultProps =
+{
+	usernameError: null,
+	passwordError: null,
+	loginAttemptError: null,
+	username: '',
+};
+
 const mapStateToProps = state =>
 	({
 		username: state.auth.user ? state.auth.user.username : '',

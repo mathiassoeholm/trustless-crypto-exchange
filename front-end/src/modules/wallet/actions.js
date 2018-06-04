@@ -47,7 +47,7 @@ const startTransaction = () =>
 const changeAmount = amount =>
 	({
 		type: walletActionTypes.CHANGE_AMOUNT,
-		amount,
+		amount: Number(amount),
 	});
 
 const changeReceiver = receiver =>
