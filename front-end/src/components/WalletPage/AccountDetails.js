@@ -21,7 +21,7 @@ const AccountDetails = ({ classes, balance, address }) =>
 			<Typography variant="headline">Your Account</Typography>
 			<Grid container spacing={8}>
 				<Grid item xs={12} lg={6}>
-					<Typography variant="subheading">Balance: {balance}$</Typography>
+					<Typography variant="subheading">Balance: {balance} Ether</Typography>
 				</Grid>
 
 				<Grid item xs={12} lg={6}>

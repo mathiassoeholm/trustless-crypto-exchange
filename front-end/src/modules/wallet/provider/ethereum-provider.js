@@ -18,12 +18,14 @@ const makeEthereumProvider = () =>
 
 	const sendCurrency = (secret, to, amount) =>
 	{
+		const ether = amount * (10 ** 18);
+
 		const account = web3.eth.accounts.privateKeyToAccount(secret.privateKey);
 
 		return account.signTransaction({
 			to,
 			from: account.address,
-			value: amount,
+			value: ether,
 			gas: '21000',
 		})
 			.then((transaction) =>
@@ -37,7 +39,7 @@ const makeEthereumProvider = () =>
 	{
 		const newAccount = web3.eth.accounts.create();
 
-		return sendCurrency(bankAccountSecret, newAccount.address, 1000000000000000000)
+		return sendCurrency(bankAccountSecret, newAccount.address, 1)
 			.then(() =>
 				({
 					address: newAccount.address,

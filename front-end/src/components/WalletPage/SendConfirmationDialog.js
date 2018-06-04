@@ -60,7 +60,7 @@ const SendConfirmationDialog = (
 		<Dialog open={open}>
 			<DialogTitle>Perform Transaction</DialogTitle>
 			<DialogContent>
-				Are you sure you want to transfer <b>{amount}</b> Wei to <b>{receiver}</b>
+				Are you sure you want to transfer <b>{amount}</b> Ether to <b>{receiver}</b>
 			</DialogContent>
 			<DialogActions>
 				<Button disabled={Boolean(transactionStatus)} onClick={closeWindow} color="primary">
@@ -85,7 +85,7 @@ const SendConfirmationDialog = (
 				</div>
 			</DialogTitle>
 			<DialogContent>
-				<p>The transaction of <b>{amount}</b> Wei to <b>{receiver} failed</b></p>
+				<p>The transaction of <b>{amount}</b> Ether to <b>{receiver} failed</b></p>
 				<Typography color="error" variant="subheading" align="center">
 					{transactionStatus.error.message}
 				</Typography>
@@ -106,7 +106,7 @@ const SendConfirmationDialog = (
 				</div>
 			</DialogTitle>
 			<DialogContent>
-				<p>The transaction of <b>{amount}</b> Wei to <b>{receiver} succeeded</b></p>
+				<p>The transaction of <b>{amount}</b> Ether to <b>{receiver} succeeded</b></p>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={closeWindow} color="primary">
