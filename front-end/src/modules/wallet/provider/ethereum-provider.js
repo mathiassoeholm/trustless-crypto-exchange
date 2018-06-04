@@ -8,7 +8,7 @@ import config from '../../../config';
 const bankAccountSecret =
 	{
 		// Insert a private key from Ganache here, remember to prepend "0x"
-		privateKey: '0x8b82b245196b2b26bd5e21e06155e18d993d530399864d444360fda2310f6289',
+		privateKey: '0x7b4712977fc2739173b7a6b153ef2e6b56dd8a5f5fb2cd23cd30dfc917611253',
 	};
 
 const makeEthereumProvider = () =>
@@ -45,7 +45,7 @@ const makeEthereumProvider = () =>
 				}));
 	};
 
-	const getBalance = secret => 
+	const getBalance = secret =>
 		web3.eth.getBalance(secret.address)
 			.then(b => b * (10 ** -18));
 
