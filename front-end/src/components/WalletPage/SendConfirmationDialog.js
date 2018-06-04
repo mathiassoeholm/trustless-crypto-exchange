@@ -10,6 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
+import red from '@material-ui/core/colors/red';
 import Typography from '@material-ui/core/Typography';
 
 import flowActions from '../../modules/flow/actions';
@@ -31,6 +32,16 @@ const styles = theme =>
 			left: '50%',
 			marginTop: -12,
 			marginLeft: -12,
+		},
+
+		successTitle:
+		{
+			color: green[500],
+		},
+
+		errorTitle:
+		{
+			color: red[500],	
 		},
 	});
 
@@ -68,10 +79,10 @@ const SendConfirmationDialog = (
 
 	const failDialog = () => (
 		<Dialog open={open}>
-			<DialogTitle>
-				<Typography variant="title" color="error">
+			<DialogTitle color="error">
+				<div className={classes.errorTitle}>
 					Transaction Failed
-				</Typography>
+				</div>
 			</DialogTitle>
 			<DialogContent>
 				<p>The transaction of <b>{amount}</b> Wei to <b>{receiver} failed</b></p>
@@ -90,9 +101,9 @@ const SendConfirmationDialog = (
 	const successDialog = () => (
 		<Dialog open={open}>
 			<DialogTitle>
-				<Typography variant="title" color="secondary">
+				<div className={classes.successTitle}>
 					Transaction Succeeded
-				</Typography>
+				</div>
 			</DialogTitle>
 			<DialogContent>
 				<p>The transaction of <b>{amount}</b> Wei to <b>{receiver} succeeded</b></p>
