@@ -1,4 +1,4 @@
-yarn build-production;
+sudo yarn build-production;
 yarn production;
 
-forever start -c "ganache-cli --defaultBalanceEther 9000000000000000000000 --db ./ganache-db" ./;
+forever start -c "ganache-cli --defaultBalanceEther 9000000000000000000000 --db ~/git/trustless-crypto-exchange/api/ganache-db" ./;
