@@ -11,7 +11,7 @@ export default
 	makeAuthProtocol: makeProtocol,
 	slowKeyGenerator: utils.makeKeyGenerator(2 ** 1),
 	fastKeyGenerator: utils.makeKeyGenerator(2 ** 1),
-	apiUrl: 'https://35.204.85.70:3001',
+	apiUrl: 'http://35.204.85.70:3001',
 	ganacheUrl: 'http://35.204.85.70:8545',
 	makeWalletProvider: makeEthereumProvider,
 };
