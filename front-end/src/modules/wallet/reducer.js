@@ -36,7 +36,7 @@ const reducer = (state = initialState, action) =>
 		return { ...state, receiver: action.receiver };
 	case walletActionTypes.INVALID_RECEIVER_ERROR:
 		return { ...state, receiverError: action.error };
-	case flowActionTypes.SET_SEND_CONFIRMATION_OPEN:
+	case flowActionTypes.SET_SEND_DIALOG_OPEN:
 		return { ...state, transactionStatus: null };
 	default:
 		return state;

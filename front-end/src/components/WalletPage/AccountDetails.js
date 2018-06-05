@@ -5,29 +5,52 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import SendIcon from '@material-ui/icons/Send';
+
+import flowActions from '../../modules/flow/actions';
 
 const styles = theme =>
 	({
 		root:
 		{
 			padding: theme.spacing.unit,
+			position: 'relative',
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
+		},
+
+		buttonParent:
+		{
+			position: 'absolute',
+			top: 0,
+			right: 8,
+			display: 'flex',
+			zIndex: '10',
 		},
 	});
 
-const AccountDetails = ({ classes, balance, address }) =>
+const AccountDetails = ({ classes, balance, address, onClickedSend }) =>
 	(
 		<Paper className={classes.root}>
-			<Typography variant="headline">Your Account</Typography>
-			<Grid container spacing={8}>
-				<Grid item xs={12} lg={6}>
-					<Typography variant="subheading">Balance: {balance} Ether</Typography>
-				</Grid>
+			<div>
+				Test
+			</div>
 
-				<Grid item xs={12} lg={6}>
-					<Typography variant="subheading">Address: {address}</Typography>
-				</Grid>
-			</Grid>
+			<div style={{ textAlign: 'left' }}>
+				<Typography variant="headline">Your Account</Typography>
+				<br />
+				<Typography noWrap variant="subheading">Address: {address}</Typography>
+				<br />
+				<Typography variant="subheading">Balance: {balance} Ether</Typography>
+			</div>
+
+			<div className={classes.buttonParent}>
+				<IconButton onClick={onClickedSend}>
+					<SendIcon style={{ width: '30px', height: '30px' }} />
+				</IconButton>
+			</div>
 		</Paper>
 	);
 
@@ -36,6 +59,7 @@ AccountDetails.propTypes =
 	classes: PropTypes.object.isRequired,
 	balance: PropTypes.number.isRequired,
 	address: PropTypes.string.isRequired,
+	onClickedSend: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
@@ -44,4 +68,9 @@ const mapStateToProps = state =>
 		address: state.wallet.secret ? state.wallet.secret.address : 'Invalid address',
 	});
 
-export default connect(mapStateToProps)(withStyles(styles)(AccountDetails));
+const mapDispatchToProps = dispatch =>
+	({
+		onClickedSend: () => dispatch(flowActions.setSendDialogOpen(true)),
+	});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AccountDetails));

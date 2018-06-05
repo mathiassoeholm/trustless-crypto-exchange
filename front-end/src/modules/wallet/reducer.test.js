@@ -77,7 +77,7 @@ describe('Transaction Reducer', () =>
 				'transactionStatus when closing confirmation',
 				{ transactionStatus: {} },
 				{ transactionStatus: null },
-				flowActions.setSendConfirmationOpen(false),
+				flowActions.setSendDialogOpen(false),
 			],
 		]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 	{

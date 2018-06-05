@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
-import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,8 +12,7 @@ import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
 import Typography from '@material-ui/core/Typography';
 
-import flowActions from '../../modules/flow/actions';
-import walletActions from '../../modules/wallet/actions';
+import walletActions from '../../../modules/wallet/actions';
 
 const styles = theme =>
 	({
@@ -45,26 +43,26 @@ const styles = theme =>
 		},
 	});
 
-const SendConfirmationDialog = (
+const Confirmation = (
 	{
 		classes,
-		open,
 		amount,
 		receiver,
 		closeWindow,
 		onConfirm,
 		transactionStatus,
+		onClickedBack,
 	}) =>
 {
 	const confirmDialog = () => (
-		<Dialog open={open}>
+		<div>
 			<DialogTitle>Perform Transaction</DialogTitle>
 			<DialogContent>
 				Are you sure you want to transfer <b>{amount}</b> Ether to <b>{receiver}</b>
 			</DialogContent>
 			<DialogActions>
-				<Button disabled={Boolean(transactionStatus)} onClick={closeWindow} color="primary">
-					Cancel
+				<Button disabled={Boolean(transactionStatus)} onClick={onClickedBack} color="primary">
+					Back
 				</Button>
 				<div className={classes.wrapper}>
 					<Button disabled={Boolean(transactionStatus)} onClick={onConfirm} color="primary">
@@ -74,11 +72,11 @@ const SendConfirmationDialog = (
 						<CircularProgress size={24} className={classes.buttonProgress} /> }
 				</div>
 			</DialogActions>
-		</Dialog>
+		</div>
 	);
 
 	const failDialog = () => (
-		<Dialog open={open}>
+		<div>
 			<DialogTitle color="error">
 				<div className={classes.errorTitle}>
 					Transaction Failed
@@ -95,11 +93,11 @@ const SendConfirmationDialog = (
 					Ok
 				</Button>
 			</DialogActions>
-		</Dialog>
+		</div>
 	);
 
 	const successDialog = () => (
-		<Dialog open={open}>
+		<div>
 			<DialogTitle>
 				<div className={classes.successTitle}>
 					Transaction Succeeded
@@ -113,7 +111,7 @@ const SendConfirmationDialog = (
 					Ok
 				</Button>
 			</DialogActions>
-		</Dialog>
+		</div>
 	);
 
 	if (!transactionStatus || !transactionStatus.isFinished)
@@ -128,37 +126,26 @@ const SendConfirmationDialog = (
 	return successDialog();
 };
 
-SendConfirmationDialog.propTypes =
+Confirmation.propTypes =
 {
 	classes: PropTypes.object.isRequired,
-	open: PropTypes.bool.isRequired,
 	closeWindow: PropTypes.func.isRequired,
 	onConfirm: PropTypes.func.isRequired,
-	amount: PropTypes.number,
-	receiver: PropTypes.string,
+	amount: PropTypes.number.isRequired,
+	receiver: PropTypes.string.isRequired,
 	transactionStatus: PropTypes.object,
-};
-
-SendConfirmationDialog.defaultProps =
-{
-	amount: 0,
-	receiver: '',
+	onClickedBack: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
 	({
-		open: state.flow.sendConfirmationOpen,
-		amount: state.wallet.amount,
-		receiver: state.wallet.receiver,
-
 		transactionStatus: state.wallet.transactionStatus,
 	});
 
 const mapDispatchToProps = dispatch =>
 	({
-		closeWindow: () => dispatch(flowActions.setSendConfirmationOpen(false)),
 		onConfirm: () => dispatch(walletActions.startTransaction()),
 	});
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	withStyles(styles)(SendConfirmationDialog));
+	withStyles(styles)(Confirmation));
