@@ -8,13 +8,27 @@ import UserForm from './UserForm';
 import AuthActions from '../modules/auth/actions';
 import AuthProgress from './AuthProgress';
 import flowActions from '../modules/flow/actions';
+import menuTypes from '../modules/flow/menu-types';
 
 const authActions = AuthActions();
 
-const Create = props =>
-	(
+const Create = (props) =>
+{
+	const onClickedButton = (password) =>
+	{
+		if (props.enable2FA)
+		{
+			props.goToNextPage(password);
+		}
+		else
+		{
+			props.createUser(password);
+		}
+	};
+
+	return (
 		<div>
-			<UserForm {...props} buttonText="Create">
+			<UserForm onClickedButton={onClickedButton} buttonText={props.enable2FA ? 'Next' : 'Create'} >
 				<FormControlLabel
 					control={
 						<Checkbox
@@ -29,11 +43,14 @@ const Create = props =>
 			<AuthProgress title="Creating user" />
 		</div>
 	);
+};
 
 Create.propTypes =
 {
 	enable2FA: PropTypes.bool.isRequired,
 	onChanged2FACheckbox: PropTypes.func.isRequired,
+	goToNextPage: PropTypes.func.isRequired,
+	createUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
@@ -43,7 +60,9 @@ const mapStateToProps = state =>
 
 const mapDispatchToProps = dispatch =>
 	({
-		onClickedButton: password => dispatch(authActions.createUser(password)),
+		goToNextPage: password => dispatch(
+			authActions.validateAndGoToMenu(password, menuTypes.TWO_FACTOR_CREATE)),
+		createUser: password => dispatch(authActions.createUser(password)),
 		onChanged2FACheckbox: event => dispatch(flowActions.setEnable2FA(event.target.checked)),
 	});
 

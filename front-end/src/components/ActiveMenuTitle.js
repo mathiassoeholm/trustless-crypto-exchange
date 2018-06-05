@@ -8,6 +8,8 @@ export function ActiveMenuTitle({ activeMenu })
 	{
 	case menuTypes.CREATE_USER:
 		return 'Create User';
+	case menuTypes.TWO_FACTOR_CREATE:
+		return 'Create User';
 	case menuTypes.LOGIN:
 		return 'Login';
 	case menuTypes.WALLET:

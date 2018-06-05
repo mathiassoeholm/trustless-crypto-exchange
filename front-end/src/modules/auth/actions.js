@@ -1,5 +1,6 @@
 import t from './action-types';
 import config from '../../config';
+import flowActions from '../flow/actions';
 
 export default (
 	authProtocol = config.makeAuthProtocol(),
@@ -63,6 +64,16 @@ export default (
 
 		return !didErr;
 	};
+
+	const validateAndGoToMenu = (password, menuType) => (dispatch, getState) =>
+	{
+		const user = getState().auth && getState().auth.user;
+
+		if (validateInput(user, password, dispatch))
+		{
+			dispatch(flowActions.changeMenu(menuType));
+		}
+	}
 
 	const createUser = password => (dispatch, getState) =>
 	{
@@ -147,6 +158,7 @@ export default (
 		});
 
 	return {
+		validateAndGoToMenu,
 		change2FAToken,
 		clearPasswordError,
 		createUser,
