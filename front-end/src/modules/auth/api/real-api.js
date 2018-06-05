@@ -4,7 +4,7 @@ import config from '../../../config';
 
 const unknownError = error => Error(`Unknown server error occured: ${error.response.status}`);
 
-const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
+const createUser = async (username, cipher, salt1, salt2, authenticationKey, twoFactorSecret, twoFactorToken) =>
 {
 	const body =
 	{
@@ -13,6 +13,8 @@ const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 		salt1,
 		salt2,
 		authenticationKey,
+		twoFactorSecret,
+		twoFactorToken,
 	};
 
 	try

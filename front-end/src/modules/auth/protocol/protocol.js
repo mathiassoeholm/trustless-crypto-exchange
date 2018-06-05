@@ -8,7 +8,7 @@ const makeProtocol = (
 	authKeyGen = config.fastKeyGenerator,
 	authApi = config.authApi) =>
 	({
-		createUser: async (user, password, secret, progressCallback = () => undefined) =>
+		createUser: async (user, password, secret, progressCallback = () => undefined, twoFactorSecret, twoFactorToken) =>
 		{
 			progressCallback(0, 'Generating Encryption Key');
 
@@ -33,7 +33,9 @@ const makeProtocol = (
 				encryptedSecret,
 				salt1,
 				salt2,
-				authenticationKeyString);
+				authenticationKeyString,
+				twoFactorSecret,
+				twoFactorToken);
 
 			progressCallback(1, 'Finished');
 

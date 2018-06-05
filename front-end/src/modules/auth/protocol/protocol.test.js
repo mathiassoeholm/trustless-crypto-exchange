@@ -38,6 +38,16 @@ describe('Protocol', () =>
 		expect(result.topSecret).toEqual('yes');
 	});
 
+	it('creates a user with 2fa', async () =>
+	{
+		await protocol.createUser(...createArguments, undefined, 'twoFactorSecret', 'twoFactorToken');
+
+		const { twoFactorSecret, twoFactorToken } = stubApi.getState();
+
+		expect(twoFactorSecret).toBe('twoFactorSecret');
+		expect(twoFactorToken).toBe('twoFactorToken');
+	});
+
 	it('creates the correct authentication key', async () =>
 	{
 		await protocol.createUser(...createArguments);
