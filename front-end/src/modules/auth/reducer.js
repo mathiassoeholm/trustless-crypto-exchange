@@ -18,6 +18,7 @@ const exampleState = // eslint-disable-line no-unused-vars
 		username: 'bob',
 	},
 	chosenPassword: 'pass123',
+	twoFactorToken: '123456',
 };
 
 const initialState =
@@ -56,7 +57,7 @@ const reducer = (state = initialState, action) =>
 	case t.CHANGE_2FA_TOKEN:
 		return {
 			...state,
-			user: { ...state.user, twoFactorToken: action.token },
+			twoFactorToken: action.token,
 		};
 
 	case t.SET_2FA_SECRET:

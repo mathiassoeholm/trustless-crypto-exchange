@@ -40,7 +40,7 @@ TwoFactorCreate.propTypes =
 
 const mapStateToProps = state =>
 	({
-		token: (state.auth.user && state.auth.user.twoFactorToken) || '',
+		token: (state.auth.user && state.auth.twoFactorToken) || '',
 		secret: (state.auth.user && state.auth.user.twoFactorSecret) || '',
 	});
 

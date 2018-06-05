@@ -3,12 +3,14 @@ const fakeDelay = 0; // milliseconds
 // The stub api supports a single user
 const state = {};
 
-const createUser = (username, cipher, salt1, salt2, authenticationKey) => new Promise((resolve) =>
+const createUser = (username, cipher, salt1, salt2, authenticationKey, twoFactorSecret, twoFactorToken) => new Promise((resolve) =>
 {
 	state.username = username;
 	state.cipher = cipher;
 	state.salt1 = salt1;
 	state.salt2 = salt2;
+	state.twoFactorSecret = twoFactorSecret;
+	state.twoFactorToken = twoFactorToken;
 
 	// Will be a hashed version in real API
 	state.authenticationKey = authenticationKey;

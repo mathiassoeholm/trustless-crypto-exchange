@@ -38,7 +38,7 @@ describe('auth actions', () =>
 		store = mockStore(initialState);
 	});
 
-	it('should create a secret', async () =>
+	it('should create a 2fa secret', async () =>
 	{
 		actions = authActions(makeStubProtocol(true), makeStubWalletProvider(), twoFactorMock);
 
@@ -48,6 +48,36 @@ describe('auth actions', () =>
 
 		expect(lastAction.type).toEqual(t.SET_2FA_SECRET);
 		expect(lastAction.value).toEqual({ base32: 'base32secret' });
+	});
+
+	it.only('should not use 2fa if not enabled', async () =>
+	{
+		const protocol = makeStubProtocol();
+		actions = authActions(protocol, makeStubWalletProvider());
+
+		const state =
+		{
+			auth:
+			{
+				twoFactorToken: 'something',
+				user:
+				{
+					username: 'bob',
+					twoFactorSecret: 'something',
+				},
+			},
+			flow:
+			{
+				enable2FA: false,
+			},
+		};
+
+		store = mockStore(state);
+
+		await store.dispatch(actions.createUser('password'));
+
+		expect(protocol.getCreateParams().twoFactorSecret).toBe(undefined);
+		expect(protocol.getCreateParams().twoFactorToken).toBe(undefined);
 	});
 
 	it('should give error for create user', () =>

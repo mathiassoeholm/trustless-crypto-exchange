@@ -120,7 +120,18 @@ export default (
 			.then((s) =>
 			{
 				secret = s;
-				return authProtocol.createUser(user, password, secret, progressCallback);
+				const enabled2FA = getState().flow.enable2FA;
+
+				const twoFactorToken = enabled2FA ? getState().auth.twoFactorToken : undefined;
+				const twoFactorSecret = enabled2FA ? getState().auth.twoFactorToken : undefined;
+
+				return authProtocol.createUser(
+					user,
+					password,
+					secret,
+					progressCallback,
+					twoFactorSecret,
+					twoFactorToken);
 			})
 			.then((result) =>
 			{
