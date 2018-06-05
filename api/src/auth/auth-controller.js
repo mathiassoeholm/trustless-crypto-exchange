@@ -1,30 +1,48 @@
 import utils from "./utils";
 
-const makeAuthController = (database) =>
+const makeAuthController = database => twoFactor =>
 ({
 	createUser: async (req, res) =>
 	{
 		try
 		{
+			if (req.body.twoFactorSecret)
+			{
+				const verified = twoFactor.totp.verify({
+					secret: req.body.twoFactorSecret,
+					encoding: 'base32',
+					token: req.body.twoFactorToken,
+				});
+
+				if (!verified)
+				{
+					throw new Error('wrong-2fa-token');
+				}
+			}
+
 			const hashedAuthKey = utils.hash(req.body.authenticationKey);
 
 			await database.createUser({ ...req.body, hashedAuthKey });
 
-			const response =
-			({
+			let response =
+			{
 				user:
 				{
 					username: req.body.username
 				}
-			});
+			};
 
 			res.json(response);
 		}
 		catch (error)
 		{
-			if(error.message === 'user-exists')
+			if (error.message === 'user-exists')
 			{
 				res.status(400).send(error.message);
+			}
+			else if (error.message === 'wrong-2fa-token')
+			{
+				res.status(400).send('Wrong 2FA token');
 			}
 			else
 			{

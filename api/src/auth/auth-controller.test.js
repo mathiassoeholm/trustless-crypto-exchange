@@ -9,12 +9,25 @@ describe('auth controller', () =>
 	let resMock;
 	let reqMock;
 	let databaseMock;
+	let twoFactorMock;
+
+	const makeExpectStatusCodeResMock = (done, expectedCode) =>
+		({
+			status: code =>
+			({
+				send: error =>
+				{
+					expect(code).toBe(expectedCode);
+					done();
+				},
+			})
+		});
 
 	const getAuthController = () =>
 	{
 		if (!authController)
 		{
-			authController = makeAuthController(databaseMock);
+			authController = makeAuthController(databaseMock)(twoFactorMock);
 		}
 
 		return authController;
@@ -23,6 +36,10 @@ describe('auth controller', () =>
 	beforeEach(() =>
 	{
 		authController = undefined;
+
+		twoFactorMock =
+		{
+		};
 
 		databaseMock =
 		{
@@ -50,6 +67,93 @@ describe('auth controller', () =>
 				username: 'query user',
 			}
 		};
+	});
+
+	it('verifies the 2fa token in create', () =>
+	{
+		reqMock =
+		{
+			body:
+			{
+				...reqMock.body,
+				twoFactorSecret: 'base32Secret',
+				twoFactorToken: '12345',
+			},
+		};
+
+		twoFactorMock =
+		{
+			...twoFactorMock,
+			totp:
+			{
+				verify: ({ secret, encoding, token }) =>
+				{
+					expect(token).toBe('12345');
+					expect(secret).toBe('base32secret');
+					expect(encoding).toBe('base32');
+
+					done();
+
+					return true;
+				},
+			},
+		};
+
+		getAuthController().createUser(reqMock, resMock);
+	});
+
+	it('sends code 400 if twoFactor token is wrong', (done) =>
+	{
+		twoFactorMock =
+		{
+			totp:
+			{
+				verify: () => false
+			},
+		};
+
+		reqMock =
+		{
+			body:
+			{
+				...reqMock.body,
+				twoFactorSecret: 'base32Secret',
+			},
+		};
+
+		getAuthController().createUser(reqMock, makeExpectStatusCodeResMock(done, 400));
+	});
+
+	it('saves the 2FA key if verification is succesful', (done) =>
+	{
+		reqMock =
+		{
+			body:
+			{
+				...reqMock.body,
+				twoFactorSecret: 'base32Secret',
+			},
+		};
+
+		twoFactorMock =
+		{
+			totp:
+			{
+				verify: () => true
+			},
+		};
+
+		databaseMock =
+		{
+			...databaseMock,
+			createUser: params =>
+			{
+				expect(params.twoFactorSecret).toBe('base32Secret');
+				done();
+			}
+		};
+
+		getAuthController().createUser(reqMock, resMock);
 	});
 
 	it('responds with the user', (done) =>
@@ -103,20 +207,7 @@ describe('auth controller', () =>
 			},
 		};
 
-		resMock =
-		{
-			...resMock,
-			status: code =>
-			({
-				send: error =>
-				{
-					expect(code).toBe(400);
-					done();
-				},
-			})
-		};
-
-		getAuthController().createUser(reqMock, resMock);
+		getAuthController().createUser(reqMock, makeExpectStatusCodeResMock(done, 400));
 	});
 
 	it('should give 400 for unknown user', (done) =>
@@ -130,20 +221,7 @@ describe('auth controller', () =>
 			},
 		};
 
-		resMock =
-		{
-			...resMock,
-			status: code =>
-			({
-				send: error =>
-				{
-					expect(code).toBe(400);
-					done();
-				},
-			})
-		};
-
-		getAuthController().getSalt1(reqMock, resMock);
+		getAuthController().getSalt1(reqMock, makeExpectStatusCodeResMock(done, 400));
 	});
 
 	each([
@@ -290,19 +368,6 @@ describe('auth controller', () =>
 			getUser: username => Promise.resolve({hashedAuthKey: '9b74c9897bac770ffc029102a200c5de'}),
 		};
 
-		resMock =
-		{
-			...resMock,
-			status: code =>
-			({
-				send: error =>
-				{
-					expect(code).toBe(403);
-					done();
-				},
-			})
-		};
-
-		getAuthController().getPrivateData(reqMock, resMock);
+		getAuthController().getPrivateData(reqMock, makeExpectStatusCodeResMock(done, 403));
 	})
 });
