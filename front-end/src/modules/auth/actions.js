@@ -1,10 +1,13 @@
+import speakeasy from 'speakeasy';
+
 import t from './action-types';
 import config from '../../config';
 import flowActions from '../flow/actions';
 
 export default (
 	authProtocol = config.makeAuthProtocol(),
-	walletProvider = config.makeWalletProvider()) =>
+	walletProvider = config.makeWalletProvider(),
+	twoFactor = speakeasy) =>
 {
 	const setUsernameError = errorMessage =>
 		({
@@ -46,6 +49,16 @@ export default (
 			user,
 		});
 
+	const generate2FASecret = () => (dispatch) =>
+	{
+		const secret = twoFactor.generateSecret();
+
+		dispatch({
+			type: t.SET_2FA_SECRET,
+			value: secret,
+		});
+	};
+
 	const validateInput = (user, password, dispatch) =>
 	{
 		let didErr = false;
@@ -73,7 +86,7 @@ export default (
 		{
 			dispatch(flowActions.changeMenu(menuType));
 		}
-	}
+	};
 
 	const createUser = password => (dispatch, getState) =>
 	{
@@ -158,6 +171,7 @@ export default (
 		});
 
 	return {
+		generate2FASecret,
 		validateAndGoToMenu,
 		change2FAToken,
 		clearPasswordError,

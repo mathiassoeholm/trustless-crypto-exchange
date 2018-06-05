@@ -50,6 +50,12 @@ const reducer = (state = initialState, action) =>
 			user: { ...state.user, twoFactorToken: action.token },
 		};
 
+	case t.SET_2FA_SECRET:
+		return {
+			...state,
+			user: { ...state.user, twoFactorSecret: action.value.base32 },
+		};
+
 	case t.PROGRESS_UPDATE:
 		return { ...state, isLoggingIn: true, loginAttemptStatus: action.status };
 

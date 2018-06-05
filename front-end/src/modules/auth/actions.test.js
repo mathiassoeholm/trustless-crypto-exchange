@@ -25,11 +25,29 @@ describe('auth actions', () =>
 
 	let store;
 	let actions;
+	let twoFactorMock;
 
 	beforeEach(() =>
 	{
-		actions = authActions(makeStubProtocol(), makeStubWalletProvider());
+		twoFactorMock =
+		{
+			generateSecret: () => ({ base32: 'base32secret' }),
+		};
+
+		actions = authActions(makeStubProtocol(), makeStubWalletProvider(), twoFactorMock);
 		store = mockStore(initialState);
+	});
+
+	it('should create a secret', async () =>
+	{
+		actions = authActions(makeStubProtocol(true), makeStubWalletProvider(), twoFactorMock);
+
+		await store.dispatch(actions.generate2FASecret());
+
+		const lastAction = store.getActions()[store.getActions().length - 1];
+
+		expect(lastAction.type).toEqual(t.SET_2FA_SECRET);
+		expect(lastAction.value).toEqual({ base32: 'base32secret' });
 	});
 
 	it('should give error for create user', () =>

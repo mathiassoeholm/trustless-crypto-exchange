@@ -18,6 +18,7 @@ const Create = (props) =>
 	{
 		if (props.enable2FA)
 		{
+			props.generate2FASecret();
 			props.goToNextPage(password);
 		}
 		else
@@ -51,6 +52,7 @@ Create.propTypes =
 	onChanged2FACheckbox: PropTypes.func.isRequired,
 	goToNextPage: PropTypes.func.isRequired,
 	createUser: PropTypes.func.isRequired,
+	generate2FASecret: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
@@ -64,6 +66,7 @@ const mapDispatchToProps = dispatch =>
 			authActions.validateAndGoToMenu(password, menuTypes.TWO_FACTOR_CREATE)),
 		createUser: password => dispatch(authActions.createUser(password)),
 		onChanged2FACheckbox: event => dispatch(flowActions.setEnable2FA(event.target.checked)),
+		generate2FASecret: () => dispatch(authActions.generate2FASecret()),
 	});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create);
