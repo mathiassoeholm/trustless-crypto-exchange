@@ -19,6 +19,10 @@ const Create = (props) =>
 		if (props.enable2FA)
 		{
 			props.generate2FASecret();
+
+			// If we don't do this, TwoFactorCreate has no way to get the password
+			props.setChosenPassword(password);
+
 			props.goToNextPage(password);
 		}
 		else
@@ -53,6 +57,7 @@ Create.propTypes =
 	goToNextPage: PropTypes.func.isRequired,
 	createUser: PropTypes.func.isRequired,
 	generate2FASecret: PropTypes.func.isRequired,
+	setChosenPassword: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
@@ -67,6 +72,7 @@ const mapDispatchToProps = dispatch =>
 		createUser: password => dispatch(authActions.createUser(password)),
 		onChanged2FACheckbox: event => dispatch(flowActions.setEnable2FA(event.target.checked)),
 		generate2FASecret: () => dispatch(authActions.generate2FASecret()),
+		setChosenPassword: password => dispatch(authActions.setChosenPassword(password)),
 	});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create);

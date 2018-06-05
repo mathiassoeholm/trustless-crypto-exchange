@@ -9,6 +9,12 @@ export default (
 	walletProvider = config.makeWalletProvider(),
 	twoFactor = speakeasy) =>
 {
+	const setChosenPassword = password =>
+		({
+			type: t.SET_CHOSEN_PASSWORD,
+			value: password,
+		});
+
 	const setUsernameError = errorMessage =>
 		({
 			type: t.SET_USERNAME_ERROR,
@@ -88,8 +94,12 @@ export default (
 		}
 	};
 
-	const createUser = password => (dispatch, getState) =>
+	const createUser = pw => (dispatch, getState) =>
 	{
+		// If no password is specified, see if it is set in Redux
+		// This only happens when creating a user from the 2FA create menu
+		const password = pw || getState().auth.chosenPassword;
+
 		const user = getState().auth && getState().auth.user;
 
 		if (!validateInput(user, password, dispatch))
@@ -171,6 +181,7 @@ export default (
 		});
 
 	return {
+		setChosenPassword,
 		generate2FASecret,
 		validateAndGoToMenu,
 		change2FAToken,
