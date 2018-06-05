@@ -44,6 +44,12 @@ const reducer = (state = initialState, action) =>
 			usernameError: undefined,
 		};
 
+	case t.CHANGE_2FA_TOKEN:
+		return {
+			...state,
+			user: { ...state.user, twoFactorToken: action.token },
+		};
+
 	case t.PROGRESS_UPDATE:
 		return { ...state, isLoggingIn: true, loginAttemptStatus: action.status };
 

@@ -140,7 +140,14 @@ export default (
 			username,
 		});
 
+	const change2FAToken = token =>
+		({
+			type: t.CHANGE_2FA_TOKEN,
+			token,
+		});
+
 	return {
+		change2FAToken,
 		clearPasswordError,
 		createUser,
 		login,
