@@ -12,8 +12,15 @@ const setSendConfirmationOpen = open =>
 		open,
 	});
 
+const setEnable2FA = value =>
+	({
+		type: t.SET_ENABLE_2FA,
+		value,
+	});
+
 export default
 {
+	setEnable2FA,
 	changeMenu,
 	setSendConfirmationOpen,
 };

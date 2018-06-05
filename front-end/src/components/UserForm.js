@@ -60,6 +60,8 @@ export class UserForm extends React.Component
 					onChange={this.onChangedPassword}
 				/>
 				<br />
+				{this.props.children}
+				<br />
 				{ this.props.loginAttemptError &&
 					<div>
 						<Typography variant="subheading" color="error">{this.props.loginAttemptError}</Typography>
@@ -84,6 +86,7 @@ UserForm.propTypes =
 	onChangedUsername: PropTypes.func.isRequired,
 	clearPasswordError: PropTypes.func.isRequired,
 	loginAttemptError: PropTypes.string,
+	children: PropTypes.node,
 };
 
 UserForm.defaultProps =
@@ -92,6 +95,7 @@ UserForm.defaultProps =
 	passwordError: null,
 	loginAttemptError: null,
 	username: '',
+	children: [],
 };
 
 const mapStateToProps = state =>
