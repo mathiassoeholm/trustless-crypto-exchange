@@ -9,12 +9,6 @@ export default (
 	walletProvider = config.makeWalletProvider(),
 	twoFactor = speakeasy) =>
 {
-	const setChosenPassword = password =>
-		({
-			type: t.SET_CHOSEN_PASSWORD,
-			value: password,
-		});
-
 	const setUsernameError = errorMessage =>
 		({
 			type: t.SET_USERNAME_ERROR,
@@ -25,11 +19,6 @@ export default (
 		({
 			type: t.SET_PASSWORD_ERROR,
 			errorMessage,
-		});
-
-	const clearPasswordError = () =>
-		({
-			type: t.CLEAR_PASSWORD_ERROR,
 		});
 
 	const progressUpdate = (progress, message) =>
@@ -84,9 +73,10 @@ export default (
 		return !didErr;
 	};
 
-	const validateAndGoToMenu = (password, menuType) => (dispatch, getState) =>
+	const validateAndGoToMenu = menuType => (dispatch, getState) =>
 	{
 		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
 
 		if (validateInput(user, password, dispatch))
 		{
@@ -94,13 +84,10 @@ export default (
 		}
 	};
 
-	const createUser = pw => (dispatch, getState) =>
+	const createUser = () => (dispatch, getState) =>
 	{
-		// If no password is specified, see if it is set in Redux
-		// This only happens when creating a user from the 2FA create menu
-		const password = pw || getState().auth.chosenPassword;
-
 		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
 
 		if (!validateInput(user, password, dispatch))
 		{
@@ -120,7 +107,7 @@ export default (
 			.then((s) =>
 			{
 				secret = s;
-				const enabled2FA = getState().flow.enable2FA;
+				const enabled2FA = getState().flow && getState().flow.enable2FA;
 
 				const twoFactorToken = enabled2FA ? getState().auth.twoFactorToken : undefined;
 				const twoFactorSecret = enabled2FA ? getState().auth.twoFactorToken : undefined;
@@ -145,9 +132,10 @@ export default (
 			});
 	};
 
-	const login = password => (dispatch, getState) =>
+	const login = () => (dispatch, getState) =>
 	{
 		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
 
 		if (!validateInput(user, password, dispatch))
 		{
@@ -185,6 +173,12 @@ export default (
 			username,
 		});
 
+	const changePassword = password =>
+		({
+			type: t.CHANGE_PASSWORD,
+			value: password,
+		});
+
 	const change2FAToken = token =>
 		({
 			type: t.CHANGE_2FA_TOKEN,
@@ -192,14 +186,13 @@ export default (
 		});
 
 	return {
-		setChosenPassword,
 		generate2FASecret,
 		validateAndGoToMenu,
 		change2FAToken,
-		clearPasswordError,
 		createUser,
 		login,
 		logout,
+		changePassword,
 		changeUsername,
 	};
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -15,7 +15,7 @@ describe('UserForm', () =>
 	{
 		if (!mountedUserForm)
 		{
-			mountedUserForm = mount(<UserForm {...props} />);
+			mountedUserForm = shallow(<UserForm {...props} />);
 		}
 
 		return mountedUserForm;
@@ -30,7 +30,9 @@ describe('UserForm', () =>
 			onClickedButton: buttonCallbackMock,
 			buttonText: 'Button',
 			username: 'Bob',
+			password: 'Pass',
 			onChangedUsername: () => undefined,
+			onChangedPassword: () => undefined,
 			clearPasswordError: () => undefined,
 		};
 
@@ -52,20 +54,5 @@ describe('UserForm', () =>
 	{
 		const button = userForm().find(Button);
 		expect(button.props().children).toBe(props.buttonText);
-	});
-
-	it('has a single password field', () =>
-	{
-		expect(userForm().find('input#password').length).toBe(1);
-	});
-
-	it('updates password field and calls callback correctly', () =>
-	{
-		const pwField = userForm().find('input#password').first();
-		pwField.simulate('change', { target: { value: 'pass' } });
-
-		userForm().find(Button).simulate('click');
-		expect(buttonCallbackMock.mock.calls.length).toBe(1);
-		expect(buttonCallbackMock.mock.calls[0][0]).toBe('pass');
 	});
 });

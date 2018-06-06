@@ -20,6 +20,7 @@ describe('auth actions', () =>
 			{
 				username: 'bob',
 			},
+			password: 'password',
 		},
 	};
 
@@ -50,7 +51,7 @@ describe('auth actions', () =>
 		expect(lastAction.value).toEqual({ base32: 'base32secret' });
 	});
 
-	it.only('should not use 2fa if not enabled', async () =>
+	it('should not use 2fa if not enabled', async () =>
 	{
 		const protocol = makeStubProtocol();
 		actions = authActions(protocol, makeStubWalletProvider());
@@ -74,17 +75,17 @@ describe('auth actions', () =>
 
 		store = mockStore(state);
 
-		await store.dispatch(actions.createUser('password'));
+		await store.dispatch(actions.createUser());
 
 		expect(protocol.getCreateParams().twoFactorSecret).toBe(undefined);
 		expect(protocol.getCreateParams().twoFactorToken).toBe(undefined);
 	});
 
-	it('should give error for create user', () =>
-	{
-		actions = authActions(makeStubProtocol(true), makeStubWalletProvider());
-
-		return store.dispatch(actions.createUser('password')).then(() =>
+	each([
+		['create user', authActions(makeStubProtocol(true), makeStubWalletProvider()).createUser],
+		['login', authActions(makeStubProtocol(true), makeStubWalletProvider()).login],
+	]).it('should give error for %s', (_, action) =>
+		store.dispatch(action()).then(() =>
 		{
 			const lastAction = store.getActions()[store.getActions().length - 1];
 
@@ -93,10 +94,12 @@ describe('auth actions', () =>
 					type: t.LOGIN_ATTEMPT_FINISHED,
 					errorMessage: 'error message',
 				});
-		});
-	});
+		}));
 
-	it('should dispatch username error if username is empty', async () =>
+	each([
+		['create user', authActions(makeStubProtocol(), makeStubWalletProvider()).createUser],
+		['login', authActions(makeStubProtocol(), makeStubWalletProvider()).login],
+	]).it('should dispatch username error if username is empty for %s', async (_, action) =>
 	{
 		const noUsernameState =
 		{
@@ -106,52 +109,52 @@ describe('auth actions', () =>
 				{
 					username: '',
 				},
+				password: 'password',
 			},
 		};
 
 		store = mockStore(noUsernameState);
 
-		await store.dispatch(actions.createUser('password'));
+		await store.dispatch(action());
 
 		const lastAction = store.getActions()[store.getActions().length - 1];
 
 		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
 	});
 
-	it('should dispatch username error if user is undefined for create', async () =>
+	each([
+		['create user', authActions(makeStubProtocol(), makeStubWalletProvider()).createUser],
+		['login', authActions(makeStubProtocol(), makeStubWalletProvider()).login],
+	]).it('should dispatch username error if user is undefined for %s', async (_, action) =>
 	{
 		store = mockStore({});
 
-		await store.dispatch(actions.createUser('password'));
+		await store.dispatch(action());
 
 		const lastAction = store.getActions()[store.getActions().length - 1];
 
 		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
 	});
 
-	it('should dispatch username error if user is undefined for login', async () =>
+	each([
+		['create user', authActions(makeStubProtocol(), makeStubWalletProvider()).createUser],
+		['login', authActions(makeStubProtocol(), makeStubWalletProvider()).login],
+	]).it('should dispatch password error for %s', async (_, action) =>
 	{
-		store = mockStore({});
+		const noPasswordState =
+		{
+			auth:
+			{
+				user:
+				{
+					username: 'Bob',
+				},
+			},
+		};
 
-		await store.dispatch(actions.login('password'));
+		store = mockStore(noPasswordState);
 
-		const lastAction = store.getActions()[store.getActions().length - 1];
-
-		expect(lastAction.type).toEqual(t.SET_USERNAME_ERROR);
-	});
-
-	it('should dispatch password error for create', async () =>
-	{
-		await store.dispatch(actions.createUser(''));
-
-		const lastAction = store.getActions()[store.getActions().length - 1];
-
-		expect(lastAction.type).toEqual(t.SET_PASSWORD_ERROR);
-	});
-
-	it('should dispatch password error for login', async () =>
-	{
-		await store.dispatch(actions.login(''));
+		await store.dispatch(action());
 
 		const lastAction = store.getActions()[store.getActions().length - 1];
 
@@ -162,7 +165,7 @@ describe('auth actions', () =>
 	{
 		actions = authActions(makeStubProtocol(true));
 
-		return store.dispatch(actions.login('password')).then(() =>
+		return store.dispatch(actions.login()).then(() =>
 		{
 			const lastAction = store.getActions()[store.getActions().length - 1];
 
@@ -177,7 +180,7 @@ describe('auth actions', () =>
 	each([
 		['create user', authActions(makeStubProtocol(), makeStubWalletProvider()).createUser],
 		['login', authActions(makeStubProtocol(), makeStubWalletProvider()).login],
-	]).it('should dispatch for %s', (_, action) => store.dispatch(action('password')).then(() =>
+	]).it('should dispatch for %s', (_, action) => store.dispatch(action()).then(() =>
 	{
 		const thirdToLastAction = store.getActions()[store.getActions().length - 3];
 		const secondToLastAction = store.getActions()[store.getActions().length - 2];

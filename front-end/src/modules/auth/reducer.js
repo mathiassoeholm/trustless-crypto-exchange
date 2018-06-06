@@ -17,8 +17,8 @@ const exampleState = // eslint-disable-line no-unused-vars
 	{
 		username: 'bob',
 	},
-	chosenPassword: 'pass123',
 	twoFactorToken: '123456',
+	password: 'myPassword',
 };
 
 const initialState =
@@ -40,8 +40,7 @@ const reducer = (state = initialState, action) =>
 			user: action.user,
 
 			// Clear password to keep it in memory as short a time as possible
-			// chosenPassword is only set if using 2FA
-			chosenPassword: undefined,
+			password: undefined,
 		};
 
 	case t.LOG_OUT:
@@ -53,6 +52,9 @@ const reducer = (state = initialState, action) =>
 			user: { ...state.user, username: action.username },
 			usernameError: undefined,
 		};
+
+	case t.CHANGE_PASSWORD:
+		return { ...state, password: action.value, passwordError: undefined };
 
 	case t.CHANGE_2FA_TOKEN:
 		return {
@@ -74,12 +76,6 @@ const reducer = (state = initialState, action) =>
 
 	case t.SET_PASSWORD_ERROR:
 		return { ...state, passwordError: action.errorMessage };
-
-	case t.CLEAR_PASSWORD_ERROR:
-		return { ...state, passwordError: undefined };
-
-	case t.SET_CHOSEN_PASSWORD:
-		return { ...state, chosenPassword: action.value };
 
 	case t.LOGIN_ATTEMPT_FINISHED:
 	{
