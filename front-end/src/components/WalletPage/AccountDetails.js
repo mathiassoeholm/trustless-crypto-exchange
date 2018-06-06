@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import qrcode from 'qrcode-generator';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -10,9 +9,9 @@ import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
-import images from '../../images';
 import flowActions from '../../modules/flow/actions';
 import RefreshBalanceButton from './RefreshBalanceButton';
+import AddressQRCode from './AddressQRCode';
 
 const styles = theme =>
 	({
@@ -40,20 +39,20 @@ const styles = theme =>
 			height: '30px',
 		},
 
+		textParent:
+		{
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'space-around',
+			textAlign: 'left',
+		},
+
 		qrcodeImage:
 		{
 			height: '10em',
 			padding: theme.spacing.unit,
 		},
 	});
-
-const getQRCode = (data) =>
-{
-	const qr = qrcode(4, 'L');
-	qr.addData(data);
-	qr.make();
-	return qr.createDataURL(8, 0);
-};
 
 const AccountDetails = (
 	{
@@ -63,13 +62,11 @@ const AccountDetails = (
 		onClickedSend,
 	}) =>
 {
-	const qrCode = getQRCode(address);
-
 	return (
 		<Paper className={classes.root}>
-			<img className={classes.qrcodeImage} src={qrCode} alt="QR code" />
+			<AddressQRCode className={classes.qrcodeImage} address={address} />
 
-			<div style={{ textAlign: 'left' }}>
+			<div className={classes.textParent}>
 				<Typography variant="headline">Your Account</Typography>
 				<br />
 				<Typography noWrap variant="subheading">Address: {address}</Typography>
