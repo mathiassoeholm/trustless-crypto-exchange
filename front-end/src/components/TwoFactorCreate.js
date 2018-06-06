@@ -9,12 +9,14 @@ import Button from '@material-ui/core/Button';
 import AuthActions from '../modules/auth/actions';
 import AuthProgress from './AuthProgress';
 import LoginAttemptError from './LoginAttemptError';
+import QRCode from './QRCode';
 
 const authActions = AuthActions();
 
 const TwoFactorCreate = props =>
 	(
 		<div>
+			<QRCode data={props.secret} />
 			<Typography variant="body1"><b>Secret:</b> {props.secret}</Typography>
 			<TextField
 				id="2fatoken"

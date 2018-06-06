@@ -24,17 +24,27 @@ const styles = theme =>
 		},
 	});
 
-class AddressQRCode extends React.Component
+class QRCode extends React.Component
 {
 	state = {};
 
+	componentDidMount()
+	{
+		this.updateQR();
+	}
+
 	componentDidUpdate(prevProps)
 	{
-		if (prevProps.address !== this.props.address || !this.state.dataSrc)
+		if (prevProps.data !== this.props.data || !this.state.dataSrc)
 		{
-			qrCode.toDataURL(this.props.address, { margin: 1, scale: 8 })
-				.then(url => this.setState({ dataSrc: url }));
+			this.updateQR();
 		}
+	}
+
+	updateQR()
+	{
+		qrCode.toDataURL(this.props.data, { margin: 1, scale: 8 })
+			.then(url => this.setState({ dataSrc: url }));
 	}
 
 	render()
@@ -52,10 +62,10 @@ class AddressQRCode extends React.Component
 	}
 }
 
-AddressQRCode.propTypes =
+QRCode.propTypes =
 {
 	classes: PropTypes.object.isRequired,
-	address: PropTypes.string.isRequired,
+	data: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(AddressQRCode);
+export default withStyles(styles)(QRCode);

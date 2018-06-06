@@ -11,7 +11,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 
 import flowActions from '../../modules/flow/actions';
 import RefreshBalanceButton from './RefreshBalanceButton';
-import AddressQRCode from './AddressQRCode';
+import QRCode from '../QRCode';
 
 const styles = theme =>
 	({
@@ -58,7 +58,7 @@ const AccountDetails = (
 {
 	return (
 		<Paper className={classes.root}>
-			<AddressQRCode address={address} />
+			<QRCode data={address} />
 
 			<div className={classes.textParent}>
 				<Typography variant="headline">Your Account</Typography>
