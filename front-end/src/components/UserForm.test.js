@@ -30,7 +30,9 @@ describe('UserForm', () =>
 			onClickedButton: buttonCallbackMock,
 			buttonText: 'Button',
 			username: 'Bob',
+			password: 'Pass',
 			onChangedUsername: () => undefined,
+			onChangedPassword: () => undefined,
 			clearPasswordError: () => undefined,
 		};
 
@@ -66,6 +68,5 @@ describe('UserForm', () =>
 
 		userForm().find(Button).simulate('click');
 		expect(buttonCallbackMock.mock.calls.length).toBe(1);
-		expect(buttonCallbackMock.mock.calls[0][0]).toBe('pass');
 	});
 });

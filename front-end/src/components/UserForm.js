@@ -10,8 +10,9 @@ import AuthActions from '../modules/auth/actions';
 
 const authActions = AuthActions();
 
-const UserForm = props =>
-	(
+export function UserForm(props)
+{
+	return (
 		<div>
 			<TextField
 				id="username"
@@ -33,19 +34,20 @@ const UserForm = props =>
 				onChange={props.onChangedPassword}
 			/>
 			<br />
-			{this.props.children}
+			{props.children}
 			<br />
-			{ this.props.loginAttemptError &&
+			{props.loginAttemptError &&
 				<div>
-					<Typography variant="subheading" color="error">{this.props.loginAttemptError}</Typography>
+					<Typography variant="subheading" color="error">{props.loginAttemptError}</Typography>
 					<br />
 				</div>
 			}
-			<Button variant="raised" color="primary" onClick={this.onClickedButton}>
-				{this.props.buttonText}
+			<Button variant="raised" color="primary" onClick={props.onClickedButton}>
+				{props.buttonText}
 			</Button>
 		</div>
 	);
+}
 
 UserForm.propTypes =
 {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import TestIcon from 'material-ui-icons/ExitToApp';
+import TestIcon from '@material-ui/icons/ExitToApp';
 
 import ListButton from './ListButton';
 

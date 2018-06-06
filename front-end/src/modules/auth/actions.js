@@ -73,9 +73,10 @@ export default (
 		return !didErr;
 	};
 
-	const validateAndGoToMenu = (password, menuType) => (dispatch, getState) =>
+	const validateAndGoToMenu = menuType => (dispatch, getState) =>
 	{
 		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
 
 		if (validateInput(user, password, dispatch))
 		{
@@ -106,7 +107,7 @@ export default (
 			.then((s) =>
 			{
 				secret = s;
-				const enabled2FA = getState().flow.enable2FA;
+				const enabled2FA = getState().flow && getState().flow.enable2FA;
 
 				const twoFactorToken = enabled2FA ? getState().auth.twoFactorToken : undefined;
 				const twoFactorSecret = enabled2FA ? getState().auth.twoFactorToken : undefined;
@@ -131,9 +132,10 @@ export default (
 			});
 	};
 
-	const login = password => (dispatch, getState) =>
+	const login = () => (dispatch, getState) =>
 	{
 		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
 
 		if (!validateInput(user, password, dispatch))
 		{
@@ -173,7 +175,7 @@ export default (
 
 	const changePassword = password =>
 		({
-			type: t.CHANGE_USERNAME,
+			type: t.CHANGE_PASSWORD,
 			value: password,
 		});
 
