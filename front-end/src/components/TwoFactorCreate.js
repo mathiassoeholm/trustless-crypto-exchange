@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 
 import AuthActions from '../modules/auth/actions';
 import AuthProgress from './AuthProgress';
+import LoginAttemptError from './LoginAttemptError';
 
 const authActions = AuthActions();
 
@@ -23,6 +24,7 @@ const TwoFactorCreate = props =>
 				margin="normal"
 			/>
 			<br />
+			<LoginAttemptError />
 			<Button variant="raised" color="primary" onClick={props.createUser}>
 				Create
 			</Button>
