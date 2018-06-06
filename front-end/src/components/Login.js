@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import UserForm from './UserForm';
+import TwoFactorTokenField from './TwoFactorTokenField';
 import AuthActions from '../modules/auth/actions';
 import AuthProgress from './AuthProgress';
 
@@ -15,7 +16,9 @@ const mapDispatchToProps = dispatch =>
 const Login = props =>
 	(
 		<div>
-			<UserForm {...props} buttonText="Login" />
+			<UserForm {...props} buttonText="Login" >
+				<TwoFactorTokenField />
+			</UserForm>
 			<AuthProgress title="Logging in" />
 		</div>
 	);
