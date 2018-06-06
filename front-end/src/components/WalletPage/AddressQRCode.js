@@ -1,8 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import qrCode from 'qrcode';
 
-import images from '../../images';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+const styles = theme =>
+	({
+		qrcodeImage:
+		{
+			position: 'relative',
+			height: '10em',
+			width: '10em',
+			padding: theme.spacing.unit,
+		},
+
+		spinner:
+		{
+			position: 'absolute',
+			top: '50%',
+			marginTop: '-30px',
+			marginLeft: '-30px',
+		},
+	});
 
 class AddressQRCode extends React.Component
 {
@@ -19,16 +39,23 @@ class AddressQRCode extends React.Component
 
 	render()
 	{
-		const qrCodeSrc = this.state.dataSrc ? this.state.dataSrc : images.qrcode;
+		if (!this.state.dataSrc)
+		{
+			return (
+				<div className={this.props.classes.qrcodeImage}>
+					<CircularProgress size={60} className={this.props.classes.spinner} />
+				</div>
+			);
+		}
 
-		return <img className={this.props.className} src={qrCodeSrc} alt="QR Code" />;
+		return <img className={this.props.classes.qrcodeImage} src={this.state.dataSrc} alt="QR Code" />;
 	}
 }
 
 AddressQRCode.propTypes =
 {
-	className: PropTypes.string.isRequired,
+	classes: PropTypes.object.isRequired,
 	address: PropTypes.string.isRequired,
 };
 
-export default AddressQRCode;
+export default withStyles(styles)(AddressQRCode);

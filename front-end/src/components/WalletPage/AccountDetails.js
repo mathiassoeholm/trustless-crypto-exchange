@@ -46,12 +46,6 @@ const styles = theme =>
 			justifyContent: 'space-around',
 			textAlign: 'left',
 		},
-
-		qrcodeImage:
-		{
-			height: '10em',
-			padding: theme.spacing.unit,
-		},
 	});
 
 const AccountDetails = (
@@ -64,7 +58,7 @@ const AccountDetails = (
 {
 	return (
 		<Paper className={classes.root}>
-			<AddressQRCode className={classes.qrcodeImage} address={address} />
+			<AddressQRCode address={address} />
 
 			<div className={classes.textParent}>
 				<Typography variant="headline">Your Account</Typography>
