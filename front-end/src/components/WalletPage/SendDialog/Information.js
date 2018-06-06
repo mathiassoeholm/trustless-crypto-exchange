@@ -26,6 +26,7 @@ const Information = ({
 
 			<DialogContent>
 				<TextField
+					fullWidth
 					id="amountField"
 					label="Amount"
 					margin="normal"
@@ -35,6 +36,7 @@ const Information = ({
 				/>
 				<br />
 				<TextField
+					fullWidth
 					id="receiverField"
 					label="Receiver"
 					margin="normal"

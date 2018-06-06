@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import qrcode from 'qrcode-generator';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
 import images from '../../images';
@@ -47,6 +47,14 @@ const styles = theme =>
 		},
 	});
 
+const getQRCode = (data) =>
+{
+	const qr = qrcode(4, 'L');
+	qr.addData(data);
+	qr.make();
+	return qr.createDataURL(8, 0);
+};
+
 const AccountDetails = (
 	{
 		classes,
@@ -54,9 +62,12 @@ const AccountDetails = (
 		address,
 		onClickedSend,
 	}) =>
-	(
+{
+	const qrCode = getQRCode(address);
+
+	return (
 		<Paper className={classes.root}>
-			<img className={classes.qrcodeImage} src={images.qrcode} alt="QR code" />
+			<img className={classes.qrcodeImage} src={qrCode} alt="QR code" />
 
 			<div style={{ textAlign: 'left' }}>
 				<Typography variant="headline">Your Account</Typography>
@@ -77,6 +88,7 @@ const AccountDetails = (
 			</div>
 		</Paper>
 	);
+};
 
 AccountDetails.propTypes =
 {
