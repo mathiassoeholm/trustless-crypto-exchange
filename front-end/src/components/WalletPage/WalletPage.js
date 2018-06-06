@@ -1,19 +1,39 @@
 import React from 'react';
-
-import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 import AccountDetails from './AccountDetails';
 import SendDialog from './SendDialog/SendDialog';
+import TransactionsList from './TransactionsList';
 
-const WalletPage = () =>
+const styles = theme =>
+	({
+		root:
+		{
+			display: 'flex',
+			flexDirection: 'column',
+			height: '100%',
+		},
+	});
+
+const WalletPage = ({ classes }) =>
 	(
-		<Grid container spacing={24}>
-			<Grid item xs={12}>
+		<div className={classes.root}>
+			<div>
 				<AccountDetails />
-			</Grid>
+			</div>
+
+			<div style={{ flexGrow: 1, marginTop: '8px' }}>
+				<TransactionsList />
+			</div>
 
 			<SendDialog />
-		</Grid>
+		</div>
 	);
 
-export default WalletPage;
+WalletPage.propTypes =
+{
+	classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(WalletPage);

@@ -6,6 +6,11 @@ const balanceUpdateFailed = error =>
 		error,
 	});
 
+const startBalanceUpdate = () =>
+	({
+		type: walletActionTypes.START_BALANCE_UPDATE,
+	});
+
 const updateBalance = balance =>
 	({
 		type: walletActionTypes.UPDATE_BALANCE,
@@ -66,4 +71,5 @@ export default {
 	invalidReceiver,
 	statusUpdate,
 	transactionSuccess,
+	startBalanceUpdate,
 };

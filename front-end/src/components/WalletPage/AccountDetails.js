@@ -7,14 +7,17 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
 import flowActions from '../../modules/flow/actions';
+import RefreshBalanceButton from './RefreshBalanceButton';
+import AddressQRCode from './AddressQRCode';
 
 const styles = theme =>
 	({
 		root:
 		{
-			padding: theme.spacing.unit,
+			padding: theme.spacing.unit * 2,
 			position: 'relative',
 			display: 'flex',
 			flexDirection: 'row',
@@ -29,16 +32,35 @@ const styles = theme =>
 			display: 'flex',
 			zIndex: '10',
 		},
+
+		icon:
+		{
+			width: '30px',
+			height: '30px',
+		},
+
+		textParent:
+		{
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'space-around',
+			textAlign: 'left',
+		},
 	});
 
-const AccountDetails = ({ classes, balance, address, onClickedSend }) =>
-	(
+const AccountDetails = (
+	{
+		classes,
+		balance,
+		address,
+		onClickedSend,
+	}) =>
+{
+	return (
 		<Paper className={classes.root}>
-			<div>
-				Test
-			</div>
+			<AddressQRCode address={address} />
 
-			<div style={{ textAlign: 'left' }}>
+			<div className={classes.textParent}>
 				<Typography variant="headline">Your Account</Typography>
 				<br />
 				<Typography noWrap variant="subheading">Address: {address}</Typography>
@@ -47,12 +69,17 @@ const AccountDetails = ({ classes, balance, address, onClickedSend }) =>
 			</div>
 
 			<div className={classes.buttonParent}>
+				<RefreshBalanceButton classes={classes} />
 				<IconButton onClick={onClickedSend}>
-					<SendIcon style={{ width: '30px', height: '30px' }} />
+					<SendIcon className={classes.icon} />
+				</IconButton>
+				<IconButton>
+					<MoreIcon className={classes.icon} />
 				</IconButton>
 			</div>
 		</Paper>
 	);
+};
 
 AccountDetails.propTypes =
 {
