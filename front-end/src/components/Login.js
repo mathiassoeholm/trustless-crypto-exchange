@@ -9,7 +9,7 @@ const authActions = AuthActions();
 
 const mapDispatchToProps = dispatch =>
 	({
-		onClickedButton: password => dispatch(authActions.login(password)),
+		onClickedButton: () => dispatch(authActions.login()),
 	});
 
 const Login = props =>
