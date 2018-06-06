@@ -55,7 +55,7 @@ const makeAuthController = database => twoFactor =>
 	{
 		try
 		{
-			const { twoFactorToken } = req.body;
+			const { twoFactorToken } = req.query;
 			const { salt1, twoFactorSecret } = await database.getUser(req.query.username);
 
 			if (twoFactorSecret)

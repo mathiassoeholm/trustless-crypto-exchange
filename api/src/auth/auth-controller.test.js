@@ -84,6 +84,10 @@ describe('auth controller', () =>
 				twoFactorSecret: 'req-secret',
 				twoFactorToken: '12345',
 			},
+			query:
+			{
+				twoFactorToken: '12345',
+			},
 		};
 		
 		databaseMock =

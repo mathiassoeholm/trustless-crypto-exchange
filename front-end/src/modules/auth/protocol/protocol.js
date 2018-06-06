@@ -8,7 +8,13 @@ const makeProtocol = (
 	authKeyGen = config.fastKeyGenerator,
 	authApi = config.authApi) =>
 	({
-		createUser: async (user, password, secret, progressCallback = () => undefined, twoFactorSecret, twoFactorToken) =>
+		createUser: async (
+			user,
+			password,
+			secret,
+			progressCallback = () => undefined,
+			twoFactorSecret,
+			twoFactorToken) =>
 		{
 			progressCallback(0, 'Generating Encryption Key');
 
@@ -42,11 +48,11 @@ const makeProtocol = (
 			return result;
 		},
 
-		login: async (username, password, progressCallback = () => undefined) =>
+		login: async (username, password, progressCallback = () => undefined, twoFactorToken) =>
 		{
 			progressCallback(0, 'Retrieving data from server');
 
-			const { salt1 } = await authApi.getSalt1(username);
+			const { salt1 } = await authApi.getSalt1(username, twoFactorToken);
 
 			const authenticationKeyProgess = progress => progressCallback(progress * authKeyPercentage, 'Generating Authentication Key');
 			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
