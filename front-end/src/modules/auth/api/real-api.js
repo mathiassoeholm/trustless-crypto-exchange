@@ -73,26 +73,6 @@ const getWallet = async (username, authenticationKey) =>
 	}
 };
 
-const storeTransaction = async (from, to, amount) =>
-{
-	const body =
-	{
-		from,
-		to,
-		amount,
-	};
-
-	try
-	{
-		const response = await axios.post(`${config.apiUrl}/transactions`, body);
-		return response.data;
-	}
-	catch (error)
-	{
-		throw unknownError(error);
-	}
-};
-
 export default
 {
 	createUser,
