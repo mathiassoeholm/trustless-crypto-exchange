@@ -12,6 +12,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 
 import images from '../../images';
 import flowActions from '../../modules/flow/actions';
+import RefreshBalanceButton from './RefreshBalanceButton';
 
 const styles = theme =>
 	({
@@ -66,9 +67,7 @@ const AccountDetails = (
 			</div>
 
 			<div className={classes.buttonParent}>
-				<IconButton>
-					<RefreshIcon className={classes.icon} />
-				</IconButton>
+				<RefreshBalanceButton classes={classes} />
 				<IconButton onClick={onClickedSend}>
 					<SendIcon className={classes.icon} />
 				</IconButton>

@@ -72,6 +72,7 @@ export default function* ()
 			[
 				authActionTypes.LOG_IN,
 				walletActionTypes.TRANSACTION_SUCCESS,
+				walletActionTypes.START_BALANCE_UPDATE,
 			], makeUpdateBalance()),
 
 		takeLatest(walletActionTypes.START_TRANSACTION, makePerformTransaction()),

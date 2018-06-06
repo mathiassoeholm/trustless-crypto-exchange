@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
@@ -23,5 +22,10 @@ const TransactionsList = ({ classes }) =>
 			<Typography variant="subheading">Not implemented</Typography>
 		</Paper>
 	);
+
+TransactionsList.propTypes =
+{
+	classes: PropTypes.object.isRequired,
+};
 
 export default withStyles(styles)(TransactionsList);
