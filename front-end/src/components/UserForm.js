@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 
 import AuthActions from '../modules/auth/actions';
+import LoginAttemptError from './LoginAttemptError';
 
 const authActions = AuthActions();
 
@@ -36,12 +36,7 @@ export function UserForm(props)
 			<br />
 			{props.children}
 			<br />
-			{props.loginAttemptError &&
-				<div>
-					<Typography variant="subheading" color="error">{props.loginAttemptError}</Typography>
-					<br />
-				</div>
-			}
+			<LoginAttemptError />
 			<Button variant="raised" color="primary" onClick={props.onClickedButton}>
 				{props.buttonText}
 			</Button>
@@ -59,7 +54,6 @@ UserForm.propTypes =
 	password: PropTypes.string.isRequired,
 	onChangedUsername: PropTypes.func.isRequired,
 	onChangedPassword: PropTypes.func.isRequired,
-	loginAttemptError: PropTypes.string,
 	children: PropTypes.node,
 };
 
@@ -67,7 +61,6 @@ UserForm.defaultProps =
 {
 	usernameError: null,
 	passwordError: null,
-	loginAttemptError: null,
 	children: [],
 };
 
@@ -77,9 +70,6 @@ const mapStateToProps = state =>
 		password: state.auth.password || '',
 		usernameError: state.auth.usernameError,
 		passwordError: state.auth.passwordError,
-		loginAttemptError: state.auth.loginAttemptStatus ?
-			state.auth.loginAttemptStatus.errorMessage :
-			null,
 	});
 
 const mapDispatchToProps = dispatch =>
