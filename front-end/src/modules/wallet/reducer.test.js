@@ -86,6 +86,12 @@ describe('Transaction Reducer', () =>
 				{ transactionStatus: null },
 				flowActions.setSendDialogOpen(false),
 			],
+			[
+				'transactions',
+				{ transactions: null },
+				{ transactions: [{ from: 'from', to: 'to', amount: 10 }] },
+				walletActions.updateTransactions([{ from: 'from', to: 'to', amount: 10 }]),
+			],
 		]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 	{
 		deepFreeze(stateBefore);

@@ -32,10 +32,17 @@ export const makeUpdateBalance = (walletProvider = config.makeWalletProvider()) 
 
 export const walletSelector = state => state.wallet;
 
-export const makePerformTransaction = (walletProvider = config.makeWalletProvider()) =>
+export const makePerformTransaction = (
+	walletProvider = config.makeWalletProvider(), walletApi = config.walletApi) =>
 	function* performTransaction()
 	{
-		const { secret, amount, receiver } = yield select(walletSelector);
+		const {
+			secret,
+			amount,
+			receiver,
+		} = yield select(walletSelector);
+
+		const { address } = secret;
 
 		if (secret === undefined)
 		{
@@ -56,6 +63,8 @@ export const makePerformTransaction = (walletProvider = config.makeWalletProvide
 		{
 			yield call(walletProvider.sendCurrency, secret, receiver, amount);
 
+			yield call(walletApi.addTransaction, address, receiver, amount);
+
 			yield put(walletActions.statusUpdate(true, null));
 			yield put(walletActions.transactionSuccess());
 		}
@@ -63,6 +72,18 @@ export const makePerformTransaction = (walletProvider = config.makeWalletProvide
 		{
 			yield put(walletActions.statusUpdate(true, error));
 		}
+	};
+
+export const addressSelector = state => state.wallet.secret.address;
+
+export const makeUpdateTransactions = (walletApi = config.walletApi) =>
+	function* updateTransactions()
+	{
+		const address = yield select(addressSelector);
+
+		const transactions = yield call(walletApi.getTransactions, address);
+
+		yield put(walletActions.updateTransactions(transactions));
 	};
 
 export default function* ()
@@ -74,6 +95,13 @@ export default function* ()
 				walletActionTypes.TRANSACTION_SUCCESS,
 				walletActionTypes.START_BALANCE_UPDATE,
 			], makeUpdateBalance()),
+
+		takeLatest(
+			[
+				authActionTypes.LOG_IN,
+				walletActionTypes.TRANSACTION_SUCCESS,
+				walletActionTypes.START_BALANCE_UPDATE,
+			], makeUpdateTransactions()),
 
 		takeLatest(walletActionTypes.START_TRANSACTION, makePerformTransaction()),
 	]);

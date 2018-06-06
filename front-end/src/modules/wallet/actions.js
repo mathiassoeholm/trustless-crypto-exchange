@@ -61,6 +61,12 @@ const changeReceiver = receiver =>
 		receiver,
 	});
 
+const updateTransactions = transactions =>
+	({
+		type: walletActionTypes.UPDATE_TRANSACTIONS,
+		transactions,
+	});
+
 export default {
 	startTransaction,
 	changeAmount,
@@ -72,4 +78,5 @@ export default {
 	statusUpdate,
 	transactionSuccess,
 	startBalanceUpdate,
+	updateTransactions,
 };
