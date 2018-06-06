@@ -11,6 +11,7 @@ import path from 'path';
 import appConfig from './config';
 import firebaseSetup from './firebase-setup';
 import authRoutes from './auth/auth-routes';
+import transactionRoutes from './transaction/transaction-routes';
 
 
 firebaseSetup();
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 authRoutes(app);
+transactionRoutes(app);
 
 // Important that we check routes before handling 404 
 app.use((req, res) =>
