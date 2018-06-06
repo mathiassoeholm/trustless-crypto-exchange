@@ -66,6 +66,7 @@ const reducer = (state = initialState, action) =>
 		return {
 			...state,
 			user: { ...state.user, twoFactorSecret: action.value.base32 },
+			twoFactorQrData: action.value.otpauth_url,
 		};
 
 	case t.PROGRESS_UPDATE:
