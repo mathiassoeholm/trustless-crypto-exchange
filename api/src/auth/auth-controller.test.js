@@ -69,7 +69,7 @@ describe('auth controller', () =>
 		};
 	});
 
-	it('verifies the 2fa token in create', () =>
+	it('verifies the 2fa token in create', async () =>
 	{
 		reqMock =
 		{
@@ -80,26 +80,21 @@ describe('auth controller', () =>
 				twoFactorToken: '12345',
 			},
 		};
-
+		
 		twoFactorMock =
 		{
 			...twoFactorMock,
 			totp:
 			{
-				verify: ({ secret, encoding, token }) =>
-				{
-					expect(token).toBe('12345');
-					expect(secret).toBe('base32secret');
-					expect(encoding).toBe('base32');
-
-					done();
-
-					return true;
-				},
+				verify: jest.fn()
 			},
 		};
 
-		getAuthController().createUser(reqMock, resMock);
+		await getAuthController().createUser(reqMock, resMock);
+
+		const mock = twoFactorMock.totp.verify.mock;
+		expect(mock.calls.length).toBe(1);
+		expect(mock.calls[0][0]).toEqual({ secret: 'base32Secret', encoding: 'base32', token: '12345'});
 	});
 
 	it('sends code 400 if twoFactor token is wrong', (done) =>
