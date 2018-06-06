@@ -36,6 +36,7 @@ export function UserForm(props)
 			<br />
 			{props.children}
 			<br />
+			<br />
 			<LoginAttemptError />
 			<Button variant="raised" color="primary" onClick={props.onClickedButton}>
 				{props.buttonText}

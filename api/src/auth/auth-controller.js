@@ -55,7 +55,23 @@ const makeAuthController = database => twoFactor =>
 	{
 		try
 		{
-			const { salt1 } = await database.getUser(req.query.username);
+			const { twoFactorToken } = req.query;
+			const { salt1, twoFactorSecret } = await database.getUser(req.query.username);
+
+			if (twoFactorSecret)
+			{
+				const verified = twoFactor.totp.verify({
+					secret: twoFactorSecret,
+					encoding: 'base32',
+					token: twoFactorToken,
+				});
+
+				if (!verified)
+				{
+					throw new Error('wrong-2fa-token');
+				}
+			}
+
 			res.json({ salt1 });
 		}
 		catch (error)
@@ -63,6 +79,10 @@ const makeAuthController = database => twoFactor =>
 			if(error.message === 'unknown-user')
 			{
 				res.status(400).send(error.message);
+			}
+			else if (error.message === 'wrong-2fa-token')
+			{
+				res.status(400).send('Wrong 2FA token');
 			}
 			else
 			{

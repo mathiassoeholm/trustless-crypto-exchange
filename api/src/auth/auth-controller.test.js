@@ -44,6 +44,7 @@ describe('auth controller', () =>
 		databaseMock =
 		{
 			createUser: () => undefined,
+			getUser: () => ({}),
 		};
 
 		resMock =
@@ -69,18 +70,32 @@ describe('auth controller', () =>
 		};
 	});
 
-	it('verifies the 2fa token in create', async () =>
+	each([
+		['create', (authController) => authController.createUser, 'req-secret'],
+		['getSalt1', (authController) => authController.getSalt1, 'db-secret'],
+	]).it('verifies the 2fa token in %s', async (_, getFunc, expectedSecret) =>
 	{
 		reqMock =
 		{
+			...reqMock,
 			body:
 			{
 				...reqMock.body,
-				twoFactorSecret: 'base32Secret',
+				twoFactorSecret: 'req-secret',
+				twoFactorToken: '12345',
+			},
+			query:
+			{
 				twoFactorToken: '12345',
 			},
 		};
 		
+		databaseMock =
+		{
+			...databaseMock,
+			getUser: username => Promise.resolve({ twoFactorSecret: 'db-secret' }),
+		};
+
 		twoFactorMock =
 		{
 			...twoFactorMock,
@@ -90,14 +105,17 @@ describe('auth controller', () =>
 			},
 		};
 
-		await getAuthController().createUser(reqMock, resMock);
+		await getFunc(getAuthController())(reqMock, resMock);
 
 		const mock = twoFactorMock.totp.verify.mock;
 		expect(mock.calls.length).toBe(1);
-		expect(mock.calls[0][0]).toEqual({ secret: 'base32Secret', encoding: 'base32', token: '12345'});
+		expect(mock.calls[0][0]).toEqual({ secret: expectedSecret, encoding: 'base32', token: '12345'});
 	});
 
-	it('sends code 400 if twoFactor token is wrong', (done) =>
+	each([
+		['create', (authController) => authController.createUser],
+		['getSalt1', (authController) => authController.getSalt1],
+	]).it('sends code 400 for %s if twoFactor token is wrong', (_, getFunc, done) =>
 	{
 		twoFactorMock =
 		{
@@ -107,16 +125,24 @@ describe('auth controller', () =>
 			},
 		};
 
+		databaseMock =
+		{
+			...databaseMock,
+			getUser: () => ({ twoFactorSecret: 'secret' }),
+		}
+
 		reqMock =
 		{
+			...reqMock,
 			body:
 			{
 				...reqMock.body,
 				twoFactorSecret: 'base32Secret',
+				twoFactorToken: '123456',
 			},
 		};
 
-		getAuthController().createUser(reqMock, makeExpectStatusCodeResMock(done, 400));
+		getFunc(getAuthController())(reqMock, makeExpectStatusCodeResMock(done, 400));
 	});
 
 	it('saves the 2FA key if verification is succesful', (done) =>

@@ -33,11 +33,18 @@ const createUser = async (username, cipher, salt1, salt2, authenticationKey, two
 	}
 };
 
-const getSalt1 = async (username) =>
+const getSalt1 = async (username, twoFactorToken) =>
 {
 	try
 	{
-		const response = await axios.get(`${config.apiUrl}/auth/salt1?username=${username}`);
+		let queryParams = `username=${username}`;
+
+		if (twoFactorToken)
+		{
+			queryParams += `&twoFactorToken=${twoFactorToken}`;
+		}
+
+		const response = await axios.get(`${config.apiUrl}/auth/salt1?${queryParams}`);
 		return response.data;
 	}
 	catch (error)

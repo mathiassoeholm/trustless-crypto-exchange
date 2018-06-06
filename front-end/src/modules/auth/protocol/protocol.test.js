@@ -24,88 +24,118 @@ describe('Protocol', () =>
 		protocol = makeProtocol(testKeyGenerator, testKeyGenerator, stubApi);
 	});
 
-	it('creates a user', async () =>
+	describe('create', () =>
 	{
-		await protocol.createUser(...createArguments);
-		expect(stubApi.getState().username).toEqual('kurt');
-	});
-
-	it('creates and returns secret', async () =>
-	{
-		await protocol.createUser(...createArguments);
-		const result = await protocol.login('kurt', 'start123');
-
-		expect(result.topSecret).toEqual('yes');
-	});
-
-	it('creates a user with 2fa', async () =>
-	{
-		await protocol.createUser(...createArguments, undefined, 'twoFactorSecret', 'twoFactorToken');
-
-		const { twoFactorSecret, twoFactorToken } = stubApi.getState();
-
-		expect(twoFactorSecret).toBe('twoFactorSecret');
-		expect(twoFactorToken).toBe('twoFactorToken');
-	});
-
-	it('creates the correct authentication key', async () =>
-	{
-		await protocol.createUser(...createArguments);
-
-		const { salt1, authenticationKey } = stubApi.getState();
-		const ak = await testKeyGenerator(password, salt1);
-
-		expect(authenticationKey).toEqual(utils.bytesToBase64String(ak));
-	});
-
-	it('updates progress correctly when logging in', async () =>
-	{
-		let previousProgress = 0;
-
-		const progressCallback = (p) =>
+		it('creates a user', async () =>
 		{
-			expect(p).toBeGreaterThanOrEqual(previousProgress);
-			previousProgress = p;
-		};
+			await protocol.createUser(...createArguments);
+			expect(stubApi.getState().username).toEqual('kurt');
+		});
 
-		await protocol.createUser(...createArguments, progressCallback);
+		it('creates and returns secret', async () =>
+		{
+			await protocol.createUser(...createArguments);
+			const result = await protocol.login('kurt', 'start123');
 
-		expect(previousProgress).toEqual(1);
+			expect(result.topSecret).toEqual('yes');
+		});
 
-		previousProgress = 0;
+		it('creates a user with 2fa', async () =>
+		{
+			await protocol.createUser(...createArguments, undefined, 'twoFactorSecret', 'twoFactorToken');
 
-		await protocol.login(username, password, progressCallback);
+			const { twoFactorSecret, twoFactorToken } = stubApi.getState();
 
-		expect(previousProgress).toEqual(1);
+			expect(twoFactorSecret).toBe('twoFactorSecret');
+			expect(twoFactorToken).toBe('twoFactorToken');
+		});
+
+		it('creates the correct authentication key', async () =>
+		{
+			await protocol.createUser(...createArguments);
+
+			const { salt1, authenticationKey } = stubApi.getState();
+			const ak = await testKeyGenerator(password, salt1);
+
+			expect(authenticationKey).toEqual(utils.bytesToBase64String(ak));
+		});
+
+		it('encrypts secret correctly and stores on api when creating', async () =>
+		{
+			await protocol.createUser(...createArguments);
+
+			const { salt2 } = stubApi.getState();
+			const key = await testKeyGenerator(password, salt2);
+
+			const decryptedCipher = utils.decryptAES(stubApi.getState().cipher, key);
+			const decryptedSecret = JSON.parse(decryptedCipher);
+			expect(decryptedSecret).toEqual(secret);
+		});
 	});
 
-	it('encrypts secret correctly and stores on api when creating', async () =>
+	describe('login', () =>
 	{
-		await protocol.createUser(...createArguments);
-
-		const { salt2 } = stubApi.getState();
-		const key = await testKeyGenerator(password, salt2);
-
-		const decryptedCipher = utils.decryptAES(stubApi.getState().cipher, key);
-		const decryptedSecret = JSON.parse(decryptedCipher);
-		expect(decryptedSecret).toEqual(secret);
-	});
-
-	it('fails to login if wrong password supplied', async () =>
-	{
-		await protocol.createUser({ username: 'bob' }, 'bob', {});
-
-		let error;
-
-		try
+		it('updates progress correctly when logging in', async () =>
 		{
-			await protocol.login('bob', 'alice');
-		}
-		catch (err)
-		{
-			error = err;
-		}
+			let previousProgress = 0;
 
-		expect(error).not.toBeNull();
+			const progressCallback = (p) =>
+			{
+				expect(p).toBeGreaterThanOrEqual(previousProgress);
+				previousProgress = p;
+			};
+
+			await protocol.createUser(...createArguments, progressCallback);
+
+			expect(previousProgress).toEqual(1);
+
+			previousProgress = 0;
+
+			await protocol.login(username, password, progressCallback);
+
+			expect(previousProgress).toEqual(1);
+		});
+
+		it('fails to login if wrong password supplied', async () =>
+		{
+			await protocol.createUser({ username: 'bob' }, 'bob', {});
+
+			let error;
+
+			try
+			{
+				await protocol.login('bob', 'alice');
+			}
+			catch (err)
+			{
+				error = err;
+			}
+
+			expect(error).not.toBeNull();
+		});
+
+		it('logs in with 2fa', async () =>
+		{
+			const api =
+			{
+				...stubApi,
+				getSalt1: jest.fn(),
+			};
+
+			api.getSalt1.mockReturnValueOnce({ salt1: 'salt1' });
+
+			protocol = makeProtocol(testKeyGenerator, testKeyGenerator, api);
+
+			// Create the user so we can test login
+			await protocol.createUser({ username: 'bob' }, 'pass', {});
+
+			await protocol.login('bob', 'pass', undefined, 'twoFactorToken');
+
+			const { mock } = api.getSalt1;
+
+			expect(mock.calls.length).toBe(1);
+			expect(mock.calls[0][0]).toBe('bob');
+			expect(mock.calls[0][1]).toBe('twoFactorToken');
+		});
 	});
 });
