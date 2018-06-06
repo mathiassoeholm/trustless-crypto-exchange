@@ -38,7 +38,7 @@ const makeAuthController = database => twoFactor =>
 		{
 			if (error.message === 'user-exists')
 			{
-				res.status(400).send(error.message);
+				res.status(400).send('The user already exists');
 			}
 			else if (error.message === 'wrong-2fa-token')
 			{
