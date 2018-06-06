@@ -28,7 +28,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 
-
 authRoutes(app);
 
 // Important that we check routes before handling 404 

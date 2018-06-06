@@ -26,7 +26,7 @@ const createUser = async (username, cipher, salt1, salt2, authenticationKey, two
 	{
 		if (error.response.status === 400)
 		{
-			throw Error('Username is already taken');
+			throw Error(error.response.data);
 		}
 
 		throw unknownError(error);

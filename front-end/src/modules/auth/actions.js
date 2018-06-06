@@ -110,7 +110,7 @@ export default (
 				const enabled2FA = getState().flow && getState().flow.enable2FA;
 
 				const twoFactorToken = enabled2FA ? getState().auth.twoFactorToken : undefined;
-				const twoFactorSecret = enabled2FA ? getState().auth.twoFactorToken : undefined;
+				const twoFactorSecret = enabled2FA ? getState().auth.user.twoFactorSecret : undefined;
 
 				return authProtocol.createUser(
 					user,
