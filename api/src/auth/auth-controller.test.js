@@ -134,7 +134,7 @@ describe('auth controller', () =>
 		{
 			totp:
 			{
-				verify: () => true
+				verify: () => true,
 			},
 		};
 
