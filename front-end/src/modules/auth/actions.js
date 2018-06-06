@@ -149,7 +149,9 @@ export default (
 			dispatch(progressUpdate(p, m));
 		};
 
-		return authProtocol.login(username, password, progressCallback)
+		const { twoFactorToken } = getState().auth;
+
+		return authProtocol.login(username, password, progressCallback, twoFactorToken)
 			.then((secret) =>
 			{
 				dispatch(loginAttemptFinished());

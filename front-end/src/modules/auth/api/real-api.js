@@ -51,7 +51,7 @@ const getSalt1 = async (username, twoFactorToken) =>
 	{
 		if (error.response.status === 400)
 		{
-			throw Error('Not account exists with the specified username');
+			throw Error(error.response.data);
 		}
 
 		throw unknownError(error);

@@ -12,14 +12,21 @@ export default
 			throw new Error('user-exists');
 		}
 
-		await userDoc.set(
+		const data =
 		{
 			cipher,
 			salt1,
 			salt2,
 			hashedAuthKey,
 			twoFactorSecret,
-		});
+		}
+
+		if (!twoFactorSecret)
+		{
+			delete data.twoFactorSecret;
+		}
+
+		await userDoc.set(data);
 	},
 
 	getUser: username =>

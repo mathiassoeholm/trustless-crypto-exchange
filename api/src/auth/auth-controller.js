@@ -78,7 +78,7 @@ const makeAuthController = database => twoFactor =>
 		{
 			if(error.message === 'unknown-user')
 			{
-				res.status(400).send(error.message);
+				res.status(400).send('Unknown user');
 			}
 			else if (error.message === 'wrong-2fa-token')
 			{
