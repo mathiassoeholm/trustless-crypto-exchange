@@ -5,11 +5,7 @@ import { connect } from 'react-redux';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme =>
 	({
@@ -19,19 +15,79 @@ const styles = theme =>
 			padding: theme.spacing.unit * 2,
 			textAlign: 'left',
 		},
+
+		table:
+		{
+			minWidth: '500px',
+			padding: theme.spacing.unit,
+		},
+
+		tableRow:
+		{
+			borderBottom: '1px solid rgba(0, 0, 0, 0.54);',
+		},
+
+		tableCell:
+		{
+			paddingLeft: theme.spacing.unit,
+			paddingRight: theme.spacing.unit,
+			paddingTop: theme.spacing.unit * 1.5,
+			paddingBottom: theme.spacing.unit * 1.5,
+			width: 'auto',
+			overflow: 'hidden',
+			whiteSpace: 'normal',
+			minWidth: '0',
+		},
+
+		tableHeader:
+		{
+			borderBottom: '1px solid rgba(0, 0, 0, 0.54);',
+			paddingTop: theme.spacing.unit / 2,
+			paddingBottom: theme.spacing.unit / 2,
+		},
 	});
 
-const TransactionsList = ({ classes, transactions }) =>
+const TransactionsList = ({ classes, transactions, address }) =>
 {
-	const getTransactionRow = transaction =>
-		(
-			<TableRow>
-				<TableCell>{transaction.createTime}</TableCell>
-				<TableCell>{transaction.amount}</TableCell>
-				<TableCell>{transaction.from}</TableCell>
-				<TableCell>{transaction.to}</TableCell>
-			</TableRow>
+	let i = 0;
+
+	const getTypography = text =>
+		<Typography noWrap variant="body2">{text}</Typography>;
+
+	const parseDate = (transaction) =>
+	{
+		const date = new Date(Date.parse(transaction.createTime));
+		
+		var options = {  day: '2-digit', month: '2-digit', year: '2-digit',  hour: '2-digit', minute: '2-digit' };
+		return date.toLocaleDateString('da-DK', options);
+	};
+
+	const getTransactionRow = (transaction) =>
+	{
+		i += 1;
+
+		const sign = transaction.from === address ? '-' : '+';
+		const totalColor = transaction.from === address ? 'rgba(187, 0, 0, 0.5)' : 'rgba(0, 187, 0, 0.5';
+
+		return (
+			<Grid item xs={12} key={i} className={classes.tableRow}>
+				<Grid container spacing={0}>
+					<Grid item xs={3} className={classes.tableCell}>
+						{getTypography(parseDate(transaction))}
+					</Grid>
+					<Grid item xs={1} className={classes.tableCell} style={{ backgroundColor: totalColor }}>
+						{getTypography(`${sign} ${transaction.amount}`)}
+					</Grid>
+					<Grid item xs={4} className={classes.tableCell}>
+						{getTypography(transaction.from)}
+					</Grid>
+					<Grid item xs={4} className={classes.tableCell}>
+						{getTypography(transaction.to)}
+					</Grid>
+				</Grid>
+			</Grid>
 		);
+	};
 
 	const tableRows = transactions.map(t => getTransactionRow(t));
 
@@ -39,32 +95,40 @@ const TransactionsList = ({ classes, transactions }) =>
 		<Paper className={classes.root}>
 			<Typography variant="headline">Previous Transactions</Typography>
 
-			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell>Date</TableCell>
-						<TableCell>Total</TableCell>
-						<TableCell>From</TableCell>
-						<TableCell>To</TableCell>
-					</TableRow>
-				</TableHead>
+			<Grid container spacing={0} className={classes.table}>
+				<Grid item xs={12} className={classes.tableHeader}>
+					<Grid container spacing={0}>
+						<Grid item xs={3} className={classes.tableCell}>
+							<Typography variant="subheading">Date</Typography>
+						</Grid>
+						<Grid item xs={3} className={classes.tableCell}>
+							<Typography variant="subheading">Total</Typography>
+						</Grid>
+						<Grid item xs={3} className={classes.tableCell}>
+							<Typography variant="subheading">From</Typography>
+						</Grid>
+						<Grid item xs={3} className={classes.tableCell}>
+							<Typography variant="subheading">To</Typography>
+						</Grid>
+					</Grid>
+				</Grid>
 
-				<TableBody>
-					{tableRows}
-				</TableBody>
-			</Table>
+				{tableRows}
+			</Grid>
 		</Paper>
 	);
 };
 
 TransactionsList.propTypes =
 {
+	address: PropTypes.string.isRequired,
 	classes: PropTypes.object.isRequired,
 	transactions: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state =>
 	({
+		address: state.wallet.secret.address ? state.wallet.secret.address : '',
 		transactions: state.wallet.transactions ? state.wallet.transactions : [],
 	});
 
