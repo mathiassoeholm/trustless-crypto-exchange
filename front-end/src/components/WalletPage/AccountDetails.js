@@ -7,14 +7,17 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
+import images from '../../images';
 import flowActions from '../../modules/flow/actions';
 
 const styles = theme =>
 	({
 		root:
 		{
-			padding: theme.spacing.unit,
+			padding: theme.spacing.unit * 2,
 			position: 'relative',
 			display: 'flex',
 			flexDirection: 'row',
@@ -29,14 +32,30 @@ const styles = theme =>
 			display: 'flex',
 			zIndex: '10',
 		},
+
+		icon:
+		{
+			width: '30px',
+			height: '30px',
+		},
+
+		qrcodeImage:
+		{
+			height: '10em',
+			padding: theme.spacing.unit,
+		},
 	});
 
-const AccountDetails = ({ classes, balance, address, onClickedSend }) =>
+const AccountDetails = (
+	{
+		classes,
+		balance,
+		address,
+		onClickedSend,
+	}) =>
 	(
 		<Paper className={classes.root}>
-			<div>
-				Test
-			</div>
+			<img className={classes.qrcodeImage} src={images.qrcode} alt="QR code" />
 
 			<div style={{ textAlign: 'left' }}>
 				<Typography variant="headline">Your Account</Typography>
@@ -47,8 +66,14 @@ const AccountDetails = ({ classes, balance, address, onClickedSend }) =>
 			</div>
 
 			<div className={classes.buttonParent}>
+				<IconButton>
+					<RefreshIcon className={classes.icon} />
+				</IconButton>
 				<IconButton onClick={onClickedSend}>
-					<SendIcon style={{ width: '30px', height: '30px' }} />
+					<SendIcon className={classes.icon} />
+				</IconButton>
+				<IconButton>
+					<MoreIcon className={classes.icon} />
 				</IconButton>
 			</div>
 		</Paper>
