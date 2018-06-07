@@ -54,8 +54,13 @@ export default
 		const fromResult = await fromQuery.get();
 		const toResult = await toQuery.get();
 
-		const documents = fromResult.docs.concat(toResult.docs);		
+		const getData = docs =>
+			docs.map(doc => ({ ...doc.data(), createTime: doc._createTime }));
 
-		return documents.map(doc => ({ ...doc.data(), createTime: doc._createTime }));
+		const result = { sent: getData(fromResult.docs), received: getData(toResult.docs) };
+
+		console.log("result: " + result);
+
+		return result;
 	},
 };

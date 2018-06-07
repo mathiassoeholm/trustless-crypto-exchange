@@ -47,7 +47,7 @@ const styles = theme =>
 		},
 	});
 
-const TransactionsList = ({ classes, transactions, address }) =>
+const TransactionsList = ({ classes, transactions }) =>
 {
 	let i = 0;
 
@@ -57,8 +57,15 @@ const TransactionsList = ({ classes, transactions, address }) =>
 	const parseDate = (transaction) =>
 	{
 		const date = new Date(Date.parse(transaction.createTime));
-		
-		var options = {  day: '2-digit', month: '2-digit', year: '2-digit',  hour: '2-digit', minute: '2-digit' };
+
+		const options =
+		{
+			day: '2-digit',
+			month: '2-digit',
+			year: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit',
+		};
 		return date.toLocaleDateString('da-DK', options);
 	};
 
@@ -66,8 +73,9 @@ const TransactionsList = ({ classes, transactions, address }) =>
 	{
 		i += 1;
 
-		const sign = transaction.from === address ? '-' : '+';
-		const totalColor = transaction.from === address ? 'rgba(187, 0, 0, 0.5)' : 'rgba(0, 187, 0, 0.5';
+		const didReceive = transactions.received.includes(transaction);
+		const sign = didReceive ? '+' : '-';
+		const totalColor = didReceive ? 'rgba(0, 187, 0, 0.5)' : 'rgba(187, 0, 0, 0.5)';
 
 		return (
 			<Grid item xs={12} key={i} className={classes.tableRow}>
@@ -89,7 +97,11 @@ const TransactionsList = ({ classes, transactions, address }) =>
 		);
 	};
 
-	const tableRows = transactions.map(t => getTransactionRow(t));
+	console.log(transactions);
+
+	const allTransactions = transactions.received.concat(transactions.sent);
+	allTransactions.sort((t1, t2) => new Date(t1.createTime) < new Date(t2.createTime));
+	const tableRows = allTransactions.map(t => getTransactionRow(t));
 
 	return (
 		<Paper className={classes.root}>
@@ -121,15 +133,15 @@ const TransactionsList = ({ classes, transactions, address }) =>
 
 TransactionsList.propTypes =
 {
-	address: PropTypes.string.isRequired,
 	classes: PropTypes.object.isRequired,
-	transactions: PropTypes.array.isRequired,
+	transactions: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state =>
 	({
-		address: state.wallet.secret.address ? state.wallet.secret.address : '',
-		transactions: state.wallet.transactions ? state.wallet.transactions : [],
+		transactions: state.wallet.transactions ?
+			state.wallet.transactions :
+			{ sent: [], received: [] },
 	});
 
 export default connect(mapStateToProps)(withStyles(styles)(TransactionsList));
