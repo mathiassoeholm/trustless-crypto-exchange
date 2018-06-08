@@ -74,3 +74,8 @@ After setting this up, run the app using:
 yarn start
 ```
 
+## Running the tests
+If you want to run the tests, run the following command in the front-end/ and api/ folders.
+```
+yarn test
+```
