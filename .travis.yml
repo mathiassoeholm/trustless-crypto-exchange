@@ -9,14 +9,5 @@ cache:
 script:
     - cd front-end
     - yarn
-    - cd ..
-    - cd api
-    - yarn
-    - cd ..
-    - cd front-end
-    - yarn build
-    - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-    - cd ..
-    - cd api
     - yarn build
     - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
