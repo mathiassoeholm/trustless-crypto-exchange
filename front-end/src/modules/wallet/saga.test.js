@@ -100,8 +100,7 @@ describe('wallet saga', () =>
 
 			const state =
 			{
-				address: 'address',
-				secret: {},
+				secret: { address: 'address' },
 				amount: 100,
 				receiver: 'test',
 			};
@@ -114,7 +113,7 @@ describe('wallet saga', () =>
 					call(walletProvider.sendCurrency, state.secret, state.receiver, state.amount));
 
 			expect(generator.next().value)
-				.toEqual(call(walletApi.addTransaction, state.address, state.receiver, state.amount));
+				.toEqual(call(walletApi.addTransaction, state.secret.address, state.receiver, state.amount));
 
 			expect(generator.next().value)
 				.toEqual(put(walletActions.statusUpdate(true, null)));
