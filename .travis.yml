@@ -7,10 +7,8 @@ cache:
 
 install:
     - cd front-end
-    - yarn
+    - yarn 
  
-jobs:
-    include:
-        - stage: run
-        script: yarn build
-        script: yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+script: 
+    - yarn build
+    - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
