@@ -8,6 +8,8 @@ import {
 	makeUpdateBalance,
 	walletSelector,
 	makePerformTransaction,
+	makeUpdateTransactions,
+	addressSelector,
 } from './saga';
 
 describe('wallet saga', () =>
@@ -58,11 +60,17 @@ describe('wallet saga', () =>
 	{
 		let walletProvider;
 		let generator;
+		let walletApi;
 
 		beforeEach(() =>
 		{
+			walletApi =
+			{
+				addTransaction: () => { },
+			};
+
 			walletProvider = makeStubWalletProvider();
-			generator = makePerformTransaction(walletProvider)();
+			generator = makePerformTransaction(walletProvider, walletApi)();
 		});
 
 		it('throws when secret missing', () =>
@@ -90,13 +98,22 @@ describe('wallet saga', () =>
 		{
 			expect(generator.next().value).toEqual(select(walletSelector));
 
-			const response = { secret: {}, amount: 100, receiver: 'test' };
-			const { secret, amount, receiver } = response;
-			expect(generator.next(response).value)
+			const state =
+			{
+				secret: { address: 'address' },
+				amount: 100,
+				receiver: 'test',
+			};
+
+			expect(generator.next(state).value)
 				.toEqual(put(walletActions.statusUpdate(false, null)));
 
 			expect(generator.next().value)
-				.toEqual(call(walletProvider.sendCurrency, secret, receiver, amount));
+				.toEqual(
+					call(walletProvider.sendCurrency, state.secret, state.receiver, state.amount));
+
+			expect(generator.next().value)
+				.toEqual(call(walletApi.addTransaction, state.secret.address, state.receiver, state.amount));
 
 			expect(generator.next().value)
 				.toEqual(put(walletActions.statusUpdate(true, null)));
@@ -118,6 +135,36 @@ describe('wallet saga', () =>
 
 			expect(generator.throw('error').value)
 				.toEqual(put(walletActions.statusUpdate(true, 'error')));
+		});
+	});
+
+	describe('update transactions', () =>
+	{
+		let generator;
+		let walletApi;
+
+		beforeEach(() =>
+		{
+			walletApi =
+			{
+				getTransactions: () => { },
+			};
+
+			generator = makeUpdateTransactions(walletApi)();
+		});
+
+		it('yields correctly', () =>
+		{
+			expect(generator.next().value)
+				.toEqual(select(addressSelector));
+
+			const address = 'address';
+			expect(generator.next(address).value)
+				.toEqual(call(walletApi.getTransactions, address));
+
+			const transactions = [{ from: 'from', to: 'to', amount: 10 }];
+			expect(generator.next(transactions).value)
+				.toEqual(put(walletActions.updateTransactions(transactions)));
 		});
 	});
 });

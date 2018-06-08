@@ -8,7 +8,13 @@ const makeProtocol = (
 	authKeyGen = config.fastKeyGenerator,
 	authApi = config.authApi) =>
 	({
-		createUser: async (user, password, secret, progressCallback = () => undefined) =>
+		createUser: async (
+			user,
+			password,
+			secret,
+			progressCallback = () => undefined,
+			twoFactorSecret,
+			twoFactorToken) =>
 		{
 			progressCallback(0, 'Generating Encryption Key');
 
@@ -19,7 +25,10 @@ const makeProtocol = (
 			const salt2 = utils.getRandomSalt();
 
 			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
+
+			// Get the key as a string, since we need to store it server-side
 			const authenticationKeyString = utils.bytesToBase64String(authenticationKeyBuffer);
+
 			const encryptionKey = await encKeyGen(password, salt2, encryptionKeyProgess);
 
 			const secretText = JSON.stringify(secret);
@@ -30,18 +39,20 @@ const makeProtocol = (
 				encryptedSecret,
 				salt1,
 				salt2,
-				authenticationKeyString);
+				authenticationKeyString,
+				twoFactorSecret,
+				twoFactorToken);
 
 			progressCallback(1, 'Finished');
 
 			return result;
 		},
 
-		login: async (username, password, progressCallback = () => undefined) =>
+		login: async (username, password, progressCallback = () => undefined, twoFactorToken) =>
 		{
 			progressCallback(0, 'Retrieving data from server');
 
-			const { salt1 } = await authApi.getSalt1(username);
+			const { salt1 } = await authApi.getSalt1(username, twoFactorToken);
 
 			const authenticationKeyProgess = progress => progressCallback(progress * authKeyPercentage, 'Generating Authentication Key');
 			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);

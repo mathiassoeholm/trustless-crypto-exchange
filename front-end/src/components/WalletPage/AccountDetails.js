@@ -5,37 +5,88 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import SendIcon from '@material-ui/icons/Send';
+import MoreIcon from '@material-ui/icons/MoreVert';
+
+import flowActions from '../../modules/flow/actions';
+import RefreshBalanceButton from './RefreshBalanceButton';
+import QRCode from '../QRCode';
 
 const styles = theme =>
 	({
 		root:
 		{
-			padding: theme.spacing.unit,
+			padding: theme.spacing.unit * 2,
+			position: 'relative',
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
+		},
+
+		buttonParent:
+		{
+			position: 'absolute',
+			top: 0,
+			right: 8,
+			display: 'flex',
+			zIndex: '10',
+		},
+
+		icon:
+		{
+			width: '30px',
+			height: '30px',
+		},
+
+		textParent:
+		{
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'space-around',
+			textAlign: 'left',
 		},
 	});
 
-const AccountDetails = ({ classes, balance, address }) =>
-	(
+const AccountDetails = (
+	{
+		classes,
+		balance,
+		address,
+		onClickedSend,
+	}) =>
+{
+	return (
 		<Paper className={classes.root}>
-			<Typography variant="headline">Your Account</Typography>
-			<Grid container spacing={8}>
-				<Grid item xs={12} lg={6}>
-					<Typography variant="subheading">Balance: {balance}$</Typography>
-				</Grid>
+			<QRCode data={address} />
 
-				<Grid item xs={12} lg={6}>
-					<Typography variant="subheading">Address: {address}</Typography>
-				</Grid>
-			</Grid>
+			<div className={classes.textParent}>
+				<Typography variant="headline">Your Account</Typography>
+				<br />
+				<Typography noWrap variant="subheading">Address: {address}</Typography>
+				<br />
+				<Typography variant="subheading">Balance: {balance} Ether</Typography>
+			</div>
+
+			<div className={classes.buttonParent}>
+				<RefreshBalanceButton classes={classes} />
+				<IconButton onClick={onClickedSend}>
+					<SendIcon className={classes.icon} />
+				</IconButton>
+				<IconButton>
+					<MoreIcon className={classes.icon} />
+				</IconButton>
+			</div>
 		</Paper>
 	);
+};
 
 AccountDetails.propTypes =
 {
 	classes: PropTypes.object.isRequired,
 	balance: PropTypes.number.isRequired,
 	address: PropTypes.string.isRequired,
+	onClickedSend: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
@@ -44,4 +95,9 @@ const mapStateToProps = state =>
 		address: state.wallet.secret ? state.wallet.secret.address : 'Invalid address',
 	});
 
-export default connect(mapStateToProps)(withStyles(styles)(AccountDetails));
+const mapDispatchToProps = dispatch =>
+	({
+		onClickedSend: () => dispatch(flowActions.setSendDialogOpen(true)),
+	});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AccountDetails));

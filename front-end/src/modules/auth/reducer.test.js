@@ -3,6 +3,36 @@ import deepFreeze from 'deep-freeze';
 import t from './action-types';
 import reducer from './reducer';
 
+it('sets 2FA secret on user object', () =>
+{
+	const stateBefore =
+	{
+		user:
+		{
+			username: 'bob',
+		},
+	};
+
+	const stateAfter =
+	{
+		user:
+		{
+			username: 'bob',
+			twoFactorSecret: 'base32Secret',
+		},
+	};
+
+	deepFreeze(stateBefore);
+
+	const newState = reducer(stateBefore,
+		{
+			type: t.SET_2FA_SECRET,
+			value: { base32: 'base32Secret' },
+		});
+
+	expect(newState).toEqual(stateAfter);
+});
+
 it('changes username and is pure', () =>
 {
 	const stateBefore =

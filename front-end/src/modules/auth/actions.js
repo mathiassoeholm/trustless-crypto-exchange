@@ -1,9 +1,13 @@
+import speakeasy from 'speakeasy';
+
 import t from './action-types';
 import config from '../../config';
+import flowActions from '../flow/actions';
 
 export default (
 	authProtocol = config.makeAuthProtocol(),
-	walletProvider = config.makeWalletProvider()) =>
+	walletProvider = config.makeWalletProvider(),
+	twoFactor = speakeasy) =>
 {
 	const setUsernameError = errorMessage =>
 		({
@@ -15,11 +19,6 @@ export default (
 		({
 			type: t.SET_PASSWORD_ERROR,
 			errorMessage,
-		});
-
-	const clearPasswordError = () =>
-		({
-			type: t.CLEAR_PASSWORD_ERROR,
 		});
 
 	const progressUpdate = (progress, message) =>
@@ -45,6 +44,16 @@ export default (
 			user,
 		});
 
+	const generate2FASecret = () => (dispatch) =>
+	{
+		const secret = twoFactor.generateSecret();
+
+		dispatch({
+			type: t.SET_2FA_SECRET,
+			value: secret,
+		});
+	};
+
 	const validateInput = (user, password, dispatch) =>
 	{
 		let didErr = false;
@@ -64,9 +73,21 @@ export default (
 		return !didErr;
 	};
 
-	const createUser = password => (dispatch, getState) =>
+	const validateAndGoToMenu = menuType => (dispatch, getState) =>
 	{
 		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
+
+		if (validateInput(user, password, dispatch))
+		{
+			dispatch(flowActions.changeMenu(menuType));
+		}
+	};
+
+	const createUser = () => (dispatch, getState) =>
+	{
+		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
 
 		if (!validateInput(user, password, dispatch))
 		{
@@ -86,7 +107,18 @@ export default (
 			.then((s) =>
 			{
 				secret = s;
-				return authProtocol.createUser(user, password, secret, progressCallback);
+				const enabled2FA = getState().flow && getState().flow.enable2FA;
+
+				const twoFactorToken = enabled2FA ? getState().auth.twoFactorToken : undefined;
+				const twoFactorSecret = enabled2FA ? getState().auth.user.twoFactorSecret : undefined;
+
+				return authProtocol.createUser(
+					user,
+					password,
+					secret,
+					progressCallback,
+					twoFactorSecret,
+					twoFactorToken);
 			})
 			.then((result) =>
 			{
@@ -100,9 +132,10 @@ export default (
 			});
 	};
 
-	const login = password => (dispatch, getState) =>
+	const login = () => (dispatch, getState) =>
 	{
 		const user = getState().auth && getState().auth.user;
+		const password = getState().auth && getState().auth.password;
 
 		if (!validateInput(user, password, dispatch))
 		{
@@ -116,7 +149,9 @@ export default (
 			dispatch(progressUpdate(p, m));
 		};
 
-		return authProtocol.login(username, password, progressCallback)
+		const { twoFactorToken } = getState().auth;
+
+		return authProtocol.login(username, password, progressCallback, twoFactorToken)
 			.then((secret) =>
 			{
 				dispatch(loginAttemptFinished());
@@ -140,11 +175,26 @@ export default (
 			username,
 		});
 
+	const changePassword = password =>
+		({
+			type: t.CHANGE_PASSWORD,
+			value: password,
+		});
+
+	const change2FAToken = token =>
+		({
+			type: t.CHANGE_2FA_TOKEN,
+			token,
+		});
+
 	return {
-		clearPasswordError,
+		generate2FASecret,
+		validateAndGoToMenu,
+		change2FAToken,
 		createUser,
 		login,
 		logout,
+		changePassword,
 		changeUsername,
 	};
 };

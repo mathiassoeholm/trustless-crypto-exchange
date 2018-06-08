@@ -42,8 +42,15 @@ it('changes menu to login after logging out', () =>
 
 each(
 	[
-		['sendConfirmationOpen', { sendConfirmationOpen: false }, { sendConfirmationOpen: true }, flowActions.setSendConfirmationOpen(true)],
+		['sendDialogOpen', { sendDialogOpen: false }, { sendDialogOpen: true, sendDialogStep: 0 }, flowActions.setSendDialogOpen(true)],
 		['menu', { activeMenu: menuTypes.LOGIN }, { activeMenu: menuTypes.WALLET }, flowActions.changeMenu(menuTypes.WALLET)],
+		['sendDialogStep', { sendDialogStep: 0 }, { sendDialogStep: 1 }, flowActions.setSendDialogStep(1)],
+		[
+			'sendDialogStep to 0 when closing send dialog',
+			{ sendDialogOpen: true, sendDialogStep: 1 },
+			{ sendDialogOpen: false, sendDialogStep: 0 },
+			flowActions.setSendDialogOpen(false),
+		],
 	]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 {
 	deepFreeze(stateBefore);

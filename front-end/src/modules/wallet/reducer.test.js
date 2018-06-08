@@ -3,6 +3,7 @@ import each from 'jest-each';
 
 import authActionTypes from '../auth/action-types';
 import walletActionTypes from './action-types';
+import walletActions from './actions';
 import reducer from './reducer';
 import flowActions from '../flow/actions';
 
@@ -45,7 +46,13 @@ describe('Transaction Reducer', () =>
 
 	each(
 		[
-			['balance', { balance: 50 }, { balance: 100 }, { type: walletActionTypes.UPDATE_BALANCE, balance: 100 }],
+			['isUpdatingBalance', { isUpdatingBalance: false }, { isUpdatingBalance: true }, walletActions.startBalanceUpdate()],
+			[
+				'balance',
+				{ balance: 50, isUpdatingBalance: true },
+				{ balance: 100, isUpdatingBalance: false },
+				{ type: walletActionTypes.UPDATE_BALANCE, balance: 100 }
+			],
 			['transaction status',
 				{ transactionStatus: null },
 				{
@@ -67,8 +74,8 @@ describe('Transaction Reducer', () =>
 			['amount', { amount: 25 }, { amount: 50 }, { type: walletActionTypes.CHANGE_AMOUNT, amount: 50 }],
 			['receiver', { receiver: null }, { receiver: '1010' }, { type: walletActionTypes.CHANGE_RECEIVER, receiver: '1010' }],
 			['balance update error',
-				{ balanceUpdateError: null },
-				{ balanceUpdateError: 'error' },
+				{ balanceUpdateError: null, isUpdatingBalance: true },
+				{ balanceUpdateError: 'error', isUpdatingBalance: false },
 				{ type: walletActionTypes.BALANCE_UPDATE_FAILED, error: 'error' },
 			],
 			['amountError', { amountError: 'test' }, { amountError: 'error' }, { type: walletActionTypes.INVALID_AMOUNT_ERROR, error: 'error' }],
@@ -77,7 +84,13 @@ describe('Transaction Reducer', () =>
 				'transactionStatus when closing confirmation',
 				{ transactionStatus: {} },
 				{ transactionStatus: null },
-				flowActions.setSendConfirmationOpen(false),
+				flowActions.setSendDialogOpen(false),
+			],
+			[
+				'transactions',
+				{ transactions: null },
+				{ transactions: [{ from: 'from', to: 'to', amount: 10 }] },
+				walletActions.updateTransactions([{ from: 'from', to: 'to', amount: 10 }]),
 			],
 		]).it('changes %s and is pure', (_, stateBefore, stateAfter, action) =>
 	{

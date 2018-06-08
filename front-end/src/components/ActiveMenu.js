@@ -6,6 +6,7 @@ import menuTypes from '../modules/flow/menu-types';
 import Login from './Login';
 import Create from './Create';
 import WalletPage from './WalletPage/WalletPage';
+import TwoFactorCreate from './TwoFactorCreate';
 
 
 export function ActiveMenu({ activeMenu })
@@ -18,6 +19,8 @@ export function ActiveMenu({ activeMenu })
 		return <Login />;
 	case menuTypes.WALLET:
 		return <WalletPage />;
+	case menuTypes.TWO_FACTOR_CREATE:
+		return <TwoFactorCreate />;
 	default:
 		throw new Error('Unknown menu type');
 	}

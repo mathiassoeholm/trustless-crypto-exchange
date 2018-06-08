@@ -2,12 +2,9 @@ import axios from 'axios';
 
 import config from '../../../config';
 
-const unknownError = (error) =>
-{
-	return Error(`Unknown server error occured: ${error.response.status}`);
-};
+const unknownError = error => Error(`Unknown server error occured: ${error.response.status}`);
 
-const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
+const createUser = async (username, cipher, salt1, salt2, authenticationKey, twoFactorSecret, twoFactorToken) =>
 {
 	const body =
 	{
@@ -16,6 +13,8 @@ const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 		salt1,
 		salt2,
 		authenticationKey,
+		twoFactorSecret,
+		twoFactorToken,
 	};
 
 	try
@@ -25,28 +24,34 @@ const createUser = async (username, cipher, salt1, salt2, authenticationKey) =>
 	}
 	catch (error)
 	{
-		console.log(error);
 		if (error.response.status === 400)
 		{
-			throw Error('Username is already taken');
+			throw Error(error.response.data);
 		}
 
 		throw unknownError(error);
 	}
 };
 
-const getSalt1 = async (username) =>
+const getSalt1 = async (username, twoFactorToken) =>
 {
 	try
 	{
-		const response = await axios.get(`${config.apiUrl}/auth/salt1?username=${username}`);
+		let queryParams = `username=${username}`;
+
+		if (twoFactorToken)
+		{
+			queryParams += `&twoFactorToken=${twoFactorToken}`;
+		}
+
+		const response = await axios.get(`${config.apiUrl}/auth/salt1?${queryParams}`);
 		return response.data;
 	}
 	catch (error)
 	{
 		if (error.response.status === 400)
 		{
-			throw Error('Not account exists with the specified username');
+			throw Error(error.response.data);
 		}
 
 		throw unknownError(error);

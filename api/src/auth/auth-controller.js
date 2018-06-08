@@ -1,30 +1,48 @@
 import utils from "./utils";
 
-const makeAuthController = (database) =>
+const makeAuthController = database => twoFactor =>
 ({
 	createUser: async (req, res) =>
 	{
 		try
 		{
+			if (req.body.twoFactorSecret)
+			{
+				const verified = twoFactor.totp.verify({
+					secret: req.body.twoFactorSecret,
+					encoding: 'base32',
+					token: req.body.twoFactorToken,
+				});
+
+				if (!verified)
+				{
+					throw new Error('wrong-2fa-token');
+				}
+			}
+
 			const hashedAuthKey = utils.hash(req.body.authenticationKey);
 
 			await database.createUser({ ...req.body, hashedAuthKey });
 
-			const response =
-			({
+			let response =
+			{
 				user:
 				{
 					username: req.body.username
 				}
-			});
+			};
 
 			res.json(response);
 		}
 		catch (error)
 		{
-			if(error.message === 'user-exists')
+			if (error.message === 'user-exists')
 			{
-				res.status(400).send(error.message);
+				res.status(400).send('The user already exists');
+			}
+			else if (error.message === 'wrong-2fa-token')
+			{
+				res.status(400).send('Wrong 2FA token');
 			}
 			else
 			{
@@ -37,14 +55,34 @@ const makeAuthController = (database) =>
 	{
 		try
 		{
-			const { salt1 } = await database.getUser(req.query.username);
+			const { twoFactorToken } = req.query;
+			const { salt1, twoFactorSecret } = await database.getUser(req.query.username);
+
+			if (twoFactorSecret)
+			{
+				const verified = twoFactor.totp.verify({
+					secret: twoFactorSecret,
+					encoding: 'base32',
+					token: twoFactorToken,
+				});
+
+				if (!verified)
+				{
+					throw new Error('wrong-2fa-token');
+				}
+			}
+
 			res.json({ salt1 });
 		}
 		catch (error)
 		{
 			if(error.message === 'unknown-user')
 			{
-				res.status(400).send(error.message);
+				res.status(400).send('Unknown user');
+			}
+			else if (error.message === 'wrong-2fa-token')
+			{
+				res.status(400).send('Wrong 2FA token');
 			}
 			else
 			{
