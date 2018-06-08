@@ -2,6 +2,12 @@
 
 [![Build Status](https://travis-ci.org/mathiassoeholm/trustless-crypto-exchange.svg?branch=master)](https://travis-ci.org/mathiassoeholm/trustless-crypto-exchange)
 
+This is a bachelor project and not a production ready wallet. It stores the users' private-key safely by using a protocol based on scrypt and AES. The secret never leaves the client unencrypted, and the encryption key(their pw) is only held by the user. The front-end is developed in React, and the back-end is a Node.js service.
+
+Other features include:
+Material design.
+2FA with support for Google Authenticator.
+
 ## Requirements
 ### If you only want to run the front-end
 [Node.js](https://nodejs.org/en/)
