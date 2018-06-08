@@ -1,4 +1,4 @@
-# trustless-crypto-exchange
+# trustless-ether-wallet
 
 [![Build Status](https://travis-ci.org/mathiassoeholm/trustless-crypto-exchange.svg?branch=master)](https://travis-ci.org/mathiassoeholm/trustless-crypto-exchange)
 
