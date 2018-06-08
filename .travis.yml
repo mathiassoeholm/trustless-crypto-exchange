@@ -6,15 +6,13 @@ cache:
         - front-end/node_modules
         - api/node_modules
 
-install:
+script:
     - cd front-end
     - yarn
     - cd ..
     - cd api
     - yarn
     - cd ..
-
-script:
     - cd front-end
     - yarn build
     - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
