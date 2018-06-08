@@ -4,11 +4,21 @@ node_js:
 cache:
     directories:
         - front-end/node_modules
+        - api/node_modules
 
 install:
     - cd front-end
-    - yarn 
- 
-script: 
+    - yarn
+    - cd ..
+    - cd api
+    - yarn
+    - cd ..
+
+script:
+    - cd front-end
+    - yarn build
+    - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    - cd ..
+    - cd api
     - yarn build
     - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
