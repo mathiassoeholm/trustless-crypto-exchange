@@ -1,6 +1,7 @@
 # trustless-ether-wallet
 
 [![Build Status](https://travis-ci.org/mathiassoeholm//trustless-ether-wallet.svg?branch=master)](https://travis-ci.org/mathiassoeholm/trustless-ether-wallet)
+[![Coverage Status](https://coveralls.io/repos/github/mathiassoeholm/trustless-ether-wallet/badge.svg)](https://coveralls.io/github/mathiassoeholm/trustless-ether-wallet)
 
 This is a bachelor project and not a production ready wallet. It stores the users' private-key safely by using a protocol based on scrypt and AES. The secret never leaves the client unencrypted, and the encryption key(their pw) is only held by the user. The front-end is developed in React, and the back-end is a Node.js service.
 
