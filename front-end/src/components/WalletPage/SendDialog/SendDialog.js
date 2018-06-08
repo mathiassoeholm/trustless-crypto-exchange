@@ -15,7 +15,7 @@ const styles = theme =>
 		dialogPaper:
 		{
 			minWidth: '40em',
-			minHeight: '40em',
+			minHeight: '20em',
 		},
 	});
 
