@@ -1,5 +1,6 @@
 firebase-secret.json
 ssl
+ganache-db/
 
 # Logs
 logs
