@@ -12,7 +12,5 @@ install:
 jobs:
     include:
         - stage: run
-        script:
-            - yarn build
-        script:
-            - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+        script: yarn build
+        script: yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
