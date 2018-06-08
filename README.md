@@ -5,7 +5,7 @@
 This is a bachelor project and not a production ready wallet. It stores the users' private-key safely by using a protocol based on scrypt and AES. The secret never leaves the client unencrypted, and the encryption key(their pw) is only held by the user. The front-end is developed in React, and the back-end is a Node.js service.
 
 Other features include:
-Material design.
+Mobile responsiveness using material design.
 2FA with support for Google Authenticator.
 
 ## Requirements
