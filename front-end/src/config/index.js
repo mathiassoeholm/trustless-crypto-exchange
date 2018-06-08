@@ -2,11 +2,16 @@ import 'colors';
 
 import defaults from './default';
 import development from './development';
+import production from './production';
 
 let config;
 
 switch (process.env.NODE_ENV)
 {
+case 'production':
+	config = production;
+	break;
+
 default:
 	config = development;
 	break;
