@@ -14,11 +14,12 @@ const styles = theme =>
 			height: '100%',
 			padding: theme.spacing.unit * 2,
 			textAlign: 'left',
+			marginBottom: theme.spacing.unit * 2,
 		},
 
 		table:
 		{
-			minWidth: '500px',
+			minWidth: '200px',
 			padding: theme.spacing.unit,
 		},
 
@@ -96,8 +97,6 @@ const TransactionsList = ({ classes, transactions }) =>
 			</Grid>
 		);
 	};
-
-	console.log(transactions);
 
 	const allTransactions = transactions.received.concat(transactions.sent);
 	allTransactions.sort((t1, t2) => new Date(t1.createTime) < new Date(t2.createTime));
