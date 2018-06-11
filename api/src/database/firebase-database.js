@@ -2,7 +2,7 @@ import admin from 'firebase-admin';
 
 export default
 {
-	createUser: async ({ username, cipher, salt1, salt2, hashedAuthKey, twoFactorSecret }) =>
+	createUser: async ({ username, cipher, salt1, salt2, hashedAuthKey, twoFactorSecret, iv }) =>
 	{
 		const userDoc = admin.firestore().collection('users').doc(username);
 		const userData = await userDoc.get();
@@ -19,6 +19,7 @@ export default
 			salt2,
 			hashedAuthKey,
 			twoFactorSecret,
+			iv,
 		}
 
 		if (!twoFactorSecret)

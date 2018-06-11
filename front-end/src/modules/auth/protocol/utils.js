@@ -7,13 +7,15 @@ const bytesToBase64String = bytes =>
 
 const getRandomSalt = () => crypto.randomBytes(16).toString('hex').normalize('NFKC');
 
-const encryptAES = (secret, key, keyIsBuffer = true) =>
+const getRandomIV = () => Math.floor(Math.random() * (10 ** 9));
+
+const encryptAES = (secret, key, iv, keyIsBuffer = true) =>
 {
 	const keyBytes = keyIsBuffer ? key : aesjs.utils.utf8.toBytes(key);
 
 	const secretBytes = aesjs.utils.utf8.toBytes(secret);
 
-	const aesCtr = new aesjs.ModeOfOperation.ctr(keyBytes, new aesjs.Counter(5));
+	const aesCtr = new aesjs.ModeOfOperation.ctr(keyBytes, new aesjs.Counter(iv));
 	const encryptedBytes = aesCtr.encrypt(secretBytes);
 
 	// We convert to HEX for easy storage
@@ -22,14 +24,14 @@ const encryptAES = (secret, key, keyIsBuffer = true) =>
 	return encryptedHex;
 };
 
-const decryptAES = (cipher, key, keyIsBuffer = true) =>
+const decryptAES = (cipher, key, iv, keyIsBuffer = true) =>
 {
 	const keyBytes = keyIsBuffer ? key : aesjs.utils.utf8.toBytes(key);
 
 	// We store the encrypted secret as HEX
 	const encryptedBytes = aesjs.utils.hex.toBytes(cipher);
 
-	const aesCtr = new aesjs.ModeOfOperation.ctr(keyBytes, new aesjs.Counter(5));
+	const aesCtr = new aesjs.ModeOfOperation.ctr(keyBytes, new aesjs.Counter(iv));
 	const decryptedBytes = aesCtr.decrypt(encryptedBytes);
 
 	const decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
@@ -76,4 +78,5 @@ export default
 	encryptAES,
 	decryptAES,
 	makeKeyGenerator,
+	getRandomIV,
 };

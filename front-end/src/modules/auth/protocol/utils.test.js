@@ -39,11 +39,12 @@ describe('Auth Utils', () =>
 		const key = '12345678912345678912345678912345';
 
 		const secretText = 'secret';
-		const encryptedText = utils.encryptAES(secretText, key, false);
+		const iv = 1;
+		const encryptedText = utils.encryptAES(secretText, key, iv, false);
 
 		expect(encryptedText).not.toEqual(secretText);
 
-		const decryptedText = utils.decryptAES(encryptedText, key, false);
+		const decryptedText = utils.decryptAES(encryptedText, key, iv, false);
 
 		expect(decryptedText).toEqual(secretText);
 	});

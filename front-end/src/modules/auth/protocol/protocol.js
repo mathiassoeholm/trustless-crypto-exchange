@@ -31,8 +31,9 @@ const makeProtocol = (
 
 			const encryptionKey = await encKeyGen(password, salt2, encryptionKeyProgess);
 
+			const iv = utils.getRandomIV();
 			const secretText = JSON.stringify(secret);
-			const encryptedSecret = utils.encryptAES(secretText, encryptionKey);
+			const encryptedSecret = utils.encryptAES(secretText, encryptionKey, iv);
 
 			const result = await authApi.createUser(
 				user.username,
@@ -41,7 +42,8 @@ const makeProtocol = (
 				salt2,
 				authenticationKeyString,
 				twoFactorSecret,
-				twoFactorToken);
+				twoFactorToken,
+				iv);
 
 			progressCallback(1, 'Finished');
 
@@ -58,12 +60,12 @@ const makeProtocol = (
 			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
 			const authenticationKeyString = utils.bytesToBase64String(authenticationKeyBuffer);
 
-			const { cipher, salt2 } = await authApi.getWallet(username, authenticationKeyString);
+			const { cipher, salt2, iv } = await authApi.getWallet(username, authenticationKeyString);
 
 			const decryptionKeyProgess = progress => progressCallback(authKeyPercentage + (progress * (1 - authKeyPercentage)), 'Generating Decryption Key');
 			const decryptionKey = await encKeyGen(password, salt2, decryptionKeyProgess);
 
-			const secretJson = utils.decryptAES(cipher, decryptionKey);
+			const secretJson = utils.decryptAES(cipher, decryptionKey, iv);
 
 			let secret;
 

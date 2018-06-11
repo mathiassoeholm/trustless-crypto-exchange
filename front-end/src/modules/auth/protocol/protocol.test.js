@@ -32,6 +32,12 @@ describe('Protocol', () =>
 			expect(stubApi.getState().username).toEqual('kurt');
 		});
 
+		it('stores the iv', async () =>
+		{
+			await protocol.createUser(...createArguments);
+			expect(stubApi.getState().iv).toBeDefined();
+		});
+
 		it('creates and returns secret', async () =>
 		{
 			await protocol.createUser(...createArguments);
@@ -64,10 +70,10 @@ describe('Protocol', () =>
 		{
 			await protocol.createUser(...createArguments);
 
-			const { salt2 } = stubApi.getState();
+			const { cipher, salt2, iv } = stubApi.getState();
 			const key = await testKeyGenerator(password, salt2);
 
-			const decryptedCipher = utils.decryptAES(stubApi.getState().cipher, key);
+			const decryptedCipher = utils.decryptAES(cipher, key, iv);
 			const decryptedSecret = JSON.parse(decryptedCipher);
 			expect(decryptedSecret).toEqual(secret);
 		});
