@@ -2,10 +2,12 @@ language: node_js
 node_js:
   - 6
 cache:
-  directories:
-    - front-end/node_modules
+    directories:
+        - front-end/node_modules
+        - api/node_modules
+
 script:
-  - cd front-end
-  - yarn
-  - yarn build
-  - yarn test
+    - cd front-end
+    - yarn
+    - yarn build
+    - yarn test --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

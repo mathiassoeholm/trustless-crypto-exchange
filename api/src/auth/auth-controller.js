@@ -105,7 +105,7 @@ const makeAuthController = database => twoFactor =>
 			}
 			else
 			{
-				res.json({ cipher: user.cipher, salt2: user.salt2 });
+				res.json({ cipher: user.cipher, salt2: user.salt2, iv: user.iv });
 			}
 		}
 		catch (error)

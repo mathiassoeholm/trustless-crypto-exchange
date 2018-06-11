@@ -62,6 +62,7 @@ describe('auth controller', () =>
 				salt1: 'salt1',
 				salt2: 'salt2',
 				authenticationKey: 'authenticationKey',
+				iv: 10,
 			},
 			query:
 			{
@@ -210,6 +211,7 @@ describe('auth controller', () =>
 				expect(params.cipher).toEqual(reqMock.body.cipher);
 				expect(params.salt1).toEqual(reqMock.body.salt1);
 				expect(params.salt2).toEqual(reqMock.body.salt2);
+				expect(params.iv).toEqual(reqMock.body.iv);
 				done();
 			}
 		};
@@ -333,13 +335,14 @@ describe('auth controller', () =>
 		getAuthController().getSalt1(reqMock, resMock);
 	});
 
-	it('gets salt2 and cipher with correct hash', done =>
+	it('gets salt2, cipher and iv with correct hash', done =>
 	{
 		const userInfo =
 		{
 			cipher: 'cipher',
 			salt2: 'salt 2',
 			hashedAuthKey: '9b74c9897bac770ffc029102a200c5de',
+			iv: 10,
 		};
 
 		databaseMock =
@@ -363,7 +366,7 @@ describe('auth controller', () =>
 			...resMock,
 			json: body =>
 			{
-				expect(body).toEqual({ cipher: 'cipher', salt2: 'salt 2' });
+				expect(body).toEqual({ cipher: 'cipher', salt2: 'salt 2', iv: 10 });
 				done();
 			}
 		};

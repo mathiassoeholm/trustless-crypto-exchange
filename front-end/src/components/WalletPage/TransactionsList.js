@@ -99,7 +99,10 @@ const TransactionsList = ({ classes, transactions }) =>
 	};
 
 	const allTransactions = transactions.received.concat(transactions.sent);
-	allTransactions.sort((t1, t2) => new Date(t1.createTime) < new Date(t2.createTime));
+	allTransactions.sort((t1, t2) =>
+		(new Date(t1.createTime) > new Date(t2.createTime) ? -1 : 1),
+	);
+
 	const tableRows = allTransactions.map(t => getTransactionRow(t));
 
 	return (
