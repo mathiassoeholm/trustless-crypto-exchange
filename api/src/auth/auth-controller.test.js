@@ -93,7 +93,7 @@ describe('auth controller', () =>
 		databaseMock =
 		{
 			...databaseMock,
-			getUser: username => Promise.resolve({ twoFactorSecret: 'db-secret' }),
+			getUser: username => ({ twoFactorSecret: 'db-secret' }),
 		};
 
 		twoFactorMock =
