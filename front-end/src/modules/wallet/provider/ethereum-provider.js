@@ -8,7 +8,7 @@ import config from '../../../config';
 const bankAccountSecret =
 	{
 		// Insert a private key from Ganache here, remember to prepend "0x"
-		privateKey: '0xd34e945965559da15527efb960d1f2556657069b541b1dcb3847ad27d061b87f',
+		privateKey: '0x20a48c44bc57c74a7fb0ae5d0b186d5cd3137a3b9ee2b677c3787f4379252de1',
 	};
 
 const makeEthereumProvider = () =>
