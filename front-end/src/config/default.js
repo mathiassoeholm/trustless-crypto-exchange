@@ -11,7 +11,6 @@ export default
 	authApi: realAuthApi,
 	walletApi: realWalletApi,
 	makeAuthProtocol: makeProtocol,
-	slowKeyGenerator: utils.makeKeyGenerator(2 ** 18),
-	fastKeyGenerator: utils.makeKeyGenerator(2 ** 15),
+	keyGenerator: utils.makeKeyGenerator(2 ** 18),
 	makeWalletProvider: makeEthereumProvider,
 };

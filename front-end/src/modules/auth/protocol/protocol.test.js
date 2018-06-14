@@ -21,7 +21,7 @@ describe('Protocol', () =>
 
 	beforeEach(() =>
 	{
-		protocol = makeProtocol(testKeyGenerator, testKeyGenerator, stubApi);
+		protocol = makeProtocol(testKeyGenerator, stubApi);
 	});
 
 	describe('create', () =>
@@ -130,7 +130,7 @@ describe('Protocol', () =>
 
 			api.getSalt1.mockReturnValueOnce({ salt1: 'salt1' });
 
-			protocol = makeProtocol(testKeyGenerator, testKeyGenerator, api);
+			protocol = makeProtocol(testKeyGenerator, api);
 
 			// Create the user so we can test login
 			await protocol.createUser({ username: 'bob' }, 'pass', {});

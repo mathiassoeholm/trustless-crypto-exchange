@@ -8,7 +8,7 @@ import config from '../../../config';
 const bankAccountSecret =
 	{
 		// Insert a private key from Ganache here, remember to prepend "0x"
-		privateKey: '0x7b4712977fc2739173b7a6b153ef2e6b56dd8a5f5fb2cd23cd30dfc917611253',
+		privateKey: '0xd34e945965559da15527efb960d1f2556657069b541b1dcb3847ad27d061b87f',
 	};
 
 const makeEthereumProvider = () =>
@@ -21,6 +21,7 @@ const makeEthereumProvider = () =>
 		const ether = amount * (10 ** 18);
 
 		const account = web3.eth.accounts.privateKeyToAccount(secret.privateKey);
+		console.log(secret.privateKey);
 
 		return account.signTransaction({
 			to,

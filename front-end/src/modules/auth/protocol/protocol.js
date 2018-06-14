@@ -1,11 +1,10 @@
 import config from '../../../config';
 import utils from './utils';
 
-const authKeyPercentage = 0.2;
+const authKeyPercentage = 0.5;
 
 const makeProtocol = (
-	encKeyGen = config.slowKeyGenerator,
-	authKeyGen = config.fastKeyGenerator,
+	keyGenerator = config.keyGenerator,
 	authApi = config.authApi) =>
 	({
 		createUser: async (
@@ -24,12 +23,12 @@ const makeProtocol = (
 			const salt1 = utils.getRandomSalt();
 			const salt2 = utils.getRandomSalt();
 
-			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
+			const authenticationKeyBuffer = await keyGenerator(password, salt1, authenticationKeyProgess);
 
 			// Get the key as a string, since we need to store it server-side
 			const authenticationKeyString = utils.bytesToBase64String(authenticationKeyBuffer);
 
-			const encryptionKey = await encKeyGen(password, salt2, encryptionKeyProgess);
+			const encryptionKey = await keyGenerator(password, salt2, encryptionKeyProgess);
 
 			const iv = utils.getRandomIV();
 			const secretText = JSON.stringify(secret);
@@ -57,13 +56,13 @@ const makeProtocol = (
 			const { salt1 } = await authApi.getSalt1(username, twoFactorToken);
 
 			const authenticationKeyProgess = progress => progressCallback(progress * authKeyPercentage, 'Generating Authentication Key');
-			const authenticationKeyBuffer = await authKeyGen(password, salt1, authenticationKeyProgess);
+			const authenticationKeyBuffer = await keyGenerator(password, salt1, authenticationKeyProgess);
 			const authenticationKeyString = utils.bytesToBase64String(authenticationKeyBuffer);
 
 			const { cipher, salt2, iv } = await authApi.getWallet(username, authenticationKeyString);
 
 			const decryptionKeyProgess = progress => progressCallback(authKeyPercentage + (progress * (1 - authKeyPercentage)), 'Generating Decryption Key');
-			const decryptionKey = await encKeyGen(password, salt2, decryptionKeyProgess);
+			const decryptionKey = await keyGenerator(password, salt2, decryptionKeyProgess);
 
 			const secretJson = utils.decryptAES(cipher, decryptionKey, iv);
 
