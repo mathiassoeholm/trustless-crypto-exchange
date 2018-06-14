@@ -4,5 +4,5 @@ export default
 {
 	apiUrl: 'http://localhost:3001',
 	ganacheUrl: 'http://localhost:8545',
-	keyGenerator: utils.makeKeyGenerator(2 ** 18),
+	keyGenerator: utils.makeKeyGenerator(2 ** 1),
 };
